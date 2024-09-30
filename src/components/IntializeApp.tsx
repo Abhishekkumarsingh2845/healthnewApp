@@ -1,7 +1,6 @@
 import MainNavigation from "../navigations/MainNavigation";
 import { useEffect, useRef, useState } from "react";
 import { Animated, StatusBar, StyleSheet, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "../screens/splash";
 import { Colors } from "../config/colors.config";
 
