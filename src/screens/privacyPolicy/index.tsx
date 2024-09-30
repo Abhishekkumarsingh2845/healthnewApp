@@ -10,7 +10,7 @@ import { Fonts } from "../../config/font.config";
 const PrivacyPolicy = () => {
     return (
         <>
-            <AppSafeAreaView title="About Us">
+            <AppSafeAreaView title="Privacy Policy">
                 <Image source={Images.appLogo}
                     resizeMode={'contain'}
                     tintColor={Colors.primary}
