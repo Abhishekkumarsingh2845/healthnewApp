@@ -1,6 +1,5 @@
 import { ReactNode } from "react"
 import { KeyboardAvoidingView, Platform, StatusBar, StyleSheet, View, FlatList } from "react-native"
-import BgDesign from "./BgDesign"
 import AppBar from "./AppBar"
 import { ViewStyle } from "react-native"
 import React from "react"

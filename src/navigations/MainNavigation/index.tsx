@@ -7,6 +7,9 @@ import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/
 import SplashScreen from '../../screens/splash';
 // import Onboarding from '../../screens/onboarding';
 import React from 'react';
+import About from '../../screens/about';
+import TermsConditions from '../../screens/termsConditions';
+import PrivacyPolicy from '../../screens/privacyPolicy';
 
 
 const MainNavigation = () => {
@@ -56,8 +59,16 @@ const MainNavigation = () => {
 const AppStack: Array<Screen> = [
 
   {
-    name: 'Demo',
-    screen: SplashScreen,
+    name: 'PrivacyPolicy',
+    screen: PrivacyPolicy,
+  },
+  {
+    name: 'TermsConditions',
+    screen: TermsConditions,
+  },
+  {
+    name: 'About',
+    screen: About,
   },
   
 ];

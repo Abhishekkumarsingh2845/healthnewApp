@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     backBtn: {
         position: 'relative',
         left: 0,
-        backgroundColor: Colors.bgBackButton,
+        
         borderRadius: 100,
         padding: moderateScale(10)
     },
@@ -59,12 +59,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     title: {
-        width:"73%",
-        fontFamily: Fonts.regular,
+        width:"82%",
+        fontFamily: Fonts.bold,
         fontSize: moderateScale(16),
         color: Colors.black,
         paddingHorizontal: moderateScale(8),
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+        textAlign:'center'
     },
     titleContainer: {
         // width: '100%',

@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, Pressable, StyleSheet, Text, TextStyle, View } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import Icons from 'react-native-vector-icons/MaterialIcons';
 
 
 const BackButton = (prop: { color: string, size: number, onPress?: () => void, style?: TextStyle }) => {
@@ -13,7 +13,7 @@ const BackButton = (prop: { color: string, size: number, onPress?: () => void, s
     }
     return (
         <TouchableRipple style={[styles.btn, prop.style]} onPress={pushNewScreen} >
-            <AntDesignIcon name={'arrowleft'} color={prop.color} size={prop.size} />
+            <Icons name={'arrow-back-ios'} color={prop.color} size={prop.size} />
         </TouchableRipple>
     )
 }
