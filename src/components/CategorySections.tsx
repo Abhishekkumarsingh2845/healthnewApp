@@ -63,12 +63,6 @@ const Header = ({ title, titleStyle, left, onViewAllPress, moreStyle, prefixAtTi
                     (left) &&
                     <TouchableOpacity onPress={onViewAllPress} style={[Style.flexRow]}>
                         <Text style={[styles.more, moreStyle]}>View All</Text>
-                        <AntDesign
-                            name={'arrowright'}
-                            size={moderateScale(15)}
-                            color={Colors.black}
-
-                        />
                     </TouchableOpacity>
                 }
             </View>

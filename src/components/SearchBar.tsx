@@ -1,4 +1,4 @@
-import { TextInput, View, Image, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { TextInput, View, Image, StyleSheet, TouchableOpacity, ViewStyle, TextStyle } from "react-native"
 import AntDesignIcons from 'react-native-vector-icons/AntDesign'
 import { Text } from "react-native-paper"
 import { ReactNode, memo, useEffect, useRef, useState } from "react"
@@ -17,7 +17,8 @@ interface SearchInputType extends SearchBoxType {
     placholder: string,
     inputRef?: any,
     right?: ReactNode,
-    left?: ReactNode
+    left?: ReactNode,
+    labelStyle?:TextStyle,
     // setValue?: (value: string) => void,
     // // type: 'input',
     value?: string
@@ -37,7 +38,7 @@ const SearchBar = (props: SearchBarProps) => {
                 }
                 {
                     (props.type == 'block') ?
-                        <Text style={styles.label} children={props.label} />
+                        <Text style={[styles.label,props.labelStyle]} children={props.label} />
                         :
                         <TextInput
                             ref={props.inputRef}

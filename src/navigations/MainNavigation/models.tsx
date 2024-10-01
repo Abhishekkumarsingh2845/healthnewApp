@@ -13,7 +13,8 @@ export interface Screen {
 export type RootStackParamList = {
     About:undefined,
     TermsConditions:undefined,
-    PrivacyPolicy:undefined
+    PrivacyPolicy:undefined,
+    BottomNavigation:undefined
 }
 
 export type RootNavigationProp = NavigationProp<

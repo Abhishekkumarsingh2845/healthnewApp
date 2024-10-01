@@ -1,21 +1,15 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { StyleSheet, View } from 'react-native';
-
 import TabIcon, { TabIconProps } from './TabIcon';
-
 import { ReactNode } from 'react';
 import { Colors } from '../../config/colors.config';
 import { Size } from '../../config/size.config';
-import { BottomTab, SVG } from '../../generated/image.assets';
-import Home from '../../screens/home';
 import { moderateScale } from 'react-native-size-matters';
-import Astrologers from '../../screens/astrologers';
-import ChatWithAstrologer from '../../screens/chatWithAstrloger';
-import LiveAstrologers from '../../screens/liveAstrologers';
-import { BlurView } from '@react-native-community/blur';
-
-// import EventCalender from '../../screens/Menu/';
+import Explore from '../../screens/explore';
+import Favorite from '../../screens/favorite';
+import Profile from '../../screens/profile';
+import { Icons } from '../../generated/image.assets';
 
 
 
@@ -61,11 +55,11 @@ function BottomNavigation() {
 const styles = StyleSheet.create({
     tabBarStyle: {
         // backgroundColor: Colors.primary,
-        backgroundColor: 'transparent',
+        backgroundColor: Colors.primary,
         borderTopWidth: 0,
         elevation:0,
         position:"absolute",
-        height: moderateScale(55),
+        height: moderateScale(60),
         
     }
 })
@@ -76,53 +70,29 @@ interface TabType extends TabIconProps {
 }
 const Tabs: Array<TabType> = [
     {
-        name: 'Call',
-        component: Astrologers,
-        label: 'Chat',
-        icon: BottomTab.in_call,
-        activeIcon: BottomTab.ac_call,
-        initialParams:{
-            type:"call"
-        }
+        name: 'Explore',
+        component: Explore,
+        label: 'Explore',
+        icon: Icons.ic_active_explore,
+        activeIcon: Icons.ic_active_explore,
+    },
+    {
+        name: 'Favorite',
+        component: Favorite,
+        label: 'Favorite',
+        icon: Icons.ic_fav,
+        activeIcon: Icons.ic_fav,
         
 
     },
     {
-        name: 'Chat',
-        component: Astrologers,
-        label: 'Chat',
-        icon: BottomTab.in_chat,
-        activeIcon: BottomTab.ac_chat,
-        initialParams:{
-            type:"chat"
-        }
-
+        name: 'Profile',
+        component: Profile,
+        label: 'Profile',
+        icon: Icons.ic_profile,
+        activeIcon: Icons.ic_profile,
     },
-    {
-        name: 'Home',
-        component: Home,
-        label: 'Home',
-        icon: BottomTab.in_home,
-        activeIcon: BottomTab.ac_home,
-    },
-    {
-        name: 'My Orders',
-        component: Astrologers,
-        label: 'Video',
-        icon: BottomTab.in_video,
-        activeIcon: BottomTab.ac_video,
-        initialParams:{
-            type:"vcall"
-        }
-
-    },
-    {
-        name: 'Menu',
-        component: LiveAstrologers,
-        label: 'Live',
-        icon: BottomTab.in_live,
-        activeIcon: BottomTab.ac_live,
-    },
+    
 
 ]
 export default BottomNavigation

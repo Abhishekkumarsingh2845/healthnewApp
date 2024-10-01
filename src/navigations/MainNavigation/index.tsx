@@ -10,6 +10,7 @@ import React from 'react';
 import About from '../../screens/about';
 import TermsConditions from '../../screens/termsConditions';
 import PrivacyPolicy from '../../screens/privacyPolicy';
+import BottomNavigation from '../BottomNavigation';
 
 
 const MainNavigation = () => {
@@ -58,6 +59,10 @@ const MainNavigation = () => {
 
 const AppStack: Array<Screen> = [
 
+  {
+    name: 'BottomNavigation',
+    screen: BottomNavigation,
+  },
   {
     name: 'PrivacyPolicy',
     screen: PrivacyPolicy,
