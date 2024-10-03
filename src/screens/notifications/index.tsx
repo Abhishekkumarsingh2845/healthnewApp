@@ -21,8 +21,8 @@ const Notifications = () => {
                 <Categories />
                 <FlatList
                     data={new Array(10).fill('')}
-                    renderItem={() => {
-                        return (<Card />)
+                    renderItem={({index}) => {
+                        return (<Card key={`Notification-${index}`} />)
                     }}
 
                 />

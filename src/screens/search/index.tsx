@@ -51,27 +51,9 @@ const Search = (props: SearchPropType) => {
     const Nav = useNavigation();
     const [Places, setPlaces] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState<{ index?: number, place?: any }>({})
-    // const getPlacesFun = async (search:string)=>{
-    //     const res:ServiceResponse = await searchPlace(search);
-    //     if(res.status){
-    //         setPlaces(res.response.geonames);
-    //     }else{
-    //         showToastMessage(res.message,'error');
-    //     }
-    // } 
+    
     return (<>
         <AppSafeAreaView containerStyle={{ paddingHorizontal: 0 }}
-
-        // footerComponent={
-        //     <AppBottomBar label={"Select Place"} loading={false} onClick={()=>{
-        //         if(selectedPlace.place){
-        //             // props.route?.params?.onSelect(selectedPlace.place)
-        //             Nav.goBack();
-        //         }else{
-        //             showToastMessage('please select place','error');
-        //         }
-        //     }}/>
-        // }
         >
             <View style={[{ paddingHorizontal: 12, paddingTop:Spacing.topSpace }]}>
                 <View style={{
@@ -128,7 +110,6 @@ const Search = (props: SearchPropType) => {
                                     >
                                         <AppImage source={Icons.ic_recent}  style={{width:moderateScale(24), height:moderateScale(24), marginHorizontal:moderateScale(3)}} />
                                         <Text numberOfLines={1} style={[FontStyle.title, { width: '85%', color:Colors.black }]} >Understanding cardiovascular</Text>
-                                        {/* <ToggleBtn isActive={(selectedPlace.index==index)??false} /> */}
                                     </TouchableOpacity>
                                 )
                             }}

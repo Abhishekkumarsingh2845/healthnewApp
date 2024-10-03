@@ -13,14 +13,19 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigations/MainNavigation/models";
 import { NewsPropType } from "../news";
+import FilterModal from "../../components/AppComponents/filterModal";
+import { useState } from "react";
 
 const Explore = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+    const [showFilter, setShowFilter] = useState(false);
     return (
         <>
             <AppSafeAreaView>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Header />
+                    <Header onPressFilter={()=>{
+                        setShowFilter(true);
+                    }} />
                     <Categories />
                     <CategorySection
                         prefixAtTitle={<AppImage source={Icons.ic_latest} style={{ width: moderateScale(20), height: moderateScale(20) }} />}
@@ -35,9 +40,9 @@ const Explore = () => {
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map(()=>{
+                                new Array(5).fill('').map((item, index)=>{
                                     return(
-                                        <Card onClick={()=>{
+                                        <Card key={index} onClick={()=>{
                                             Nav.navigate('NewsDetail')
                                         }} />
                                     )
@@ -59,9 +64,10 @@ const Explore = () => {
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map(()=>{
+                                new Array(5).fill('').map((_,index)=>{
                                     return(
                                         <Card
+                                        key={index}
                                         onClick={()=>{
                                             Nav.navigate('NewsDetail')
                                         }}
@@ -87,9 +93,10 @@ const Explore = () => {
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map(()=>{
+                                new Array(5).fill('').map((item,index)=>{
                                     return(
                                         <Card
+                                        key={index}
                                         onClick={()=>{
                                             Nav.navigate('NewsDetail')
                                         }}
@@ -102,6 +109,7 @@ const Explore = () => {
                     </CategorySection>
                     <View style={{padding:moderateScale(55)}}  />
                 </ScrollView>
+                <FilterModal modalOpenFlag={showFilter} modalClose={setShowFilter}/>
             </AppSafeAreaView>
         </>
     )

@@ -25,9 +25,9 @@ const Favorite = () => {
                     <Categories />
                     <View style={{ alignItems: 'center' }}>
                         {
-                            new Array(5).fill('').map(() => {
+                            new Array(5).fill('').map((_,index) => {
                                 return (
-                                    <Card containerStyle={{
+                                    <Card key={index} containerStyle={{
                                         width:Size.screenWidth * 0.95
                                     }} 
                                     onClick={()=>{

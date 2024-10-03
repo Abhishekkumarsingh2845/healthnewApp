@@ -11,12 +11,14 @@ import { Colors } from "../../config/colors.config"
 import { Size, Spacing } from "../../config/size.config"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParamList } from "../../navigations/MainNavigation/models"
+import { NavigationProp, useNavigation } from "@react-navigation/native"
 
 export interface NewsPropType extends StackScreenProps<RootStackParamList, 'News'> {
    title:string
 }
 
 const News = (props:NewsPropType) => {
+    const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     const params = props.route.params;
     return (
         <>
@@ -33,7 +35,11 @@ const News = (props:NewsPropType) => {
                                 return (
                                     <Card containerStyle={{
                                         width:Size.screenWidth * 0.95
-                                    }} />
+                                    }}
+                                    onClick={() => {
+                                        Nav.navigate('NewsDetail')
+                                    }}
+                                    />
                                 )
                             })
                         }

@@ -19,7 +19,7 @@ import { RootStackParamList } from "../../../navigations/MainNavigation/models";
 import { SearchPropType } from "../../search";
 
 interface HeaderPropType {
-
+    onPressFilter:()=>void
 }
 
 const Header = (prop: HeaderPropType) => {
@@ -65,7 +65,9 @@ const Header = (prop: HeaderPropType) => {
                     containerStyle={style.search}
 
                 />
-                <TouchableOpacity style={{
+                <TouchableOpacity
+                onPress={prop.onPressFilter}
+                style={{
                     backgroundColor: Colors.primary,
                     padding: moderateScale(5),
                     borderRadius: moderateScale(5)

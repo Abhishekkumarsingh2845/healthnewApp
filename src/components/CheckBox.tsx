@@ -7,9 +7,10 @@ interface CheckBoxPropType{
     checkboxStyle?:ViewStyle,
     checkedBg?:string,
     notCheckedBg?:string,
+    checkColor?:string
     onValueChange?:(value:boolean)=>void
 }
-const CheckBox = ({onValueChange, checkboxStyle, checkedBg= Colors.primary, notCheckedBg = '#F2F4F7',intialValue}:CheckBoxPropType) => {
+const CheckBox = ({onValueChange, checkboxStyle, checkedBg= Colors.primary, notCheckedBg = '#F2F4F7',intialValue, checkColor='#ffff'}:CheckBoxPropType) => {
     const [checked, setChecked] = useState(intialValue);
     return (
         <TouchableOpacity
@@ -20,7 +21,7 @@ const CheckBox = ({onValueChange, checkboxStyle, checkedBg= Colors.primary, notC
                 }
             }}
             style={[Styles.box, checkboxStyle, { backgroundColor: intialValue ? checkedBg : notCheckedBg }]} >
-            <Entypo name="check" color={'#ffff'} />
+            <Entypo name="check" color={checkColor} />
         </TouchableOpacity>
     )
 }
