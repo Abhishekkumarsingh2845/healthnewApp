@@ -19,6 +19,7 @@ interface CardPropType {
     title:string,
     icons:Source,
     right?:ReactNode,
+    onClick?:()=>void
     
 }
 const Card = (props: CardPropType) => {
@@ -26,6 +27,7 @@ const Card = (props: CardPropType) => {
     return (
         <>
             <TouchableOpacity 
+                onPress={props.onClick}
                style={[style.container, props.containerStyle]}>
                 <AppImage source={props.icons} style={{ width: moderateScale(24), height: moderateScale(24), marginHorizontal: moderateScale(3) }} />
                 <Text numberOfLines={1} style={[FontStyle.title, { color: Colors.black,flex:1 }]} >{props.title}</Text>

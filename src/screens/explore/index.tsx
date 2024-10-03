@@ -10,8 +10,12 @@ import { Colors } from "../../config/colors.config";
 import { FontStyle } from "../../config/style.config";
 import Card from "../../components/AppComponents/card";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigations/MainNavigation/models";
+import { NewsPropType } from "../news";
 
 const Explore = () => {
+    const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     return (
         <>
             <AppSafeAreaView>
@@ -26,14 +30,16 @@ const Explore = () => {
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-
+                            Nav.navigate('News',{title:'Latest News'}as NewsPropType)
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
                                 new Array(5).fill('').map(()=>{
                                     return(
-                                        <Card/>
+                                        <Card onClick={()=>{
+                                            Nav.navigate('NewsDetail')
+                                        }} />
                                     )
                                 })
                             }
@@ -48,14 +54,18 @@ const Explore = () => {
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-
+                            Nav.navigate('News',{title:'Trending/Popular News'}as NewsPropType)
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
                                 new Array(5).fill('').map(()=>{
                                     return(
-                                        <Card/>
+                                        <Card
+                                        onClick={()=>{
+                                            Nav.navigate('NewsDetail')
+                                        }}
+                                        />
                                     )
                                 })
                             }
@@ -70,14 +80,20 @@ const Explore = () => {
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-
+                            
+                                Nav.navigate('News',{title:'Favorites News'}as NewsPropType)
+                            
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
                                 new Array(5).fill('').map(()=>{
                                     return(
-                                        <Card/>
+                                        <Card
+                                        onClick={()=>{
+                                            Nav.navigate('NewsDetail')
+                                        }}
+                                        />
                                     )
                                 })
                             }

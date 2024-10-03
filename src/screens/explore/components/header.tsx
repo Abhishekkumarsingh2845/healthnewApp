@@ -8,20 +8,22 @@ import { Colors } from "../../../config/colors.config";
 import { Fonts } from "../../../config/font.config";
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { FontStyle, Style } from "../../../config/style.config";
-import { DrawerActions, StackActions, useNavigation } from "@react-navigation/native";
+import { DrawerActions, NavigationProp, StackActions, useNavigation } from "@react-navigation/native";
 
 
 import { useMemo } from "react";
 import { currencyFormatter } from "../../../utils/number";
 import SearchBar from "../../../components/SearchBar";
 import { Touchable } from "react-native";
+import { RootStackParamList } from "../../../navigations/MainNavigation/models";
+import { SearchPropType } from "../../search";
 
 interface HeaderPropType {
 
 }
 
 const Header = (prop: HeaderPropType) => {
-    const Nav = useNavigation();
+    const Nav = useNavigation<NavigationProp<RootStackParamList>>();
 
     function pushNewScreen(route: string, data: any = {}): void {
         const pushAction = StackActions.push(route, data);
@@ -41,7 +43,7 @@ const Header = (prop: HeaderPropType) => {
                 {/* Right Section */}
                 <Pressable
                     onPress={() => {
-                        pushNewScreen('NotificationSettings');
+                        Nav.navigate('Notifications')
                     }}
                 >
                     <AppImage source={Icons.ic_bell} style={style.icon} />
@@ -57,6 +59,9 @@ const Header = (prop: HeaderPropType) => {
                     left={<>
                     <AppImage source={Icons.ic_search} style={style.searchIcon} />
                     </>}
+                    onClick={()=>{
+                        Nav.navigate('Search',{onSelect:(data:any)=>{}} as SearchPropType)
+                    }}
                     containerStyle={style.search}
 
                 />

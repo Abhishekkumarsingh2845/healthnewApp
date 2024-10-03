@@ -36,7 +36,7 @@ const MainNavigation = () => {
 
         <Stack.Navigator
           // initialRouteName={UserState.intialRoute}
-        // initialRouteName={'VideoPlay'}
+        initialRouteName={'BottomNavigation'}
           screenOptions={{
             headerShown: false,
             gestureEnabled: false,

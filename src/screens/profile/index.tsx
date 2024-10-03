@@ -11,8 +11,15 @@ import Card from "./components/card";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Spacing } from "../../config/size.config";
 import { ToggleButton } from "react-native-paper";
+import { useCallback } from "react";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../../navigations/MainNavigation/models";
 
 const Profile = () => {
+    const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+    const navigate = useCallback((route: string) => {
+        Nav.navigate(route as any)
+    }, [])
     return (
         <>
             <AppSafeAreaView>
@@ -31,7 +38,7 @@ const Profile = () => {
                         resizeMode={'contain'}
                     />
                 </View>
-                <View style={{marginTop: moderateScale(20)}}>
+                <View style={{ marginTop: moderateScale(20) }}>
 
                     <Card
                         containerStyle={{
@@ -44,9 +51,15 @@ const Profile = () => {
                             </View>
                         }
                     />
-                    <Card title="About us" icons={Icons.ic_about} />
-                    <Card title="Privacy Policy" icons={Icons.ic_privacy} />
-                    <Card title="Term & Conditions" icons={Icons.ic_tnc} />
+                    <Card title="About us" icons={Icons.ic_about}
+                        onClick={() => { navigate('About') }}
+                    />
+                    <Card title="Privacy Policy" icons={Icons.ic_privacy}
+                        onClick={() => { navigate('PrivacyPolicy') }}
+                    />
+                    <Card title="Term & Conditions" icons={Icons.ic_tnc}
+                        onClick={() => { navigate('TermsConditions') }}
+                    />
                 </View>
                 <View style={{ padding: moderateScale(55) }} />
 

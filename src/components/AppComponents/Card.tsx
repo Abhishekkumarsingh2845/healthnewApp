@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View, ViewStyle } from "react-native";
 import AppImage from "../AppImage";
 import { Icons } from "../../generated/image.assets";
 import { moderateScale } from "react-native-size-matters";
@@ -8,13 +8,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Size } from "../../config/size.config";
 interface CardPropType{
-    containerStyle?:ViewStyle
+    containerStyle?:ViewStyle,
+    onClick?:()=>void
 }
 const Card = (props:CardPropType) => {
     const img = 'https://s3-alpha-sig.figma.com/img/c037/8a80/e3250b476a7f3a1d9749f5f222403e08?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NbJPPR4OEC7OLyEfAD6zHsL0nAEg4VB47tWL8PR5pWjpxk5Lw1x1Hv9k3f9dCypF5N1X8Qi4255Qrim~5WFW3qMVkG1IuXV09pZ961MzeUI1JNccNh6Qvbh3o3iUm1lwWt2igGRl8pxk4DaWDU6Im9nP7yjLsiTpy7V8pihCQVCOuHATGt7ILJWg0TESqACk3udqMzWEKEDNF17rP5xDg7WUYDDxPoQUOl4yflVuc~~OPWXs1ROUj2oh--bkuEIheGHI0nsVfYVKgfHcww2-5CRNbPGMBjf0VoDz71JYi8XrVjOK9HqfNcpNDeitRR8qRCFqjCaG11GP8rWsmjEDHg__'
     return (
         <>
-            <View style={[style.box,props.containerStyle]}>
+            <Pressable style={[style.box,props.containerStyle]} onPress={props.onClick}>
                 <View style={style.container}>
                     <AppImage source={{ uri: img }} style={style.image} resizeMode={'stretch'} />
                     {/* Overlay */}
@@ -59,7 +60,7 @@ const Card = (props:CardPropType) => {
                     The best whey protein for beginners can help to support your fitness goals. So, check out the top-rated options and optimise your workout.
                     <Text style={[FontStyle.bold, { color: Colors.primary, fontSize: moderateScale(14) }]}>Read more</Text>
                 </Text>
-            </View>
+            </Pressable>
         </>
     )
 }

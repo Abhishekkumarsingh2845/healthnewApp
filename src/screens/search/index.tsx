@@ -26,7 +26,7 @@ import { Icons } from "../../generated/image.assets";
 import BackButton from "../../components/BackButton";
 
 export interface SearchPropType extends StackScreenProps<RootStackParamList, 'Search'> {
-    onSelect: (data: any) => void
+    onSelect?: (data: any) => void
 }
 interface OptionSelectType {
     name: string,

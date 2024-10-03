@@ -9,8 +9,11 @@ import { Icons } from "../../generated/image.assets"
 import { FontStyle, Style } from "../../config/style.config"
 import { Colors } from "../../config/colors.config"
 import { Size, Spacing } from "../../config/size.config"
+import { NavigationProp, useNavigation } from "@react-navigation/native"
+import { RootStackParamList } from "../../navigations/MainNavigation/models"
 
 const Favorite = () => {
+    const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     return (
         <>
             <AppSafeAreaView>
@@ -26,7 +29,11 @@ const Favorite = () => {
                                 return (
                                     <Card containerStyle={{
                                         width:Size.screenWidth * 0.95
-                                    }} />
+                                    }} 
+                                    onClick={()=>{
+                                        Nav.navigate('NewsDetail')
+                                    }}
+                                    />
                                 )
                             })
                         }
