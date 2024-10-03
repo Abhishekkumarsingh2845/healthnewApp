@@ -1,10 +1,10 @@
 import { Image, ImageSourcePropType, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { ReactNode, memo, useMemo, useState } from "react";
 import { moderateScale } from "react-native-size-matters";
-import { FontStyle } from "../../../config/style.config";
-import { Colors } from "../../../config/colors.config";
-import { Fonts } from "../../../config/font.config";
-import { Icons, Images } from "../../../generated/image.assets";
+import { FontStyle } from "../../config/style.config";
+import { Colors } from "../../config/colors.config";
+import { Fonts } from "../../config/font.config";
+import { Icons, Images } from "../../generated/image.assets";
 const CategoriesOptions: Array<CategoryPropType> = [
     {
         name: 'All',

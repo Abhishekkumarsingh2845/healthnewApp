@@ -9,17 +9,24 @@ import { Icons } from "../../generated/image.assets"
 import { FontStyle, Style } from "../../config/style.config"
 import { Colors } from "../../config/colors.config"
 import { Size, Spacing } from "../../config/size.config"
+import { StackScreenProps } from "@react-navigation/stack"
+import { RootStackParamList } from "../../navigations/MainNavigation/models"
 
-const Favorite = () => {
+export interface NewsPropType extends StackScreenProps<RootStackParamList, 'News'> {
+   title:string
+}
+
+const News = (props:NewsPropType) => {
+    const params = props.route.params;
     return (
         <>
-            <AppSafeAreaView>
+            <AppSafeAreaView title={params.title}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(3), paddingTop: Spacing.topSpace, alignSelf: 'center' }]}>
+                    {/* <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(3), paddingTop: Spacing.topSpace, alignSelf: 'center' }]}>
                         <AppImage source={Icons.ic_love} tintColor={Colors.error} style={{ width: moderateScale(25), height: moderateScale(25) }} resizeMode={'contain'} />
                         <Text style={[FontStyle.bold, { color: Colors.black }]} >Favorites News</Text>
-                    </View>
-                    <Categories />
+                    </View> */}
+                    {/* <Categories /> */}
                     <View style={{ alignItems: 'center' }}>
                         {
                             new Array(5).fill('').map(() => {
@@ -38,4 +45,4 @@ const Favorite = () => {
     )
 }
 
-export default Favorite;
+export default News;

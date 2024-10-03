@@ -8118,6 +8118,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-toast-message@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "react-native-toast-message@npm:2.2.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: c6b5d231b3b617b3d3d893023673534fe2cc0c5f32bb5fc4aecfe239e9de2fb9f0e9a4086d776e53daf3bc2376dce16dcec13e1b5cf1554dbf51808695fc2441
+  languageName: node
+  linkType: hard
+
 "react-native-vector-icons@npm:^10.2.0":
   version: 10.2.0
   resolution: "react-native-vector-icons@npm:10.2.0"
@@ -9729,6 +9739,7 @@ __metadata:
     react-native-safe-area-context: ^4.11.0
     react-native-screens: ^3.34.0
     react-native-size-matters: ^0.4.2
+    react-native-toast-message: ^2.2.1
     react-native-vector-icons: ^10.2.0
     react-test-renderer: 18.3.1
     typescript: 5.0.4

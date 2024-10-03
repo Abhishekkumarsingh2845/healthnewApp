@@ -18,7 +18,7 @@ interface SearchInputType extends SearchBoxType {
     inputRef?: any,
     right?: ReactNode,
     left?: ReactNode,
-    labelStyle?:TextStyle,
+    labelStyle?: TextStyle,
     // setValue?: (value: string) => void,
     // // type: 'input',
     value?: string
@@ -28,64 +28,64 @@ const SearchBar = (props: SearchBarProps) => {
     const [search, setSearch] = useState(props.value!);
 
     return (
-        
-            <TouchableOpacity
+
+        <TouchableOpacity
             onPress={() => { (props?.onClick) && props?.onClick(search)! }}
             activeOpacity={1}
             style={[styles.container, props.containerStyle]}>
-                {
-                    props.left
-                }
-                {
-                    (props.type == 'block') ?
-                        <Text style={[styles.label,props.labelStyle]} children={props.label} />
-                        :
-                        <TextInput
-                            ref={props.inputRef}
-                            value={search}
-                            style={styles.input}
-                            placeholderTextColor={'#7A7F8B'}
-                            onChangeText={(value: string) => {
-                                // props.setValue(value);
-                                setSearch(value)
-                                if(props.onChange){
-                                    props.onChange!(value)
-                                }
-                            }}
-                            onSubmitEditing={() => {
-                                // setSearch('');
-                                // console.log(search, 'key...'),
-                                (props.onSubmit) &&
-                                    props.onSubmit(search)
+            {
+                props.left
+            }
+            {
+                (props.type == 'block') ?
+                    <Text style={[styles.label, props.labelStyle]} children={props.label} />
+                    :
+                    <TextInput
+                        ref={props.inputRef}
+                        value={search}
+                        style={styles.input}
+                        placeholderTextColor={'#7A7F8B'}
+                        onChangeText={(value: string) => {
+                            // props.setValue(value);
+                            setSearch(value)
+                            if (props.onChange) {
+                                props.onChange!(value)
+                            }
+                        }}
+                        onSubmitEditing={() => {
+                            // setSearch('');
+                            // console.log(search, 'key...'),
+                            (props.onSubmit) &&
+                                props.onSubmit(search)
 
-                            }}
-                            placeholder={props.placholder}
-                        />
-                }
-                {
-                    (props.right) ?
-                        props.right
-                        :
-                        <>
-                            <TouchableOpacity onPress={() => {
-                                setSearch('');
-                                props.onSubmit!(search);
+                        }}
+                        placeholder={props.placholder}
+                    />
+            }
+            {
+                (props.right) ?
+                    props.right
+                    :
+                    <>
+                        <TouchableOpacity onPress={() => {
+                            setSearch('');
+                            props.onSubmit!(search);
 
-                            }}>
+                        }}>
 
-                                <AntDesignIcons
-                                    name={'search1'}
-                                    size={20}
-                                    color={'black'}
+                            <AntDesignIcons
+                                name={'search1'}
+                                size={20}
+                                color={'black'}
 
-                                />
-                            </TouchableOpacity>
-                        </>
-                }
+                            />
+                        </TouchableOpacity>
+                    </>
+            }
 
 
-            </TouchableOpacity>
-        
+        </TouchableOpacity>
+
     )
 }
 const styles = StyleSheet.create({

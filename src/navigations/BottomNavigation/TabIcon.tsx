@@ -26,7 +26,7 @@ const TabIcon = (props: TabIconProps) => {
             <View style={styles.box}>
                 {
                         <>
-                            <Image source={props.icon} resizeMode={'contain'} style={{width:moderateScale(25), height:moderateScale(25)}} />
+                            <Image source={(props.isActive)?props.activeIcon: props.icon} resizeMode={'contain'} style={{width:moderateScale(25), height:moderateScale(25)}} />
                             <Text  style={[FontStyle.titleSemibold, { fontSize: moderateScale(12), color:Colors.white }]} >
                                 {props.label}
                             </Text>

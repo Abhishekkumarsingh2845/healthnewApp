@@ -73,7 +73,7 @@ const Tabs: Array<TabType> = [
         name: 'Explore',
         component: Explore,
         label: 'Explore',
-        icon: Icons.ic_active_explore,
+        icon: Icons.ic_explore,
         activeIcon: Icons.ic_active_explore,
     },
     {
@@ -81,7 +81,7 @@ const Tabs: Array<TabType> = [
         component: Favorite,
         label: 'Favorite',
         icon: Icons.ic_fav,
-        activeIcon: Icons.ic_fav,
+        activeIcon: Icons.ic_active_love,
         
 
     },
@@ -90,7 +90,7 @@ const Tabs: Array<TabType> = [
         component: Profile,
         label: 'Profile',
         icon: Icons.ic_profile,
-        activeIcon: Icons.ic_profile,
+        activeIcon: Icons.ic_active_profile,
     },
     
 
