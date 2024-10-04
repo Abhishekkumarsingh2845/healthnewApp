@@ -1,7 +1,7 @@
 export const Fonts = {
-    regular: "Lato-Regular",
-    bold: 'Lato-Bold',
-    light: 'Lato-Light',
-    semibold: 'Lato-SemiBold',
-    medium: 'Lato-Medium',
+    regular: "CormorantGaramond-Regular",
+    bold: 'CormorantGaramond-Bold',
+    light: 'CormorantGaramond-Light',
+    semibold: 'CormorantGaramond-SemiBold',
+    medium: 'CormorantGaramond-Medium',
 }

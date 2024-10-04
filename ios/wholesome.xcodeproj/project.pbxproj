@@ -19,13 +19,23 @@
 		6E3EA26A93B0D827BE3748D1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EFD9A5AF2CB6DBBF4F28C279 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-wholesome-wholesomeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-wholesome-wholesomeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8F505258A5B34DB3BB4FB973 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = D9889C4E3357425F9804C441 /* OFL.txt */; };
 		A382DF9DE10A464D828ECF56 /* Lato-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 540DAD8B490C4039AC2D9DDD /* Lato-Black.ttf */; };
 		B91E2D5536EE4157BCCDB571 /* Lato-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EFE69132007C433BBCFA140F /* Lato-ThinItalic.ttf */; };
 		C0E10E977CC64482A4044ABD /* Lato-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A590DDAE63CE4C61934E26FE /* Lato-LightItalic.ttf */; };
 		DE745644B4134BB38D7D2C70 /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BC2A863EDE64075B05294A2 /* Lato-Light.ttf */; };
 		E22FD300772B40A49E7989EE /* Lato-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7CE23C23F684F5F989A0C36 /* Lato-Thin.ttf */; };
 		E85DBAD53795492C9EE547ED /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7CD29C1550CC44959E6F3E70 /* Lato-Regular.ttf */; };
+		A17964F132534E8A9A647C53 /* CormorantGaramond-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 68325F8D581849F7869E6D97 /* CormorantGaramond-Bold.ttf */; };
+		3BCE9AB0AE9041E8937AA781 /* CormorantGaramond-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */; };
+		05B693A012FA417DBEF17EAD /* CormorantGaramond-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F5A20E4C25949AE9BA9B89A /* CormorantGaramond-Italic.ttf */; };
+		0A805FE69A9B48619EBB9D2E /* CormorantGaramond-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5B852E79F824C88BCDDD893 /* CormorantGaramond-Light.ttf */; };
+		1FEF2776DC5E40149A858936 /* CormorantGaramond-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B36B73D8878248E28CC1785F /* CormorantGaramond-LightItalic.ttf */; };
+		E128FD92D9D04C588BA6C4BC /* CormorantGaramond-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6DFC6A9A206462B91C56209 /* CormorantGaramond-Medium.ttf */; };
+		466BF78034B94548B3349CE5 /* CormorantGaramond-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */; };
+		219AD6A203FE4FB18D382B0A /* CormorantGaramond-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D3BB28DC326419E8730A2BC /* CormorantGaramond-Regular.ttf */; };
+		658E61110745435BB7F914E3 /* CormorantGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */; };
+		1DC7993CADF04BB297D60F4B /* CormorantGaramond-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96DFA15B427B4DD9B949570F /* CormorantGaramond-SemiBoldItalic.ttf */; };
+		BBCA6746FAA94FB790F02166 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 507D3B9EB6F04F86B4C9AFCB /* OFL.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,11 +74,21 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-wholesome-wholesomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wholesome-wholesomeTests.release.xcconfig"; path = "Target Support Files/Pods-wholesome-wholesomeTests/Pods-wholesome-wholesomeTests.release.xcconfig"; sourceTree = "<group>"; };
 		A590DDAE63CE4C61934E26FE /* Lato-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-LightItalic.ttf"; path = "../assets/fonts/Lato-LightItalic.ttf"; sourceTree = "<group>"; };
 		A7CE23C23F684F5F989A0C36 /* Lato-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Thin.ttf"; path = "../assets/fonts/Lato-Thin.ttf"; sourceTree = "<group>"; };
-		D9889C4E3357425F9804C441 /* OFL.txt */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = OFL.txt; path = ../assets/fonts/OFL.txt; sourceTree = "<group>"; };
 		DCA24CBDA4864FE2A143A6AB /* Lato-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BlackItalic.ttf"; path = "../assets/fonts/Lato-BlackItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EFD9A5AF2CB6DBBF4F28C279 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = wholesome/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EFE69132007C433BBCFA140F /* Lato-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-ThinItalic.ttf"; path = "../assets/fonts/Lato-ThinItalic.ttf"; sourceTree = "<group>"; };
+		68325F8D581849F7869E6D97 /* CormorantGaramond-Bold.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-Bold.ttf"; path = "../assets/fonts/CormorantGaramond-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-BoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3F5A20E4C25949AE9BA9B89A /* CormorantGaramond-Italic.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-Italic.ttf"; path = "../assets/fonts/CormorantGaramond-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F5B852E79F824C88BCDDD893 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-Light.ttf"; path = "../assets/fonts/CormorantGaramond-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B36B73D8878248E28CC1785F /* CormorantGaramond-LightItalic.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-LightItalic.ttf"; path = "../assets/fonts/CormorantGaramond-LightItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D6DFC6A9A206462B91C56209 /* CormorantGaramond-Medium.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-Medium.ttf"; path = "../assets/fonts/CormorantGaramond-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-MediumItalic.ttf"; path = "../assets/fonts/CormorantGaramond-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0D3BB28DC326419E8730A2BC /* CormorantGaramond-Regular.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-Regular.ttf"; path = "../assets/fonts/CormorantGaramond-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-SemiBold.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		96DFA15B427B4DD9B949570F /* CormorantGaramond-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-SemiBoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		507D3B9EB6F04F86B4C9AFCB /* OFL.txt */ = {isa = PBXFileReference; name = "OFL.txt"; path = "../assets/fonts/OFL.txt"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +156,17 @@
 				7CD29C1550CC44959E6F3E70 /* Lato-Regular.ttf */,
 				A7CE23C23F684F5F989A0C36 /* Lato-Thin.ttf */,
 				EFE69132007C433BBCFA140F /* Lato-ThinItalic.ttf */,
-				D9889C4E3357425F9804C441 /* OFL.txt */,
+				68325F8D581849F7869E6D97 /* CormorantGaramond-Bold.ttf */,
+				C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */,
+				3F5A20E4C25949AE9BA9B89A /* CormorantGaramond-Italic.ttf */,
+				F5B852E79F824C88BCDDD893 /* CormorantGaramond-Light.ttf */,
+				B36B73D8878248E28CC1785F /* CormorantGaramond-LightItalic.ttf */,
+				D6DFC6A9A206462B91C56209 /* CormorantGaramond-Medium.ttf */,
+				1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */,
+				0D3BB28DC326419E8730A2BC /* CormorantGaramond-Regular.ttf */,
+				D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */,
+				96DFA15B427B4DD9B949570F /* CormorantGaramond-SemiBoldItalic.ttf */,
+				507D3B9EB6F04F86B4C9AFCB /* OFL.txt */,
 			);
 			name = Resources;
 			path = "";
@@ -301,7 +331,17 @@
 				E85DBAD53795492C9EE547ED /* Lato-Regular.ttf in Resources */,
 				E22FD300772B40A49E7989EE /* Lato-Thin.ttf in Resources */,
 				B91E2D5536EE4157BCCDB571 /* Lato-ThinItalic.ttf in Resources */,
-				8F505258A5B34DB3BB4FB973 /* OFL.txt in Resources */,
+				A17964F132534E8A9A647C53 /* CormorantGaramond-Bold.ttf in Resources */,
+				3BCE9AB0AE9041E8937AA781 /* CormorantGaramond-BoldItalic.ttf in Resources */,
+				05B693A012FA417DBEF17EAD /* CormorantGaramond-Italic.ttf in Resources */,
+				0A805FE69A9B48619EBB9D2E /* CormorantGaramond-Light.ttf in Resources */,
+				1FEF2776DC5E40149A858936 /* CormorantGaramond-LightItalic.ttf in Resources */,
+				E128FD92D9D04C588BA6C4BC /* CormorantGaramond-Medium.ttf in Resources */,
+				466BF78034B94548B3349CE5 /* CormorantGaramond-MediumItalic.ttf in Resources */,
+				219AD6A203FE4FB18D382B0A /* CormorantGaramond-Regular.ttf in Resources */,
+				658E61110745435BB7F914E3 /* CormorantGaramond-SemiBold.ttf in Resources */,
+				1DC7993CADF04BB297D60F4B /* CormorantGaramond-SemiBoldItalic.ttf in Resources */,
+				BBCA6746FAA94FB790F02166 /* OFL.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
