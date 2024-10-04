@@ -97,7 +97,7 @@ const FilterModal = (props:FilterModalPropType) => {
                     <AppButton label={"Cancel"}  textStyle={styles.textPrimary} btnstyle={{ ...styles.actionBtn, ...styles.borderedActionBtn }} loading={false} onClick={() => {
                         props.modalClose(false);
                      }} />
-                    <AppButton label={"Apply"} btnstyle={styles.actionBtn} loading={false} onClick={() => {
+                    <AppButton label={"Apply Filter"} btnstyle={styles.actionBtn} loading={false} onClick={() => {
                         props.modalClose(false);
                      }} />
                 </View>
@@ -135,7 +135,7 @@ const Categories = () => {
 
                 <View style={{ padding: moderateScale(10), width: '100%' }}>
                     <View style={[Style.flexRow, categorStyle.checkboxContainer]}>
-                        <CheckBox />
+                        <CheckBox  checkedBg={Colors.black} />
                         <Text>Select All (120)</Text>
                     </View>
                     <View style={{ marginLeft: moderateScale(10) }}>
@@ -145,7 +145,7 @@ const Categories = () => {
                                     <View style={[Style.flexRow, {
                                         paddingVertical: moderateScale(10)
                                     }]}>
-                                        <CheckBox />
+                                        <CheckBox checkedBg={Colors.black} />
                                         <Text>Health News</Text>
                                     </View>
                                 </>)
@@ -213,7 +213,8 @@ const Date = () => {
                                 return (
                                     <View key={`sort-${index}`} style={[Style.flexRow, {
                                         paddingVertical: moderateScale(10),
-                                        flexWrap: 'nowrap'
+                                        flexWrap: 'nowrap',
+                                        justifyContent:'space-between'
                                     }]}>
                                         <Text>{item}: </Text>
                                         <View style={[Style.flexRow,

@@ -22,6 +22,25 @@
 		3BCE9AB0AE9041E8937AA781 /* CormorantGaramond-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */; };
 		404C8975ADBC40EE9DC39A01 /* Lato-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B013E55E519471FAC029FCD /* Lato-BoldItalic.ttf */; };
 		466BF78034B94548B3349CE5 /* CormorantGaramond-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */; };
+		4FF7774C2CB00E4200BFD062 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777382CB00D0900BFD062 /* AntDesign.ttf */; };
+		4FF7774D2CB00E4200BFD062 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777392CB00D0900BFD062 /* Entypo.ttf */; };
+		4FF7774E2CB00E4200BFD062 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773A2CB00D0900BFD062 /* EvilIcons.ttf */; };
+		4FF7774F2CB00E4200BFD062 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773B2CB00D0900BFD062 /* Feather.ttf */; };
+		4FF777502CB00E4200BFD062 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773C2CB00D0900BFD062 /* FontAwesome.ttf */; };
+		4FF777512CB00E4200BFD062 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773D2CB00D0900BFD062 /* FontAwesome5_Brands.ttf */; };
+		4FF777522CB00E4200BFD062 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773E2CB00D0900BFD062 /* FontAwesome5_Regular.ttf */; };
+		4FF777532CB00E4200BFD062 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7773F2CB00D0900BFD062 /* FontAwesome5_Solid.ttf */; };
+		4FF777542CB00E4200BFD062 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777402CB00D0900BFD062 /* FontAwesome6_Brands.ttf */; };
+		4FF777552CB00E4200BFD062 /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777412CB00D0900BFD062 /* FontAwesome6_Regular.ttf */; };
+		4FF777562CB00E4200BFD062 /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777422CB00D0900BFD062 /* FontAwesome6_Solid.ttf */; };
+		4FF777572CB00E4200BFD062 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777432CB00D0900BFD062 /* Fontisto.ttf */; };
+		4FF777582CB00E4200BFD062 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777442CB00D0900BFD062 /* Foundation.ttf */; };
+		4FF777592CB00E4200BFD062 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777452CB00D0900BFD062 /* Ionicons.ttf */; };
+		4FF7775A2CB00E4200BFD062 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777462CB00D0900BFD062 /* MaterialCommunityIcons.ttf */; };
+		4FF7775B2CB00E4200BFD062 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777472CB00D0900BFD062 /* MaterialIcons.ttf */; };
+		4FF7775C2CB00E4200BFD062 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777482CB00D0900BFD062 /* Octicons.ttf */; };
+		4FF7775D2CB00E4200BFD062 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF777492CB00D0900BFD062 /* SimpleLineIcons.ttf */; };
+		4FF7775E2CB00E4200BFD062 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FF7774A2CB00D0900BFD062 /* Zocial.ttf */; };
 		658936C1199D42E6953B937C /* Lato-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56A73C4B6C25464A92236E5C /* Lato-Italic.ttf */; };
 		658E61110745435BB7F914E3 /* CormorantGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */; };
 		6E3EA26A93B0D827BE3748D1 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EFD9A5AF2CB6DBBF4F28C279 /* PrivacyInfo.xcprivacy */; };
@@ -52,9 +71,9 @@
 		00E356EE1AD99517003FC87E /* wholesomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wholesomeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* wholesomeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = wholesomeTests.m; sourceTree = "<group>"; };
-		0B013E55E519471FAC029FCD /* Lato-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BoldItalic.ttf"; path = "../assets/fonts/Lato-BoldItalic.ttf"; sourceTree = "<group>"; };
-		0BC2A863EDE64075B05294A2 /* Lato-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Light.ttf"; path = "../assets/fonts/Lato-Light.ttf"; sourceTree = "<group>"; };
-		0D3BB28DC326419E8730A2BC /* CormorantGaramond-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Regular.ttf"; path = "../assets/fonts/CormorantGaramond-Regular.ttf"; sourceTree = "<group>"; };
+		0B013E55E519471FAC029FCD /* Lato-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BoldItalic.ttf"; path = "../assets/fonts/Lato-BoldItalic.ttf"; sourceTree = "<group>"; };
+		0BC2A863EDE64075B05294A2 /* Lato-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Light.ttf"; path = "../assets/fonts/Lato-Light.ttf"; sourceTree = "<group>"; };
+		0D3BB28DC326419E8730A2BC /* CormorantGaramond-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Regular.ttf"; path = "../assets/fonts/CormorantGaramond-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* wholesome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wholesome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = wholesome/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = wholesome/AppDelegate.mm; sourceTree = "<group>"; };
@@ -62,33 +81,52 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = wholesome/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = wholesome/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = wholesome/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-MediumItalic.ttf"; path = "../assets/fonts/CormorantGaramond-MediumItalic.ttf"; sourceTree = "<group>"; };
+		1617BB6196DB4118A9A8072A /* CormorantGaramond-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-MediumItalic.ttf"; path = "../assets/fonts/CormorantGaramond-MediumItalic.ttf"; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-wholesome-wholesomeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-wholesome-wholesomeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3A288A3C60B1472FA199EE2E /* Lato-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; };
+		3A288A3C60B1472FA199EE2E /* Lato-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-wholesome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wholesome.debug.xcconfig"; path = "Target Support Files/Pods-wholesome/Pods-wholesome.debug.xcconfig"; sourceTree = "<group>"; };
-		3F5A20E4C25949AE9BA9B89A /* CormorantGaramond-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Italic.ttf"; path = "../assets/fonts/CormorantGaramond-Italic.ttf"; sourceTree = "<group>"; };
-		507D3B9EB6F04F86B4C9AFCB /* OFL.txt */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = OFL.txt; path = ../assets/fonts/OFL.txt; sourceTree = "<group>"; };
-		540DAD8B490C4039AC2D9DDD /* Lato-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Black.ttf"; path = "../assets/fonts/Lato-Black.ttf"; sourceTree = "<group>"; };
-		56A73C4B6C25464A92236E5C /* Lato-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Italic.ttf"; path = "../assets/fonts/Lato-Italic.ttf"; sourceTree = "<group>"; };
+		3F5A20E4C25949AE9BA9B89A /* CormorantGaramond-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Italic.ttf"; path = "../assets/fonts/CormorantGaramond-Italic.ttf"; sourceTree = "<group>"; };
+		4FF777382CB00D0900BFD062 /* AntDesign.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = AntDesign.ttf; sourceTree = "<group>"; };
+		4FF777392CB00D0900BFD062 /* Entypo.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Entypo.ttf; sourceTree = "<group>"; };
+		4FF7773A2CB00D0900BFD062 /* EvilIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = EvilIcons.ttf; sourceTree = "<group>"; };
+		4FF7773B2CB00D0900BFD062 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
+		4FF7773C2CB00D0900BFD062 /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.ttf; sourceTree = "<group>"; };
+		4FF7773D2CB00D0900BFD062 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		4FF7773E2CB00D0900BFD062 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		4FF7773F2CB00D0900BFD062 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		4FF777402CB00D0900BFD062 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
+		4FF777412CB00D0900BFD062 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
+		4FF777422CB00D0900BFD062 /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
+		4FF777432CB00D0900BFD062 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
+		4FF777442CB00D0900BFD062 /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Foundation.ttf; sourceTree = "<group>"; };
+		4FF777452CB00D0900BFD062 /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Ionicons.ttf; sourceTree = "<group>"; };
+		4FF777462CB00D0900BFD062 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		4FF777472CB00D0900BFD062 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		4FF777482CB00D0900BFD062 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
+		4FF777492CB00D0900BFD062 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		4FF7774A2CB00D0900BFD062 /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Zocial.ttf; sourceTree = "<group>"; };
+		507D3B9EB6F04F86B4C9AFCB /* OFL.txt */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = OFL.txt; path = ../assets/fonts/OFL.txt; sourceTree = "<group>"; };
+		540DAD8B490C4039AC2D9DDD /* Lato-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Black.ttf"; path = "../assets/fonts/Lato-Black.ttf"; sourceTree = "<group>"; };
+		56A73C4B6C25464A92236E5C /* Lato-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Italic.ttf"; path = "../assets/fonts/Lato-Italic.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-wholesome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wholesome.release.xcconfig"; path = "Target Support Files/Pods-wholesome/Pods-wholesome.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-wholesome-wholesomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wholesome-wholesomeTests.debug.xcconfig"; path = "Target Support Files/Pods-wholesome-wholesomeTests/Pods-wholesome-wholesomeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-wholesome.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-wholesome.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		68325F8D581849F7869E6D97 /* CormorantGaramond-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Bold.ttf"; path = "../assets/fonts/CormorantGaramond-Bold.ttf"; sourceTree = "<group>"; };
-		7CD29C1550CC44959E6F3E70 /* Lato-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
+		68325F8D581849F7869E6D97 /* CormorantGaramond-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Bold.ttf"; path = "../assets/fonts/CormorantGaramond-Bold.ttf"; sourceTree = "<group>"; };
+		7CD29C1550CC44959E6F3E70 /* Lato-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Regular.ttf"; path = "../assets/fonts/Lato-Regular.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = wholesome/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-wholesome-wholesomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-wholesome-wholesomeTests.release.xcconfig"; path = "Target Support Files/Pods-wholesome-wholesomeTests/Pods-wholesome-wholesomeTests.release.xcconfig"; sourceTree = "<group>"; };
-		96DFA15B427B4DD9B949570F /* CormorantGaramond-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-SemiBoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
-		A590DDAE63CE4C61934E26FE /* Lato-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-LightItalic.ttf"; path = "../assets/fonts/Lato-LightItalic.ttf"; sourceTree = "<group>"; };
-		A7CE23C23F684F5F989A0C36 /* Lato-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Thin.ttf"; path = "../assets/fonts/Lato-Thin.ttf"; sourceTree = "<group>"; };
-		B36B73D8878248E28CC1785F /* CormorantGaramond-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-LightItalic.ttf"; path = "../assets/fonts/CormorantGaramond-LightItalic.ttf"; sourceTree = "<group>"; };
-		C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-BoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-BoldItalic.ttf"; sourceTree = "<group>"; };
-		D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-SemiBold.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; };
-		D6DFC6A9A206462B91C56209 /* CormorantGaramond-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Medium.ttf"; path = "../assets/fonts/CormorantGaramond-Medium.ttf"; sourceTree = "<group>"; };
-		DCA24CBDA4864FE2A143A6AB /* Lato-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BlackItalic.ttf"; path = "../assets/fonts/Lato-BlackItalic.ttf"; sourceTree = "<group>"; };
+		96DFA15B427B4DD9B949570F /* CormorantGaramond-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-SemiBoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		A590DDAE63CE4C61934E26FE /* Lato-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-LightItalic.ttf"; path = "../assets/fonts/Lato-LightItalic.ttf"; sourceTree = "<group>"; };
+		A7CE23C23F684F5F989A0C36 /* Lato-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-Thin.ttf"; path = "../assets/fonts/Lato-Thin.ttf"; sourceTree = "<group>"; };
+		B36B73D8878248E28CC1785F /* CormorantGaramond-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-LightItalic.ttf"; path = "../assets/fonts/CormorantGaramond-LightItalic.ttf"; sourceTree = "<group>"; };
+		C6C8A4E14EFF4E7F912BACA4 /* CormorantGaramond-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-BoldItalic.ttf"; path = "../assets/fonts/CormorantGaramond-BoldItalic.ttf"; sourceTree = "<group>"; };
+		D643173287C64EAAA09D1ED1 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-SemiBold.ttf"; path = "../assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; };
+		D6DFC6A9A206462B91C56209 /* CormorantGaramond-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Medium.ttf"; path = "../assets/fonts/CormorantGaramond-Medium.ttf"; sourceTree = "<group>"; };
+		DCA24CBDA4864FE2A143A6AB /* Lato-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-BlackItalic.ttf"; path = "../assets/fonts/Lato-BlackItalic.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EFD9A5AF2CB6DBBF4F28C279 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = wholesome/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		EFE69132007C433BBCFA140F /* Lato-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-ThinItalic.ttf"; path = "../assets/fonts/Lato-ThinItalic.ttf"; sourceTree = "<group>"; };
-		F5B852E79F824C88BCDDD893 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Light.ttf"; path = "../assets/fonts/CormorantGaramond-Light.ttf"; sourceTree = "<group>"; };
+		EFD9A5AF2CB6DBBF4F28C279 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = wholesome/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		EFE69132007C433BBCFA140F /* Lato-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Lato-ThinItalic.ttf"; path = "../assets/fonts/Lato-ThinItalic.ttf"; sourceTree = "<group>"; };
+		F5B852E79F824C88BCDDD893 /* CormorantGaramond-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-Light.ttf"; path = "../assets/fonts/CormorantGaramond-Light.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,7 +207,6 @@
 				507D3B9EB6F04F86B4C9AFCB /* OFL.txt */,
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -182,6 +219,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4FF7774B2CB00D0900BFD062 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4FF777382CB00D0900BFD062 /* AntDesign.ttf */,
+				4FF777392CB00D0900BFD062 /* Entypo.ttf */,
+				4FF7773A2CB00D0900BFD062 /* EvilIcons.ttf */,
+				4FF7773B2CB00D0900BFD062 /* Feather.ttf */,
+				4FF7773C2CB00D0900BFD062 /* FontAwesome.ttf */,
+				4FF7773D2CB00D0900BFD062 /* FontAwesome5_Brands.ttf */,
+				4FF7773E2CB00D0900BFD062 /* FontAwesome5_Regular.ttf */,
+				4FF7773F2CB00D0900BFD062 /* FontAwesome5_Solid.ttf */,
+				4FF777402CB00D0900BFD062 /* FontAwesome6_Brands.ttf */,
+				4FF777412CB00D0900BFD062 /* FontAwesome6_Regular.ttf */,
+				4FF777422CB00D0900BFD062 /* FontAwesome6_Solid.ttf */,
+				4FF777432CB00D0900BFD062 /* Fontisto.ttf */,
+				4FF777442CB00D0900BFD062 /* Foundation.ttf */,
+				4FF777452CB00D0900BFD062 /* Ionicons.ttf */,
+				4FF777462CB00D0900BFD062 /* MaterialCommunityIcons.ttf */,
+				4FF777472CB00D0900BFD062 /* MaterialIcons.ttf */,
+				4FF777482CB00D0900BFD062 /* Octicons.ttf */,
+				4FF777492CB00D0900BFD062 /* SimpleLineIcons.ttf */,
+				4FF7774A2CB00D0900BFD062 /* Zocial.ttf */,
+			);
+			name = Fonts;
+			path = "../node_modules/react-native-vector-icons/Fonts";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +256,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4FF7774B2CB00D0900BFD062 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* wholesome */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* wholesomeTests */,
@@ -318,6 +383,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FF7774C2CB00E4200BFD062 /* AntDesign.ttf in Resources */,
+				4FF7774D2CB00E4200BFD062 /* Entypo.ttf in Resources */,
+				4FF7774E2CB00E4200BFD062 /* EvilIcons.ttf in Resources */,
+				4FF7774F2CB00E4200BFD062 /* Feather.ttf in Resources */,
+				4FF777502CB00E4200BFD062 /* FontAwesome.ttf in Resources */,
+				4FF777512CB00E4200BFD062 /* FontAwesome5_Brands.ttf in Resources */,
+				4FF777522CB00E4200BFD062 /* FontAwesome5_Regular.ttf in Resources */,
+				4FF777532CB00E4200BFD062 /* FontAwesome5_Solid.ttf in Resources */,
+				4FF777542CB00E4200BFD062 /* FontAwesome6_Brands.ttf in Resources */,
+				4FF777552CB00E4200BFD062 /* FontAwesome6_Regular.ttf in Resources */,
+				4FF777562CB00E4200BFD062 /* FontAwesome6_Solid.ttf in Resources */,
+				4FF777572CB00E4200BFD062 /* Fontisto.ttf in Resources */,
+				4FF777582CB00E4200BFD062 /* Foundation.ttf in Resources */,
+				4FF777592CB00E4200BFD062 /* Ionicons.ttf in Resources */,
+				4FF7775A2CB00E4200BFD062 /* MaterialCommunityIcons.ttf in Resources */,
+				4FF7775B2CB00E4200BFD062 /* MaterialIcons.ttf in Resources */,
+				4FF7775C2CB00E4200BFD062 /* Octicons.ttf in Resources */,
+				4FF7775D2CB00E4200BFD062 /* SimpleLineIcons.ttf in Resources */,
+				4FF7775E2CB00E4200BFD062 /* Zocial.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				6E3EA26A93B0D827BE3748D1 /* PrivacyInfo.xcprivacy in Resources */,
@@ -683,10 +767,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
@@ -759,10 +840,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

@@ -85,7 +85,7 @@ const Search = (props: SearchPropType) => {
                             padding: moderateScale(4)
                         }}
                     >
-                        <Text style={[FontStyle.bold, {color:Colors.black, paddingTop:moderateScale(10), fontSize:moderateScale(15)}]} >Recent</Text>
+                        <Text style={[FontStyle.bold, {color:Colors.black, paddingTop:moderateScale(10), fontSize:moderateScale(15)}]} >Recent Search</Text>
                         <FlatList
                             data={TestList}
                             renderItem={({ item, index }) => {

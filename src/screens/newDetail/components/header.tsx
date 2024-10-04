@@ -15,8 +15,8 @@ const Header = () => {
                 <AppImage source={Images.appLogo} resizeMode={'contain'} tintColor={Colors.primary} style={{ width: moderateScale(105), height: moderateScale(40) }} />
             </View>
             <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(10), paddingTop: moderateScale(6) }]}>
-                <AppImage resizeMode={'contain'} source={Icons.ic_love} style={style.icon} tintColor={Colors.black} />
-                <AppImage resizeMode={'contain'} source={Icons.ic_share} style={style.icon} tintColor={Colors.black} />
+                <AppImage resizeMode={'contain'} source={Icons.ic_heart} style={style.icon} tintColor={Colors.black} />
+                <AppImage resizeMode={'contain'} source={Icons.ic_move} style={style.icon} tintColor={Colors.black} />
             </View>
         </View>
     )

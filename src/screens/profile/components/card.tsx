@@ -29,8 +29,8 @@ const Card = (props: CardPropType) => {
             <TouchableOpacity 
                 onPress={props.onClick}
                style={[style.container, props.containerStyle]}>
-                <AppImage source={props.icons} style={{ width: moderateScale(24), height: moderateScale(24), marginHorizontal: moderateScale(3) }} />
-                <Text numberOfLines={1} style={[FontStyle.title, { color: Colors.black,flex:1 }]} >{props.title}</Text>
+                <AppImage source={props.icons} style={{ width: moderateScale(28), height: moderateScale(28), marginHorizontal: moderateScale(3) }} />
+                <Text numberOfLines={1} style={[FontStyle.title, { color: Colors.black,flex:1, fontSize : moderateScale(16) }]} >{props.title}</Text>
                 {
                     props.right
                 }

@@ -11,7 +11,7 @@ import Card from "./components/card";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Spacing } from "../../config/size.config";
 import { ToggleButton } from "react-native-paper";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigations/MainNavigation/models";
 
@@ -20,6 +20,8 @@ const Profile = () => {
     const navigate = useCallback((route: string) => {
         Nav.navigate(route as any)
     }, [])
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     return (
         <>
             <AppSafeAreaView>
@@ -47,7 +49,10 @@ const Profile = () => {
                         title="Push Notifications" icons={Icons.ic_notification}
                         right={
                             <View style={{ marginHorizontal: moderateScale(4) }}>
-                                <Switch />
+                                <Switch
+                                    onValueChange={toggleSwitch}
+                                    value={isEnabled}
+                                />
                             </View>
                         }
                     />

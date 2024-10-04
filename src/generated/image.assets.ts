@@ -23,6 +23,8 @@ export const Icons = {
     ic_privacy:require("../../assets/images/ic_privacy.png"),
     ic_tnc:require("../../assets/images/ic_tnc.png"),
     ic_about:require("../../assets/images/ic_about.png"),
+    ic_heart:require("../../assets/images/ic_heart.png"),
+    ic_move:require("../../assets/images/ic_move.png"),
 
     // ac_bt_bg:require("../../assets/images/ac_bt_bg.png"),
 }

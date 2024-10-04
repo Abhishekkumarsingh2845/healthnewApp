@@ -15,12 +15,12 @@ const CheckBox = ({onValueChange, checkboxStyle, checkedBg= Colors.primary, notC
     return (
         <TouchableOpacity
             onPress={() => {
-                // setChecked(!checked);
+                setChecked(!checked);
                 if(onValueChange){
                     onValueChange!(!checked);
                 }
             }}
-            style={[Styles.box, checkboxStyle, { backgroundColor: intialValue ? checkedBg : notCheckedBg }]} >
+            style={[Styles.box, checkboxStyle, { backgroundColor: checked ? checkedBg : notCheckedBg }]} >
             <Entypo name="check" color={checkColor} />
         </TouchableOpacity>
     )

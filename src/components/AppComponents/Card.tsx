@@ -6,16 +6,18 @@ import { Colors } from "../../config/colors.config";
 import { FontStyle, Style } from "../../config/style.config";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import EntypoIcons from 'react-native-vector-icons/Entypo'
 import { Size } from "../../config/size.config";
-interface CardPropType{
-    containerStyle?:ViewStyle,
-    onClick?:()=>void
+
+interface CardPropType {
+    containerStyle?: ViewStyle,
+    onClick?: () => void
 }
-const Card = (props:CardPropType) => {
+const Card = (props: CardPropType) => {
     const img = 'https://s3-alpha-sig.figma.com/img/c037/8a80/e3250b476a7f3a1d9749f5f222403e08?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NbJPPR4OEC7OLyEfAD6zHsL0nAEg4VB47tWL8PR5pWjpxk5Lw1x1Hv9k3f9dCypF5N1X8Qi4255Qrim~5WFW3qMVkG1IuXV09pZ961MzeUI1JNccNh6Qvbh3o3iUm1lwWt2igGRl8pxk4DaWDU6Im9nP7yjLsiTpy7V8pihCQVCOuHATGt7ILJWg0TESqACk3udqMzWEKEDNF17rP5xDg7WUYDDxPoQUOl4yflVuc~~OPWXs1ROUj2oh--bkuEIheGHI0nsVfYVKgfHcww2-5CRNbPGMBjf0VoDz71JYi8XrVjOK9HqfNcpNDeitRR8qRCFqjCaG11GP8rWsmjEDHg__'
     return (
         <>
-            <Pressable style={[style.box,props.containerStyle]} onPress={props.onClick}>
+            <Pressable style={[style.box, props.containerStyle]} onPress={props.onClick}>
                 <View style={style.container}>
                     <AppImage source={{ uri: img }} style={style.image} resizeMode={'stretch'} />
                     {/* Overlay */}
@@ -28,7 +30,7 @@ const Card = (props:CardPropType) => {
                                 <Text style={[FontStyle.titleSemibold, style.label]}>Fitness</Text>
                             </View>
                             <View style={[Style.flexRow, { gap: moderateScale(7) }]}>
-                                
+
                                 <View style={[style.iconContainer, style.otherIconsContainer]}>
                                     <AppImage source={Icons.ic_share} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                                 </View>
@@ -46,7 +48,7 @@ const Card = (props:CardPropType) => {
                     </View>
                 </View>
                 <View style={[Style.flexRow, { padding: moderateScale(5), alignItems: 'center', gap: moderateScale(10) }]}>
-                    <Text style={[FontStyle.bold, { color: Colors.black, width: '80%', justifyContent: 'space-between' }]}>
+                    <Text style={[FontStyle.bold, { color: Colors.black, width: '80%', justifyContent: 'space-between', fontSize:moderateScale(18) }]}>
                         Best whey protein for beginners: 10 top choices
                     </Text>
                     <View style={[Style.flexRow, { gap: moderateScale(4) }]}>
@@ -56,10 +58,15 @@ const Card = (props:CardPropType) => {
                         <Text style={[FontStyle.title, { color: Colors.gray }]} >2</Text>
                     </View>
                 </View>
-                <Text style={[FontStyle.regular, { padding: moderateScale(3), lineHeight: moderateScale(20) }]}>
-                    The best whey protein for beginners can help to support your fitness goals. So, check out the top-rated options and optimise your workout.
+                <View>
+                    <Text style={[FontStyle.titleSemibold, { padding: moderateScale(3), lineHeight: moderateScale(20), color:'#1D1D1D' }]}>
+                        The best whey protein for beginners can help to support your fitness goals. So, check out the top-rated options and optimise your workout.
+                    </Text>
+                    <View style={Style.flexRow}>
                     <Text style={[FontStyle.bold, { color: Colors.primary, fontSize: moderateScale(14) }]}>Read more</Text>
-                </Text>
+                    <EntypoIcons name="chevron-small-right" color={Colors.primary} size={moderateScale(25)} />
+                    </View>
+                </View>
             </Pressable>
         </>
     )
@@ -67,9 +74,9 @@ const Card = (props:CardPropType) => {
 
 const style = StyleSheet.create({
     box: {
-        width:Size.screenWidth * 0.85,
+        width: Size.screenWidth * 0.85,
         marginVertical: moderateScale(12),
-        backgroundColor: Colors.white,
+        backgroundColor: '#F5FFFD',
         padding: moderateScale(12),
         elevation: 3,
         borderRadius: moderateScale(20),
