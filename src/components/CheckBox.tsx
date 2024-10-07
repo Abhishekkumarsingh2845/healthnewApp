@@ -21,7 +21,7 @@ const CheckBox = ({onValueChange, checkboxStyle, checkedBg= Colors.primary, notC
                 }
             }}
             style={[Styles.box, checkboxStyle, { backgroundColor: checked ? checkedBg : notCheckedBg }]} >
-            <Entypo name="check" color={checkColor} />
+            <Entypo name="check" color={(checked)?checkColor:'transparent'} />
         </TouchableOpacity>
     )
 }

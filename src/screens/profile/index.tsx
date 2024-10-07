@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import AppSafeAreaView from "../../components/AppSafeAreaView";
 import Categories from "../../components/AppComponents/categories";
 import CategorySection from "../../components/CategorySections";
@@ -11,17 +11,21 @@ import Card from "./components/card";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Spacing } from "../../config/size.config";
 import { ToggleButton } from "react-native-paper";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useMemo, useState } from "react";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigations/MainNavigation/models";
-
+import { Switch } from "react-native-switch";
+import Feather from 'react-native-vector-icons/Feather'
 const Profile = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     const navigate = useCallback((route: string) => {
         Nav.navigate(route as any)
     }, [])
     const [isEnabled, setIsEnabled] = useState(false);
+    const [toggle, setToggle] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+
     return (
         <>
             <AppSafeAreaView>
@@ -47,14 +51,7 @@ const Profile = () => {
                             justifyContent: 'space-between'
                         }}
                         title="Push Notifications" icons={Icons.ic_notification}
-                        right={
-                            <View style={{ marginHorizontal: moderateScale(4) }}>
-                                <Switch
-                                    onValueChange={toggleSwitch}
-                                    value={isEnabled}
-                                />
-                            </View>
-                        }
+                        right={<SwitchBtn toggle={toggle} setToggle={setToggle} />}
                     />
                     <Card title="About us" icons={Icons.ic_about}
                         onClick={() => { navigate('About') }}
@@ -72,6 +69,40 @@ const Profile = () => {
         </>
     )
 }
+
+const InnerCircle = memo(({ toggle }: { toggle: boolean }) => {
+    return (
+        <View style={[{ flex: 1, backgroundColor: Colors.white, width: '100%', height: '100%', borderRadius: moderateScale(100) }, Style.flexMiddle]}  >
+            <Feather name={'check'} color={toggle ? Colors.primary : 'transparent'} size={moderateScale(14)} />
+        </View>
+    )
+})
+
+const SwitchBtn = memo(({ toggle, setToggle }: { toggle: boolean, setToggle: (val: any) => void }) => {
+    return (
+        <View style={{ marginHorizontal: moderateScale(4), }}>
+            <Switch
+                value={toggle}
+                renderInsideCircle={() => (<InnerCircle toggle={toggle} />)}
+                onValueChange={(val) => setToggle(val)}
+                activeText={'On'}
+                inActiveText={'Off'}
+                circleSize={moderateScale(25)}
+                backgroundActive={Colors.primary}
+                backgroundInactive={'#BCBCBC'}
+                circleActiveColor={'#FFFFFF'}
+                circleInActiveColor={'#FFFFFF'}
+                circleBorderWidth={3}
+
+                circleBorderActiveColor={Colors.primary}
+                circleBorderInactiveColor={'#BCBCBC'}
+                changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+                renderActiveText={false}
+                renderInActiveText={false}
+            />
+        </View>
+    )
+})
 
 const style = StyleSheet.create({
     title: {

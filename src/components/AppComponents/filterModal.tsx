@@ -61,8 +61,8 @@ const FilterModal = (props:FilterModalPropType) => {
                                         onPress={()=>{
                                             setSelectedIndex(index)
                                         }}
-                                        key={`filter-${index}`} style={[styles.btn,(!item.isApplied)&&categorStyle.unselectedBtn]}>
-                                            <Text style={[styles.text,(!item.isApplied)&&{color:Colors.primary}]}>{item.title}</Text>
+                                        key={`filter-${index}`} style={[styles.btn,(index != selectedIndex)&&categorStyle.unselectedBtn]}>
+                                            <Text style={[styles.text,(index != selectedIndex)&&{color:Colors.primary}]}>{item.title}</Text>
                                         </Pressable>
                                     )
                                 })
@@ -160,6 +160,7 @@ const Categories = () => {
     )
 }
 const SortBy = () => {
+    const [selectedIndex, setSeletedIndex] = useState<number>(0);
     return (
         <View>
             <View style={categorStyle.container}>
@@ -177,11 +178,15 @@ const SortBy = () => {
                                     <View key={`sort-${index}`} style={[Style.flexRow, {
                                         paddingVertical: moderateScale(10)
                                     }]}>
-                                        <View style={
+                                        <Pressable
+                                        onPress={()=>{
+                                            setSeletedIndex(index);
+                                        }}
+                                        style={
                                             sortStyle.radioBtn
                                         }>
-                                            <View style={{ backgroundColor: Colors.black, flex: 1, borderRadius: moderateScale(20) }} />
-                                        </View>
+                                            <View style={{ backgroundColor: (index == selectedIndex)?Colors.black:Colors.white, flex: 1, borderRadius: moderateScale(20) }} />
+                                        </Pressable>
                                         <Text>{item}</Text>
 
                                     </View>

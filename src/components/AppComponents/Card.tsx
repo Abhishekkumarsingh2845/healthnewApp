@@ -48,10 +48,10 @@ const Card = (props: CardPropType) => {
                     </View>
                 </View>
                 <View style={[Style.flexRow, { padding: moderateScale(5), alignItems: 'center', gap: moderateScale(10) }]}>
-                    <Text style={[FontStyle.bold, { color: Colors.black, width: '80%', justifyContent: 'space-between', fontSize:moderateScale(18) }]}>
+                    <Text style={[FontStyle.bold, { color: Colors.black, width: '70%', justifyContent: 'space-between', fontSize:moderateScale(18) }]}>
                         Best whey protein for beginners: 10 top choices
                     </Text>
-                    <View style={[Style.flexRow, { gap: moderateScale(4) }]}>
+                    <View style={[Style.flexRow, { gap: moderateScale(4), flex:1, justifyContent:'flex-end' }]}>
                         <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
                             <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(16), height: moderateScale(16) }} />
                         </View>
