@@ -24,93 +24,100 @@ const Explore = () => {
         <>
             <AppSafeAreaView>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Header onPressFilter={()=>{
+                    <Header onPressFilter={() => {
                         setShowFilter(true);
                     }} />
                     <Categories />
                     <CategorySection
-                        prefixAtTitle={<LottieView source={Lottie.latest} autoPlay loop style={{width:moderateScale(30), height: moderateScale(30)}} />}
+                        prefixAtTitle={<LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />}
                         title={"Latest News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-                            Nav.navigate('News',{title:'Latest News'}as NewsPropType)
+                            Nav.navigate('News', {
+                                title: 'Latest News',
+                                icon: <LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />
+
+                            } as NewsPropType)
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map((item, index)=>{
-                                    return(
-                                        <Card key={index} onClick={()=>{
+                                new Array(5).fill('').map((item, index) => {
+                                    return (
+                                        <Card key={index} onClick={() => {
                                             Nav.navigate('NewsDetail')
                                         }} />
                                     )
                                 })
                             }
                         </ScrollView>
-                        
+
                     </CategorySection>
                     <CategorySection
-                        prefixAtTitle={<LottieView source={Lottie.trending} autoPlay loop style={{width:moderateScale(30), height: moderateScale(30)}} />}
+                        prefixAtTitle={<LottieView source={Lottie.trending} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />}
                         title={"Trending/Popular News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-                            Nav.navigate('News',{title:'Trending/Popular News'}as NewsPropType)
+                            Nav.navigate('News', { title: 'Trending/Popular News', icon: <LottieView source={Lottie.trending} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} /> } as NewsPropType)
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map((_,index)=>{
-                                    return(
+                                new Array(5).fill('').map((_, index) => {
+                                    return (
                                         <Card
-                                        key={index}
-                                        onClick={()=>{
-                                            Nav.navigate('NewsDetail')
-                                        }}
+                                            key={index}
+                                            onClick={() => {
+                                                Nav.navigate('NewsDetail')
+                                            }}
                                         />
                                     )
                                 })
                             }
                         </ScrollView>
-                        
+
                     </CategorySection>
                     <CategorySection
-                        prefixAtTitle={<AppImage tintColor={Colors.error}  source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal:moderateScale(4) }} />}
+                        prefixAtTitle={<AppImage tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />}
                         title={"Favorites News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
                         left={'View All'}
                         moreStyle={style.moreStyle}
                         onViewAllPress={() => {
-                            
-                                Nav.navigate('News',{title:'Favorites News'}as NewsPropType)
-                            
+
+                            Nav.navigate('News', {
+                                title: 'Favorites News',
+                                icon: <AppImage tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
+                         } as NewsPropType)
+
                         }}
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map((item,index)=>{
-                                    return(
+                                new Array(5).fill('').map((item, index) => {
+                                    return (
                                         <Card
-                                        key={index}
-                                        onClick={()=>{
-                                            Nav.navigate('NewsDetail')
-                                        }}
+                                            key={index}
+                                            onClick={() => {
+                                                Nav.navigate('NewsDetail')
+                                            }}
                                         />
                                     )
                                 })
                             }
                         </ScrollView>
-                        
+
                     </CategorySection>
-                    <View style={{padding:moderateScale(55)}}  />
+                    <View style={{ padding: moderateScale(55) }} />
                 </ScrollView>
-                <FilterModal modalOpenFlag={showFilter} modalClose={setShowFilter}/>
+                <FilterModal modalOpenFlag={showFilter} modalClose={setShowFilter} />
             </AppSafeAreaView>
         </>
     )

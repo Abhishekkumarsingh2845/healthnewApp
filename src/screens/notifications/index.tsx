@@ -22,7 +22,7 @@ const Notifications = () => {
                 <FlatList
                     data={new Array(10).fill('')}
                     renderItem={({index}) => {
-                        return (<Card key={`Notification-${index}`} />)
+                        return (<Card key={`Notification-${index}`} label={[0,4].includes(index)?"Today":undefined} />)
                     }}
 
                 />

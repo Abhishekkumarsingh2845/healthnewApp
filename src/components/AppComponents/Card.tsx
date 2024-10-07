@@ -55,7 +55,7 @@ const Card = (props: CardPropType) => {
                         <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
                             <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(16), height: moderateScale(16) }} />
                         </View>
-                        <Text style={[FontStyle.title, { color: Colors.gray }]} >2</Text>
+                        <Text style={[FontStyle.title, { color: Colors.gray, fontSize: moderateScale(20) }]} >2</Text>
                     </View>
                 </View>
                 <View>

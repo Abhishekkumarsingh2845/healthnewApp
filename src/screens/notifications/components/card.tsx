@@ -13,24 +13,28 @@ import { Colors } from "../../../config/colors.config";
 import { Size } from "../../../config/size.config";
 
 interface CardPropType {
-    containerStyle?: ViewStyle
+    containerStyle?: ViewStyle,
+    label?: string
 }
 const Card = (props: CardPropType) => {
     const img = 'https://s3-alpha-sig.figma.com/img/654b/d028/8e14ea136d4148145511922cc09e4767?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Tvaz5PXJUdTT~127ESe8nRn~KlLAe9SO1khl-6SuS-BoM0rQctv2Dq-mpdzkEu-nW3DnajeH~TiZftGl-aHYlhSFdOYNy2nu9t7cdI5PJUV1Oig1SAz0zWlHecVqvzBhFYISB48zIrUCIFuxUYRqc~-H5iA~Jlo4iF-8Hg8ziP983UHpi66cpEBfr4fuWsWiFoHGkIw-ANe43fpeMYecmAyP3reqXJev18wTB9uOPPRTz0-8zixJO1BVeI71q52N8Fcxyvel5Wrs8dMKo2-2zmmE42GmyyeFT85DjnxOiKUOf6Tltu9fF4CMoF11CXp2YB6SMw8gWS~cUhAW3P64wg__'
     return (
         <>
             <View style={[style.box]}>
-
+                {
+                    props.label &&
+                    <Text style={[FontStyle.title, { paddingHorizontal: moderateScale(2), paddingVertical: moderateScale(3), color: Colors.black, fontSize: moderateScale(15) }]}>{props.label}</Text>
+                }
                 <View style={[Style.flexRow, { padding: moderateScale(2), alignItems: 'flex-start', gap: moderateScale(10) }]}>
-                    <AppImage source={{uri:img}}
-                    style={{
-                        width: moderateScale(60),
-                        height: moderateScale(60),
-                        borderRadius: moderateScale(10)
-                    }}
-                    
+                    <AppImage source={{ uri: img }}
+                        style={{
+                            width: moderateScale(60),
+                            height: moderateScale(60),
+                            borderRadius: moderateScale(10)
+                        }}
+
                     />
-                    <View style={[Style.flexOne, {gap: moderateScale(4)}]}>
+                    <View style={[Style.flexOne, { gap: moderateScale(4) }]}>
                         <Text style={[FontStyle.bold, { color: Colors.black, justifyContent: 'space-between', fontSize: moderateScale(15) }]}>
                             Best whey protein for beginners: 10 top choices
                         </Text>
