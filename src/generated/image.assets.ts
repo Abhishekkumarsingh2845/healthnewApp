@@ -29,3 +29,9 @@ export const Icons = {
     // ac_bt_bg:require("../../assets/images/ac_bt_bg.png"),
 }
 
+export const Lottie ={
+    heart:require('../../assets/lottie/heart.json'),
+    latest:require('../../assets/lottie/latest.json'),
+    trending:require('../../assets/lottie/trending.json'),
+}
+

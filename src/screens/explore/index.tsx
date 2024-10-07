@@ -4,7 +4,7 @@ import Header from "./components/header";
 import Categories from "../../components/AppComponents/categories";
 import CategorySection from "../../components/CategorySections";
 import AppImage from "../../components/AppImage";
-import { Icons, Images } from "../../generated/image.assets";
+import { Icons, Images, Lottie } from "../../generated/image.assets";
 import { moderateScale } from "react-native-size-matters";
 import { Colors } from "../../config/colors.config";
 import { FontStyle } from "../../config/style.config";
@@ -15,6 +15,7 @@ import { RootStackParamList } from "../../navigations/MainNavigation/models";
 import { NewsPropType } from "../news";
 import FilterModal from "../../components/AppComponents/filterModal";
 import { useState } from "react";
+import LottieView from "lottie-react-native";
 
 const Explore = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
@@ -28,7 +29,7 @@ const Explore = () => {
                     }} />
                     <Categories />
                     <CategorySection
-                        prefixAtTitle={<AppImage source={Icons.ic_latest} style={{ width: moderateScale(20), height: moderateScale(20) }} />}
+                        prefixAtTitle={<LottieView source={Lottie.latest} autoPlay loop style={{width:moderateScale(30), height: moderateScale(30)}} />}
                         title={"Latest News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
@@ -52,7 +53,7 @@ const Explore = () => {
                         
                     </CategorySection>
                     <CategorySection
-                        prefixAtTitle={<MaterialIcons name={'trending-up'} size={moderateScale(20)} color={Colors.primary} style={{marginRight: moderateScale(4)}} />}
+                        prefixAtTitle={<LottieView source={Lottie.trending} autoPlay loop style={{width:moderateScale(30), height: moderateScale(30)}} />}
                         title={"Trending/Popular News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
