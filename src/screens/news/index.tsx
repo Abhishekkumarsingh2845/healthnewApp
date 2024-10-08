@@ -42,7 +42,7 @@ const News = (props: NewsPropType) => {
                             new Array(5).fill('').map(() => {
                                 return (
                                     <Card containerStyle={{
-                                        width: Size.screenWidth * 0.95
+                                        width: Size.screenWidth * 0.9
                                     }}
                                         onClick={() => {
                                             Nav.navigate('NewsDetail')

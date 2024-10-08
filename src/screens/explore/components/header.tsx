@@ -38,7 +38,7 @@ const Header = (prop: HeaderPropType) => {
             <View style={style.headerContainer}>
                 {/* Left Section */}
                 <View style={[Style.flexRow]}>
-                    <AppImage resizeMode={'contain'} source={Images.appLogo} style={style.logo} tintColor={Colors.primary} />
+                    <Image resizeMode={'contain'} source={Images.appLogo} style={style.logo} />
                 </View>
                 {/* Right Section */}
                 <Pressable
@@ -93,7 +93,8 @@ const style = StyleSheet.create({
     },
     logo: {
         width: moderateScale(120),
-        height: moderateScale(40)
+        height: moderateScale(40),
+        tintColor:Colors.primary
     },
     icon: {
         marginTop: moderateScale(10),

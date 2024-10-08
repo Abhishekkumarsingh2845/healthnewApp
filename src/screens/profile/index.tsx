@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import AppSafeAreaView from "../../components/AppSafeAreaView";
 import Categories from "../../components/AppComponents/categories";
 import CategorySection from "../../components/CategorySections";
@@ -36,7 +36,7 @@ const Profile = () => {
                 Style.flexMiddle
 
                 ]}>
-                    <AppImage source={Images.appLogo} style={{
+                    <Image source={Images.appLogo} style={{
                         width: moderateScale(160),
                         height: moderateScale(40)
                     }}
@@ -49,6 +49,9 @@ const Profile = () => {
                     <Card
                         containerStyle={{
                             justifyContent: 'space-between'
+                        }}
+                        onClick={()=>{
+                            setToggle(!toggle);
                         }}
                         title="Push Notifications" icons={Icons.ic_notification}
                         right={<SwitchBtn toggle={toggle} setToggle={setToggle} />}
@@ -84,7 +87,7 @@ const SwitchBtn = memo(({ toggle, setToggle }: { toggle: boolean, setToggle: (va
             <Switch
                 value={toggle}
                 renderInsideCircle={() => (<InnerCircle toggle={toggle} />)}
-                onValueChange={(val) => setToggle(val)}
+                onValueChange={(val) => {}}
                 activeText={'On'}
                 inActiveText={'Off'}
                 circleSize={moderateScale(25)}

@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import TabIcon, { TabIconProps } from './TabIcon';
 import { ReactNode } from 'react';
 import { Colors } from '../../config/colors.config';
@@ -25,7 +25,7 @@ function BottomNavigation() {
                 tabBarShowLabel: false,
                 tabBarStyle: styles.tabBarStyle,
             }}
-            
+
 
         >
             {
@@ -39,8 +39,8 @@ function BottomNavigation() {
                                         label={item.label}
                                         icon={item.icon}
                                         activeIcon={item.activeIcon}
-                                        isLastIndex={index==(Tabs.length-1)}
-                                        isStartIndex={index==0}
+                                        isLastIndex={index == (Tabs.length - 1)}
+                                        isStartIndex={index == 0}
                                         isActive={focused}
                                     />
                                 }
@@ -54,19 +54,25 @@ function BottomNavigation() {
 }
 const styles = StyleSheet.create({
     tabBarStyle: {
-        // backgroundColor: Colors.primary,
         backgroundColor: Colors.primary,
         borderTopWidth: 0,
-        elevation:0,
-        position:"absolute",
-        height: moderateScale(60),
-        
+        elevation: 0,
+        position: "absolute",
+        ...Platform.select({
+            ios: {
+                paddingTop: moderateScale(13),
+            },
+            android: {
+                height: moderateScale(65)
+            }
+        })
+
     }
 })
 interface TabType extends TabIconProps {
     name: string;
-    component: (props:any) => JSX.Element| ReactNode;
-    initialParams?:any
+    component: (props: any) => JSX.Element | ReactNode;
+    initialParams?: any
 }
 const Tabs: Array<TabType> = [
     {
@@ -82,7 +88,7 @@ const Tabs: Array<TabType> = [
         label: 'Favorite',
         icon: Icons.ic_fav,
         activeIcon: Icons.ic_active_love,
-        
+
 
     },
     {
@@ -92,7 +98,7 @@ const Tabs: Array<TabType> = [
         icon: Icons.ic_profile,
         activeIcon: Icons.ic_active_profile,
     },
-    
+
 
 ]
 export default BottomNavigation

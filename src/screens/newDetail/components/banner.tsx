@@ -35,7 +35,7 @@ const Banner = (props: CardPropType) => {
                 <View  style={[Style.flexRow, {justifyContent:'space-between', paddingTop: moderateScale(10), paddingHorizontal: moderateScale(4)}]}>
                     <View style={[Style.flexRow]}>
                         <View style={style.iconContainer}>
-                            <AppImage source={Icons.ic_fitness} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
+                            <Image source={Icons.ic_fitness} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                         </View>
                         <Text style={[FontStyle.titleSemibold, style.label,{color:Colors.black}]}>Fitness</Text>
                     </View>

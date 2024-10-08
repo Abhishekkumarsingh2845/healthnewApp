@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import AppSafeAreaView from "../../components/AppSafeAreaView";
 import Header from "./components/header";
 import Categories from "../../components/AppComponents/categories";
@@ -84,7 +84,7 @@ const Explore = () => {
 
                     </CategorySection>
                     <CategorySection
-                        prefixAtTitle={<AppImage tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />}
+                        prefixAtTitle={<Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />}
                         title={"Favorites News"}
                         titleStyle={style.title}
                         headerContainerStyle={style.header}
@@ -94,7 +94,7 @@ const Explore = () => {
 
                             Nav.navigate('News', {
                                 title: 'Favorites News',
-                                icon: <AppImage tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
+                                icon: <Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
                          } as NewsPropType)
 
                         }}

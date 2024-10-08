@@ -25,17 +25,17 @@ const Card = (props: CardPropType) => {
                         <View style={[Style.flexRow, { justifyContent: 'space-between' }]}>
                             <View style={[Style.flexRow]}>
                                 <View style={style.iconContainer}>
-                                    <AppImage source={Icons.ic_fitness} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
+                                    <Image source={Icons.ic_fitness} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                                 </View>
                                 <Text style={[FontStyle.titleSemibold, style.label]}>Fitness</Text>
                             </View>
                             <View style={[Style.flexRow, { gap: moderateScale(7) }]}>
 
                                 <View style={[style.iconContainer, style.otherIconsContainer]}>
-                                    <AppImage source={Icons.ic_share} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
+                                    <Image source={Icons.ic_share} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                                 </View>
                                 <View style={[style.iconContainer, style.otherIconsContainer]}>
-                                    <AppImage source={Icons.ic_love} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
+                                    <Image source={Icons.ic_love} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                                 </View>
                             </View>
                         </View>
@@ -48,10 +48,10 @@ const Card = (props: CardPropType) => {
                     </View>
                 </View>
                 <View style={[Style.flexRow, { padding: moderateScale(5), alignItems: 'center', gap: moderateScale(10) }]}>
-                    <Text style={[FontStyle.bold, { color: Colors.black, width: '70%', justifyContent: 'space-between', fontSize:moderateScale(18) }]}>
+                    <Text style={[FontStyle.bold, { color: Colors.black, width: '70%', justifyContent: 'space-between', fontSize: moderateScale(18) }]}>
                         Best whey protein for beginners: 10 top choices
                     </Text>
-                    <View style={[Style.flexRow, { gap: moderateScale(4), flex:1, justifyContent:'flex-end' }]}>
+                    <View style={[Style.flexRow, { gap: moderateScale(4), flex: 1, justifyContent: 'flex-end' }]}>
                         <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
                             <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(16), height: moderateScale(16) }} />
                         </View>
@@ -59,12 +59,12 @@ const Card = (props: CardPropType) => {
                     </View>
                 </View>
                 <View>
-                    <Text style={[FontStyle.titleSemibold, { padding: moderateScale(3), lineHeight: moderateScale(20), color:'#1D1D1D' }]}>
+                    <Text style={[FontStyle.titleSemibold, { padding: moderateScale(3), lineHeight: moderateScale(20), color: '#1D1D1D' }]}>
                         The best whey protein for beginners can help to support your fitness goals. So, check out the top-rated options and optimise your workout.
                     </Text>
                     <View style={Style.flexRow}>
-                    <Text style={[FontStyle.bold, { color: Colors.primary, fontSize: moderateScale(14) }]}>Read more</Text>
-                    <EntypoIcons name="chevron-small-right" color={Colors.primary} size={moderateScale(25)} />
+                        <Text style={[FontStyle.bold, { color: Colors.primary, fontSize: moderateScale(14) }]}>Read more</Text>
+                        <EntypoIcons name="chevron-small-right" color={Colors.primary} size={moderateScale(25)} />
                     </View>
                 </View>
             </Pressable>
@@ -80,7 +80,14 @@ const style = StyleSheet.create({
         padding: moderateScale(12),
         elevation: 3,
         borderRadius: moderateScale(20),
-        marginRight: moderateScale(12)
+        marginHorizontal: moderateScale(6),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
 
     },
     container: {

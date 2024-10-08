@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native"
+import { Image, ScrollView, Text, View } from "react-native"
 import AppSafeAreaView from "../../components/AppSafeAreaView"
 import Categories from "../../components/AppComponents/categories"
 import CategorySection from "../../components/CategorySections"
@@ -19,7 +19,7 @@ const Favorite = () => {
             <AppSafeAreaView>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(3), paddingTop: Spacing.topSpace, alignSelf: 'center' }]}>
-                        <AppImage source={Icons.ic_love} tintColor={Colors.error} style={{ width: moderateScale(25), height: moderateScale(25) }} resizeMode={'contain'} />
+                        <Image source={Icons.ic_love} tintColor={Colors.error} style={{ width: moderateScale(25), height: moderateScale(25) }} resizeMode={'contain'} />
                         <Text style={[FontStyle.bold, { color: Colors.black }]} >Favorites News</Text>
                     </View>
                     <Categories />
@@ -28,7 +28,7 @@ const Favorite = () => {
                             new Array(5).fill('').map((_,index) => {
                                 return (
                                     <Card key={index} containerStyle={{
-                                        width:Size.screenWidth * 0.95
+                                        width:Size.screenWidth * 0.9
                                     }} 
                                     onClick={()=>{
                                         Nav.navigate('NewsDetail')

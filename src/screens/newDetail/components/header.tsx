@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import BackButton from "../../../components/BackButton";
 import AppImage from "../../../components/AppImage";
 import { Icons, Images } from "../../../generated/image.assets";
@@ -12,11 +12,11 @@ const Header = () => {
         <View style={[Style.flexRow, { alignItems: 'center', justifyContent: 'space-between', paddingTop: Spacing.topSpace }]}>
             <View style={[Style.flexRow, { alignItems: 'center', justifyContent:'flex-start' }]} >
                 <BackButton color={Colors.black} size={moderateScale(20)} style={{ position: 'relative' }} />
-                <AppImage source={Images.appLogo} resizeMode={'contain'} tintColor={Colors.primary} style={{ width: moderateScale(105), height: moderateScale(40) }} />
+                <Image source={Images.appLogo} resizeMode={'contain'} tintColor={Colors.primary} style={{ width: moderateScale(105), height: moderateScale(40) }} />
             </View>
             <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(10), paddingTop: moderateScale(6) }]}>
-                <AppImage resizeMode={'contain'} source={Icons.ic_heart} style={style.icon} tintColor={Colors.black} />
-                <AppImage resizeMode={'contain'} source={Icons.ic_move} style={style.icon} tintColor={Colors.black} />
+                <Image resizeMode={'contain'} source={Icons.ic_heart} style={style.icon} tintColor={Colors.black} />
+                <Image resizeMode={'contain'} source={Icons.ic_move} style={style.icon} tintColor={Colors.black} />
             </View>
         </View>
     )
