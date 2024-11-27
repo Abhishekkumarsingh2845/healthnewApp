@@ -13,23 +13,49 @@ import { Size } from "../../config/size.config"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { RootStackParamList } from "../../navigations/MainNavigation/models"
 import { Fonts } from "../../config/font.config"
-
-const NewsDetail = () => {
+import { StackScreenProps } from "@react-navigation/stack"
+import { BSON } from "realm"
+import { ArticleType } from "../../store/article/article.interface"
+import { useGetArticlesById } from "../../store/article/article.hooks"
+import { useRealm } from "@realm/react"
+import Article from "../../store/article/article.schema"
+export interface NewsDetailsPropType extends StackScreenProps<RootStackParamList, 'NewsDetail'> {
+    _id: string
+}
+const NewsDetail = (props: NewsDetailsPropType) => {
+    const params = props.route.params;
+    const realm = useRealm();
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+    console.log(params._id, "ID...")
+    const objId = new BSON.ObjectId(params._id)
+    const details = useGetArticlesById(objId) as ArticleType;
+    console.log(details, "SINGLE");
+    // const details = realm.objectForPrimaryKey(Article.schema.name,objId) as ArticleType;
     return (
         <>
             <AppSafeAreaView>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <Header />
-                    <Banner />
+                    <Header {...details} />
+                    <Banner {...details} />
                     <Text
-                        style={[FontStyle.bold, { color: Colors.black, marginVertical: moderateScale(10),fontFamily:Fonts.bold, fontSize: moderateScale(24), }]}
-                    >Can this fish exercise reshape your waist? Fitness expert shares his two cents</Text>
+                        style={[FontStyle.bold,
+                        {
+                            color: Colors.black,
+                            marginVertical: moderateScale(10),
+                            fontFamily: Fonts.bold,
+                            fontSize: moderateScale(24),
+                        }]}
+                    >{details.title}</Text>
                     <Text
-                        style={[FontStyle.regular, { lineHeight: moderateScale(27), fontSize: moderateScale(17), color:'#1D1D1D' }]}
-                    >Attention, fitness and yoga enthusiasts! There’s an exciting new exercise that promises to accelerate your weight loss journey, strengthen your joints, and improve your gut health. Intrigued? So were we. According to therapeutic exercise and Qigong expert Bama Kim, this “fish exercise” or the fish pose helps improve intestinal health, spine alignment, and offers joint relief. Kim claims that this exercise not only supports weight loss but also helps reshape your waistline. Indianexpress.com spoke to Dr Dharmesh Shah, fitness expert, founder and director of Holistica World, Surat, to understand whether this exercise truly does what it is being claimed. “Yes, the fish exercise does offer benefits, but since it doesn’t involve heavy weights, its impact on the waistline might be limited,” he said. Allow the crown of your head to lightly touch the floor, but ensure that most of your weight is supported by your forearms rather than your head. Keep your legs straight and together, with your feet pointing outward.</Text>
+                        style={[FontStyle.regular,
+                        {
+                            lineHeight: moderateScale(27),
+                            fontSize: moderateScale(17),
+                            color: '#1D1D1D'
+                        }]}
+                    >{details.content}</Text>
 
-                    <CategorySection
+                    {/* <CategorySection
                         prefixAtTitle={<AppImage source={Icons.ic_latest} style={{ width: moderateScale(20), height: moderateScale(20) }} />}
                         title={"Related News"}
                         titleStyle={style.title}
@@ -42,7 +68,7 @@ const NewsDetail = () => {
                     >
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {
-                                new Array(5).fill('').map((_,index) => {
+                                new Array(5).fill('').map((_, index) => {
                                     return (
                                         <Card
                                             containerStyle={{
@@ -59,7 +85,7 @@ const NewsDetail = () => {
                             }
                         </ScrollView>
 
-                    </CategorySection>
+                    </CategorySection> */}
 
                 </ScrollView>
 

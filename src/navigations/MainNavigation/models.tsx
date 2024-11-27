@@ -1,7 +1,9 @@
 import { NavigationProp } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
 import { SearchPropType } from "../../screens/search"
-import { NewsPropType } from "../../screens/news"
+
+import { NewsDetailsPropType } from "../../screens/newDetail"
+import { NewsPropType } from "../../screens/news/types/interface"
 
 
 export interface Screen {
@@ -20,7 +22,7 @@ export type RootStackParamList = {
     Search:SearchPropType,
     News:NewsPropType,
     Notifications:undefined,
-    NewsDetail:undefined,
+    NewsDetail:NewsDetailsPropType,
 }
 
 export type RootNavigationProp = NavigationProp<

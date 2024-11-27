@@ -8,18 +8,26 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EntypoIcons from 'react-native-vector-icons/Entypo'
 import { Size } from "../../config/size.config";
+import Article from "../../store/article/article.schema";
+import { ArticleType } from "../../store/article/article.interface";
+import moment from "moment";
+import { memo, useCallback } from "react";
+import { useToggleLikeArticle } from "../../store/article/article.hooks";
 
-interface CardPropType {
+interface CardPropType extends ArticleType {
     containerStyle?: ViewStyle,
     onClick?: () => void
 }
 const Card = (props: CardPropType) => {
-    const img = 'https://s3-alpha-sig.figma.com/img/c037/8a80/e3250b476a7f3a1d9749f5f222403e08?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NbJPPR4OEC7OLyEfAD6zHsL0nAEg4VB47tWL8PR5pWjpxk5Lw1x1Hv9k3f9dCypF5N1X8Qi4255Qrim~5WFW3qMVkG1IuXV09pZ961MzeUI1JNccNh6Qvbh3o3iUm1lwWt2igGRl8pxk4DaWDU6Im9nP7yjLsiTpy7V8pihCQVCOuHATGt7ILJWg0TESqACk3udqMzWEKEDNF17rP5xDg7WUYDDxPoQUOl4yflVuc~~OPWXs1ROUj2oh--bkuEIheGHI0nsVfYVKgfHcww2-5CRNbPGMBjf0VoDz71JYi8XrVjOK9HqfNcpNDeitRR8qRCFqjCaG11GP8rWsmjEDHg__'
+    const {toggleLike} = useToggleLikeArticle();
+    const onLike = useCallback(()=>{
+            toggleLike(props._id);
+    },[props._id])
     return (
         <>
             <Pressable style={[style.box, props.containerStyle]} onPress={props.onClick}>
                 <View style={style.container}>
-                    <AppImage source={{ uri: img }} style={style.image} resizeMode={'stretch'} />
+                    <AppImage source={{ uri: props.urlToImage }} style={style.image} resizeMode={'stretch'} />
                     {/* Overlay */}
                     <View style={style.overlay}>
                         <View style={[Style.flexRow, { justifyContent: 'space-between' }]}>
@@ -27,40 +35,40 @@ const Card = (props: CardPropType) => {
                                 <View style={style.iconContainer}>
                                     <Image source={Icons.ic_fitness} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
                                 </View>
-                                <Text style={[FontStyle.titleSemibold, style.label]}>Fitness</Text>
+                                <Text style={[FontStyle.titleSemibold, style.label]}>{props.category}</Text>
                             </View>
                             <View style={[Style.flexRow, { gap: moderateScale(7) }]}>
 
-                                <View style={[style.iconContainer, style.otherIconsContainer]}>
+                                <Pressable  style={[style.iconContainer, style.otherIconsContainer]}>
                                     <Image source={Icons.ic_share} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
-                                </View>
-                                <View style={[style.iconContainer, style.otherIconsContainer]}>
-                                    <Image source={Icons.ic_love} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
-                                </View>
+                                </Pressable>
+                                <Pressable onPress={onLike} style={[style.iconContainer, style.otherIconsContainer]}>
+                                    <Image source={(props.isLiked)?Icons.ic_active_love: Icons.ic_love} style={style.icon} resizeMode={'contain'} tintColor={Colors.white} />
+                                </Pressable>
                             </View>
                         </View>
                         <View>
                             <View style={[Style.flexRow, { gap: moderateScale(3) }]}>
                                 <Ionicons name={'time-outline'} size={moderateScale(20)} color={Colors.white} />
-                                <Text style={[FontStyle.regular, { color: Colors.white, fontSize: moderateScale(12) }]}>20 minutes ago</Text>
+                                <Text style={[FontStyle.regular, { color: Colors.white, fontSize: moderateScale(12) }]}>{moment(props.publishedAt).fromNow()}</Text>
                             </View>
                         </View>
                     </View>
                 </View>
                 <View style={[Style.flexRow, { padding: moderateScale(5), alignItems: 'center', gap: moderateScale(10) }]}>
-                    <Text style={[FontStyle.bold, { color: Colors.black, width: '70%', justifyContent: 'space-between', fontSize: moderateScale(18) }]}>
-                        Best whey protein for beginners: 10 top choices
+                    <Text style={[FontStyle.bold, { color: Colors.black, justifyContent: 'space-between', fontSize: moderateScale(18) }]}>
+                        {props.title}
                     </Text>
-                    <View style={[Style.flexRow, { gap: moderateScale(4), flex: 1, justifyContent: 'flex-end' }]}>
+                    {/* <View style={[Style.flexRow, { gap: moderateScale(4), flex: 1, justifyContent: 'flex-end' }]}>
                         <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
                             <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(16), height: moderateScale(16) }} />
                         </View>
                         <Text style={[FontStyle.title, { color: Colors.gray, fontSize: moderateScale(20) }]} >2</Text>
-                    </View>
+                    </View> */}
                 </View>
                 <View>
-                    <Text style={[FontStyle.titleSemibold, { padding: moderateScale(3), lineHeight: moderateScale(20), color: '#1D1D1D' }]}>
-                        The best whey protein for beginners can help to support your fitness goals. So, check out the top-rated options and optimise your workout.
+                    <Text numberOfLines={2} style={[FontStyle.titleSemibold, { padding: moderateScale(3), lineHeight: moderateScale(20), color: '#1D1D1D' }]}>
+                        {props.description}
                     </Text>
                     <View style={Style.flexRow}>
                         <Text style={[FontStyle.bold, { color: Colors.primary, fontSize: moderateScale(14) }]}>Read more</Text>
@@ -119,11 +127,12 @@ const style = StyleSheet.create({
     },
     label: {
         paddingHorizontal: moderateScale(4),
-        color: Colors.white
+        color: Colors.white,
+        textTransform:'capitalize'
     },
     otherIconsContainer: {
         backgroundColor: '#0000006D'
     }
 })
 
-export default Card;
+export default memo(Card);

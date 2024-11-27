@@ -11,9 +11,11 @@ import { FontStyle, Style } from "../../../config/style.config";
 import { Icons } from "../../../generated/image.assets";
 import { Colors } from "../../../config/colors.config";
 import { Size } from "../../../config/size.config";
+import { ArticleType } from "../../../store/article/article.interface";
+import moment from "moment";
 
-interface CardPropType {
-    containerStyle?: ViewStyle
+interface CardPropType extends ArticleType {
+    containerStyle?: ViewStyle,
 }
 const Banner = (props: CardPropType) => {
     const img = 'https://s3-alpha-sig.figma.com/img/c037/8a80/e3250b476a7f3a1d9749f5f222403e08?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NbJPPR4OEC7OLyEfAD6zHsL0nAEg4VB47tWL8PR5pWjpxk5Lw1x1Hv9k3f9dCypF5N1X8Qi4255Qrim~5WFW3qMVkG1IuXV09pZ961MzeUI1JNccNh6Qvbh3o3iUm1lwWt2igGRl8pxk4DaWDU6Im9nP7yjLsiTpy7V8pihCQVCOuHATGt7ILJWg0TESqACk3udqMzWEKEDNF17rP5xDg7WUYDDxPoQUOl4yflVuc~~OPWXs1ROUj2oh--bkuEIheGHI0nsVfYVKgfHcww2-5CRNbPGMBjf0VoDz71JYi8XrVjOK9HqfNcpNDeitRR8qRCFqjCaG11GP8rWsmjEDHg__'
@@ -21,13 +23,13 @@ const Banner = (props: CardPropType) => {
         <>
             <View style={[style.box, props.containerStyle]}>
                 <View style={style.container}>
-                    <AppImage source={{ uri: img }} style={style.image} resizeMode={'stretch'} />
+                    <AppImage source={{ uri: props.urlToImage }} style={style.image} resizeMode={'stretch'} />
                     {/* Overlay */}
                     <View style={style.overlay}>
                         <View style={{ position: 'absolute', bottom: '5%', left: '5%' }}>
                             <View style={[Style.flexRow, { gap: moderateScale(3) }]}>
                                 <Ionicons name={'time-outline'} size={moderateScale(20)} color={Colors.white} />
-                                <Text style={[FontStyle.regular, { color: Colors.white, fontSize: moderateScale(12) }]}>20 minutes ago</Text>
+                                <Text style={[FontStyle.regular, { color: Colors.white, fontSize: moderateScale(12) }]}>{moment(props.publishedAt).fromNow()}</Text>
                             </View>
                         </View>
                     </View>
@@ -39,13 +41,13 @@ const Banner = (props: CardPropType) => {
                         </View>
                         <Text style={[FontStyle.titleSemibold, style.label,{color:Colors.black}]}>Fitness</Text>
                     </View>
-                    <View style={[Style.flexRow, { gap: moderateScale(4) }]}>
+                    {/* <View style={[Style.flexRow, { gap: moderateScale(4) }]}>
                         
                         <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
                             <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(20), height: moderateScale(20) }} />
                         </View>
                         <Text style={[FontStyle.title, { color: Colors.gray, fontSize:moderateScale(23) }]} >2</Text>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </>

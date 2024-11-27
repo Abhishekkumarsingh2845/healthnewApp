@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import AppSafeAreaView from "../../components/AppSafeAreaView";
 import Header from "./components/header";
 import Categories from "../../components/AppComponents/categories";
@@ -12,51 +12,90 @@ import Card from "../../components/AppComponents/card";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../navigations/MainNavigation/models";
-import { NewsPropType } from "../news";
+
 import FilterModal from "../../components/AppComponents/filterModal";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LottieView from "lottie-react-native";
+import { fetchLatestArticles } from "../../store/article/article.network";
+import { deleteArticles, saveManyArticles } from "../../store/article/article.service";
+import { errorLog, infoLog } from "../../utils/debug";
+import { useGetArticles } from "../../store/article/article.hooks";
+import { NewsDetailsPropType } from "../newDetail";
+import { NewListType } from "../news/types/enum";
+import { NewsPropType } from "../news/types/interface";
 
 const Explore = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     const [showFilter, setShowFilter] = useState(false);
+    const allArticles = useGetArticles();
+    const [refreshing, setRefreshing] = useState(false);
+    const getLatestArticle = useCallback(async (page: number) => {
+        const res = await fetchLatestArticles({ page });
+        if(page ==1){
+            deleteArticles();
+        }
+        if (res.status) {
+            if (res?.response?.articles) {
+                saveManyArticles(res?.response?.articles)
+            }
+        } else {
+            errorLog(res.message);
+        }
+    }, [])
+    const init = async () => {
+        setRefreshing(true);
+        await getLatestArticle(1)
+        setRefreshing(false);
+    }
+
+    useEffect(() => {
+        console.log("RUN/")
+        init()
+    }, [])
     return (
         <>
             <AppSafeAreaView>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView
+                    refreshControl={<RefreshControl  colors={[Colors.primary]} refreshing={refreshing} onRefresh={init} />}
+                    showsVerticalScrollIndicator={false}>
                     <Header onPressFilter={() => {
                         setShowFilter(true);
                     }} />
                     <Categories />
-                    <CategorySection
-                        prefixAtTitle={<LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />}
-                        title={"Latest News"}
-                        titleStyle={style.title}
-                        headerContainerStyle={style.header}
-                        left={'View All'}
-                        moreStyle={style.moreStyle}
-                        onViewAllPress={() => {
-                            Nav.navigate('News', {
-                                title: 'Latest News',
-                                icon: <LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />
+                    {
+                        allArticles.length > 0 &&
+                        <CategorySection
+                            prefixAtTitle={<LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />}
+                            title={"Latest News"}
+                            titleStyle={style.title}
+                            headerContainerStyle={style.header}
+                            left={'View All'}
+                            moreStyle={style.moreStyle}
+                            onViewAllPress={() => {
+                                Nav.navigate('News', {
+                                    title: 'Latest News',
+                                    type:NewListType.Latest,
+                                    icon: <LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />
 
-                            } as NewsPropType)
-                        }}
-                    >
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {
-                                new Array(5).fill('').map((item, index) => {
-                                    return (
-                                        <Card key={index} onClick={() => {
-                                            Nav.navigate('NewsDetail')
-                                        }} />
-                                    )
-                                })
-                            }
-                        </ScrollView>
+                                } as NewsPropType)
+                            }}
+                        >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                {
+                                    allArticles.map((item, index) => {
+                                        return (
+                                            <Card key={index} onClick={() => {
+                                                const id = item._id.toHexString();
+                                                Nav.navigate('NewsDetail',{_id:id} as NewsDetailsPropType)
+                                            }} {...item} />
+                                        )
+                                    })
+                                }
+                            </ScrollView>
 
-                    </CategorySection>
-                    <CategorySection
+                        </CategorySection>
+                    }
+                    {/* <CategorySection
                         prefixAtTitle={<LottieView source={Lottie.trending} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />}
                         title={"Trending/Popular News"}
                         titleStyle={style.title}
@@ -95,7 +134,7 @@ const Explore = () => {
                             Nav.navigate('News', {
                                 title: 'Favorites News',
                                 icon: <Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
-                         } as NewsPropType)
+                            } as NewsPropType)
 
                         }}
                     >
@@ -114,7 +153,7 @@ const Explore = () => {
                             }
                         </ScrollView>
 
-                    </CategorySection>
+                    </CategorySection> */}
                     <View style={{ padding: moderateScale(55) }} />
                 </ScrollView>
                 <FilterModal modalOpenFlag={showFilter} modalClose={setShowFilter} />
