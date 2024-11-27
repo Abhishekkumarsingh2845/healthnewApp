@@ -1,9 +1,11 @@
 import { AnyRealmObject, ObjectSchema, RealmObjectConstructor } from "realm";
 import { createRealmContext } from "@realm/react";
 import Article from "./article/article.schema";
-export const realmConfig: (RealmObjectConstructor<AnyRealmObject> | ObjectSchema)[] = [Article]
+import Favorite from "./favorite/favorite.schema";
+export const realmConfig: (RealmObjectConstructor<AnyRealmObject> | ObjectSchema)[] = [Article, Favorite]
 const config = {
-   schema: [Article.schema],
+   schema: [Favorite.schema,Article.schema,],
+   
 };
 
 export default createRealmContext(config);

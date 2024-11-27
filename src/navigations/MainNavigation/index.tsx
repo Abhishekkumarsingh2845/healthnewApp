@@ -16,13 +16,18 @@ import News from '../../screens/news';
 import Notifications from '../../screens/notifications';
 import Profile from '../../screens/profile';
 import NewsDetail from '../../screens/newDetail';
+import { useRealm } from '@realm/react';
 
 
 const MainNavigation = () => {
   const Stack = createStackNavigator<RootStackParamList>();
-  
-  
+  const realm = useRealm();
 
+  useEffect(()=>{
+    return(()=>{
+      realm.close();
+    })
+  },[])
   
   return (
     <>

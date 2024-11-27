@@ -103,7 +103,8 @@ const style = StyleSheet.create({
     },
     searchContainer:{
         width:'100%',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingBottom:'3%'
     },
     search:{
         backgroundColor: '#9EA0A733',

@@ -19,19 +19,20 @@ import LottieView from "lottie-react-native";
 import { fetchLatestArticles } from "../../store/article/article.network";
 import { deleteArticles, saveManyArticles } from "../../store/article/article.service";
 import { errorLog, infoLog } from "../../utils/debug";
-import { useGetArticles } from "../../store/article/article.hooks";
+import { useGetArticles, useGetFavArticles } from "../../store/article/article.hooks";
 import { NewsDetailsPropType } from "../newDetail";
-import { NewListType } from "../news/types/enum";
+import { NewsListType } from "../news/types/enum";
 import { NewsPropType } from "../news/types/interface";
 
 const Explore = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     const [showFilter, setShowFilter] = useState(false);
     const allArticles = useGetArticles();
+    const favArticles = useGetFavArticles();
     const [refreshing, setRefreshing] = useState(false);
     const getLatestArticle = useCallback(async (page: number) => {
         const res = await fetchLatestArticles({ page });
-        if(page ==1){
+        if (page == 1) {
             deleteArticles();
         }
         if (res.status) {
@@ -55,12 +56,13 @@ const Explore = () => {
     return (
         <>
             <AppSafeAreaView>
-                <ScrollView
-                    refreshControl={<RefreshControl  colors={[Colors.primary]} refreshing={refreshing} onRefresh={init} />}
-                    showsVerticalScrollIndicator={false}>
+                
                     <Header onPressFilter={() => {
                         setShowFilter(true);
                     }} />
+                    <ScrollView
+                    refreshControl={<RefreshControl colors={[Colors.primary]} refreshing={refreshing} onRefresh={init} />}
+                    showsVerticalScrollIndicator={false}>
                     <Categories />
                     {
                         allArticles.length > 0 &&
@@ -74,7 +76,7 @@ const Explore = () => {
                             onViewAllPress={() => {
                                 Nav.navigate('News', {
                                     title: 'Latest News',
-                                    type:NewListType.Latest,
+                                    type: NewsListType.Latest,
                                     icon: <LottieView source={Lottie.latest} autoPlay loop style={{ width: moderateScale(30), height: moderateScale(30) }} />
 
                                 } as NewsPropType)
@@ -86,7 +88,7 @@ const Explore = () => {
                                         return (
                                             <Card key={index} onClick={() => {
                                                 const id = item._id.toHexString();
-                                                Nav.navigate('NewsDetail',{_id:id} as NewsDetailsPropType)
+                                                Nav.navigate('NewsDetail', { _id: id } as NewsDetailsPropType)
                                             }} {...item} />
                                         )
                                     })
@@ -121,39 +123,45 @@ const Explore = () => {
                             }
                         </ScrollView>
 
-                    </CategorySection>
-                    <CategorySection
-                        prefixAtTitle={<Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />}
-                        title={"Favorites News"}
-                        titleStyle={style.title}
-                        headerContainerStyle={style.header}
-                        left={'View All'}
-                        moreStyle={style.moreStyle}
-                        onViewAllPress={() => {
-
-                            Nav.navigate('News', {
-                                title: 'Favorites News',
-                                icon: <Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
-                            } as NewsPropType)
-
-                        }}
-                    >
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {
-                                new Array(5).fill('').map((item, index) => {
-                                    return (
-                                        <Card
-                                            key={index}
-                                            onClick={() => {
-                                                Nav.navigate('NewsDetail')
-                                            }}
-                                        />
-                                    )
-                                })
-                            }
-                        </ScrollView>
-
                     </CategorySection> */}
+                    {
+                        favArticles.length > 0 &&
+                        <CategorySection
+                            prefixAtTitle={<Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />}
+                            title={"Favorites News"}
+                            titleStyle={style.title}
+                            headerContainerStyle={style.header}
+                            left={'View All'}
+                            moreStyle={style.moreStyle}
+                            onViewAllPress={() => {
+
+                                Nav.navigate('News', {
+                                    title: 'Favorites News',
+                                    type:NewsListType.Favourite,
+                                    icon: <Image tintColor={Colors.error} source={Icons.ic_love} style={{ width: moderateScale(20), height: moderateScale(20), marginHorizontal: moderateScale(4) }} />
+                                } as NewsPropType)
+
+                            }}
+                        >
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                {
+                                    favArticles.map((item, index) => {
+                                        return (
+                                            <Card
+                                                {...item}
+                                                key={index}
+                                                onClick={() => {
+                                                    const id = item._id.toHexString();
+                                                    Nav.navigate('NewsDetail',{_id:id} as NewsDetailsPropType)
+                                                }}
+                                            />
+                                        )
+                                    })
+                                }
+                            </ScrollView>
+
+                        </CategorySection>
+                    }
                     <View style={{ padding: moderateScale(55) }} />
                 </ScrollView>
                 <FilterModal modalOpenFlag={showFilter} modalClose={setShowFilter} />

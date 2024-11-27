@@ -1,4 +1,4 @@
-export enum NewListType{
+export enum NewsListType{
     Latest="latest",
     Trending="trending",
     Favourite='favourite'

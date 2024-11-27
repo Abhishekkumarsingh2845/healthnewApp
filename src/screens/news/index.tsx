@@ -14,8 +14,7 @@ import { RootStackParamList } from "../../navigations/MainNavigation/models"
 import { NavigationProp, useNavigation } from "@react-navigation/native"
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react"
 import BackButton from "../../components/BackButton"
-import { NewListType } from "./types/enum"
-import { useGetArticles } from "../../store/article/article.hooks"
+import { useGetArticles, useGetFavArticles } from "../../store/article/article.hooks"
 import { NewsDetailsPropType } from "../newDetail"
 import InfiniteList from "../../components/InfiniteList"
 import { ArticleType } from "../../store/article/article.interface"
@@ -25,12 +24,14 @@ import { errorLog } from "../../utils/debug"
 import { ActivityIndicator } from "react-native-paper"
 import { NewsPropType } from "./types/interface"
 import Header from "./components/header"
+import { NewsListType } from "./types/enum"
 
 
 const News = (props: NewsPropType) => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
     const params = props.route.params;
     const latest = useGetArticles();
+    const favorites = useGetFavArticles();
     const [paginationDetails, setPaginationDetails] = useState({
         page: 1,
         totalPages: 0,
@@ -39,11 +40,11 @@ const News = (props: NewsPropType) => {
     })
     const Lists = useMemo(() => {
         switch (params.type) {
-            case NewListType.Latest:
+            case NewsListType.Latest:
                 return latest
-            case NewListType.Favourite:
-                return latest
-            case NewListType.Trending:
+            case NewsListType.Favourite: 
+                return favorites;
+            case NewsListType.Trending:
                 return latest
             default: return []
         }
@@ -52,9 +53,7 @@ const News = (props: NewsPropType) => {
     const changePaginationValues = useCallback((key: keyof typeof paginationDetails, value: boolean | number) => {
         setPaginationDetails((prev) => ({ ...prev, key: value }))
     }, [])
-    const changePageNumbe = useCallback((key: keyof typeof paginationDetails, value: boolean) => {
-        setPaginationDetails((prev) => ({ ...prev, key: value }))
-    }, [])
+
     const getLatestArticle = useCallback(async (page: number) => {
         changePaginationValues('refreshing', true)
         const res = await fetchLatestArticles({ page });
@@ -72,29 +71,28 @@ const News = (props: NewsPropType) => {
         }
         changePaginationValues('refreshing', false)
     }, [])
+
     const onLoadMore = async () => {
         // console.log('load more....')
         if (Lists.length > 0) {
             changePaginationValues('loadMore', true)
             const updatedPage = paginationDetails.page + 1;
             changePaginationValues('page', updatedPage);
-            await getLatestArticle(updatedPage)
+            await init(updatedPage)
             changePaginationValues('loadMore', false)
         }
     }
-    const init = useCallback(() => {
+    const init =  useCallback(async(page:number = 1) => {
         switch (params.type) {
-            case NewListType.Latest: getLatestArticle(1)
+            case NewsListType.Latest: await getLatestArticle(page)
                 break;
-            case NewListType.Favourite: getLatestArticle(1)
-                break;
-            case NewListType.Trending: getLatestArticle(1)
+            case NewsListType.Trending: await getLatestArticle(page)
                 break;
         }
     }, [params.type])
 
     useEffect(() => {
-        init()
+        init(1)
     }, [])
     return (
         <>
