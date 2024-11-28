@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AppImage from "../../../components/AppImage";
 import { Icons, Images } from "../../../generated/image.assets";
 import { moderateScale } from "react-native-size-matters";
@@ -84,7 +84,7 @@ export default Header;
 
 const style = StyleSheet.create({
     headerContainer: {
-        paddingTop: Spacing.topSpace,
+        paddingTop: StatusBar.currentHeight,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

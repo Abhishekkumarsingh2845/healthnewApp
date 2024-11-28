@@ -31,7 +31,7 @@ const Explore = () => {
     const favArticles = useGetFavArticles();
     const [refreshing, setRefreshing] = useState(false);
     const getLatestArticle = useCallback(async (page: number) => {
-        const res = await fetchLatestArticles({ page });
+        const res = await fetchLatestArticles({ page, search:'' });
         if (page == 1) {
             deleteArticles();
         }
