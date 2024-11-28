@@ -50,7 +50,7 @@ export const saveManyArticles = (newArticles: Array<ArticleType>) => {
 export const deleteArticles = () => {
     realm && realm.write(() => {
         const articles = realm.objects(Article.schema.name);
-        console.log(articles, 'art..')
+        // console.log(articles, 'art..')
         if (articles.length > 0) {
             realm.delete(articles)
         }

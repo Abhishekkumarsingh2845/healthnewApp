@@ -23,9 +23,11 @@ import { useGetArticles, useGetFavArticles } from "../../store/article/article.h
 import { NewsDetailsPropType } from "../newDetail";
 import { NewsListType } from "../news/types/enum";
 import { NewsPropType } from "../news/types/interface";
+import { useCategory } from "../../store/category/category.hooks";
 
 const Explore = () => {
     const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+    const {getCatories} = useCategory();
     const [showFilter, setShowFilter] = useState(false);
     const allArticles = useGetArticles();
     const favArticles = useGetFavArticles();
@@ -51,6 +53,7 @@ const Explore = () => {
 
     useEffect(() => {
         console.log("RUN/")
+        getCatories();
         init()
     }, [])
     return (

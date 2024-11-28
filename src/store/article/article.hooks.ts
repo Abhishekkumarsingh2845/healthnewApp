@@ -8,12 +8,12 @@ import Favorite from '../favorite/favorite.schema';
 
 export const useGetArticles = () => {
     const articles = useQuery(Article).sorted('publishedAt', true,);
-    console.log("RUN GET>>>")
+    // console.log("RUN GET>>>")
     return articles;
 };
 export const useGetFavArticles = () => {
     const articles = useQuery(Article).filtered(`isLiked==true`).sorted('publishedAt', true,);
-    console.log("RUN GET>>>")
+    // console.log("RUN GET>>>")
     return articles;
 };
 export const useGetArticlesById = (id: BSON.ObjectId) => {
