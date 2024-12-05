@@ -23,6 +23,7 @@ export type RootStackParamList = {
     News:NewsPropType,
     Notifications:undefined,
     NewsDetail:NewsDetailsPropType,
+    WebViewScreen: { url: string }; 
 }
 
 export type RootNavigationProp = NavigationProp<

@@ -1,45 +1,92 @@
-import { Image, Pressable, StyleSheet, View } from "react-native";
-import BackButton from "../../../components/BackButton";
-import AppImage from "../../../components/AppImage";
-import { Icons, Images } from "../../../generated/image.assets";
-import { Style } from "../../../config/style.config";
-import { moderateScale } from "react-native-size-matters";
-import { Colors } from "../../../config/colors.config";
-import { Spacing } from "../../../config/size.config";
-import { ArticleType } from "../../../store/article/article.interface";
-import { useGetArticlesById, useToggleLikeArticle } from "../../../store/article/article.hooks";
-import { BSON } from "realm";
-import { useRealm } from "@realm/react";
-import Article from "../../../store/article/article.schema";
+import {Image, Pressable, SafeAreaView, StyleSheet, View} from 'react-native';
+import BackButton from '../../../components/BackButton';
+import AppImage from '../../../components/AppImage';
+import {Icons, Images} from '../../../generated/image.assets';
+import {Style} from '../../../config/style.config';
+import {moderateScale} from 'react-native-size-matters';
+import {Colors} from '../../../config/colors.config';
+import {Spacing} from '../../../config/size.config';
+import {ArticleType} from '../../../store/article/article.interface';
+import {
+  useGetArticlesById,
+  useToggleLikeArticle,
+} from '../../../store/article/article.hooks';
+import {BSON} from 'realm';
+import {useRealm} from '@realm/react';
+import Article from '../../../store/article/article.schema';
 
 const Header = (props: ArticleType) => {
-    const objId = new BSON.ObjectId(props._id)
-    const realm = useRealm();
-    console.log("HEADER>>>");
-    const details = realm.objectForPrimaryKey(Article.schema.name,objId) as ArticleType;
-    // const details = useGetArticlesById(new BSON.ObjectId(props._id)) as ArticleType;
-    const { toggleLike } = useToggleLikeArticle()
+  const objId = new BSON.ObjectId(props._id);
+  const realm = useRealm();
+  console.log('HEADER>>>');
+  const details = realm.objectForPrimaryKey(
+    Article.schema.name,
+    objId,
+  ) as ArticleType;
+  // const details = useGetArticlesById(new BSON.ObjectId(props._id)) as ArticleType;
+  const {toggleLike} = useToggleLikeArticle();
 
-    return (
-        <View style={[Style.flexRow, { alignItems: 'center', justifyContent: 'space-between', paddingTop: Spacing.topSpace }]}>
-            <View style={[Style.flexRow, { alignItems: 'center', justifyContent: 'flex-start' }]} >
-                <BackButton color={Colors.black} size={moderateScale(20)} style={{ position: 'relative' }} />
-                <Image source={Images.appLogo} resizeMode={'contain'} tintColor={Colors.primary} style={{ width: moderateScale(105), height: moderateScale(40) }} />
-            </View>
-            <View style={[Style.flexRow, { alignItems: 'center', gap: moderateScale(10), paddingTop: moderateScale(6) }]}>
-                <Pressable onPress={() => { toggleLike(props._id) }}>
-                <Image resizeMode={'contain'} source={details.isLiked ? Icons.ic_active_love : Icons.ic_heart} style={style.icon} tintColor={details.isLiked ? Colors.primary : Colors.black} />
-                </Pressable>
-                    <Image resizeMode={'contain'} source={Icons.ic_move} style={style.icon} tintColor={Colors.black} />
-            </View>
-        </View>
-    )
-}
+  return (
+    <SafeAreaView
+      style={[
+        Style.flexRow,
+        {
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingTop: Spacing.topSpace,
+        },
+      ]}>
+      <View
+        style={[
+          Style.flexRow,
+          {alignItems: 'center', justifyContent: 'flex-start'},
+        ]}>
+        <BackButton
+          color={Colors.black}
+          size={moderateScale(20)}
+          style={{position: 'relative'}}
+        />
+        <Image
+          source={Images.appLogo}
+          resizeMode={'contain'}
+          tintColor={Colors.primary}
+          style={{width: moderateScale(105), height: moderateScale(40)}}
+        />
+      </View>
+      <View
+        style={[
+          Style.flexRow,
+          {
+            alignItems: 'center',
+            gap: moderateScale(10),
+            paddingTop: moderateScale(6),
+          },
+        ]}>
+        <Pressable
+          onPress={() => {
+            toggleLike(props._id);
+          }}>
+          <Image
+            resizeMode={'contain'}
+            source={details.isLiked ? Icons.ic_active_love : Icons.ic_heart}
+            style={style.icon}
+            tintColor={details.isLiked ? Colors.primary : Colors.black}
+          />
+        </Pressable>
+        <Image
+          resizeMode={'contain'}
+          source={Icons.ic_move}
+          style={style.icon}
+          tintColor={Colors.black}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
 const style = StyleSheet.create({
-    icon: {
-        width: moderateScale(24),
-        height: moderateScale(24),
-    }
-
-})
+  icon: {
+    width: moderateScale(24),
+    height: moderateScale(24),
+  },
+});
 export default Header;

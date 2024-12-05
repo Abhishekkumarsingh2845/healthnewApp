@@ -11,6 +11,7 @@ export interface ArticleType {
     urlToImage: string;
     category: string;
     publishedAt: Date;
+    createdAt:Date;
     status: ArticleStatus;
     isLiked?: boolean;
 }

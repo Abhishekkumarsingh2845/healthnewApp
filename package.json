@@ -20,6 +20,7 @@
     "@react-navigation/stack": "^6.4.1",
     "@realm/react": "^0.11.0",
     "axios": "^1.7.7",
+    "install": "^0.13.0",
     "lottie-react-native": "^7.0.0",
     "moment": "^2.30.1",
     "patch-package": "^8.0.0",
@@ -36,6 +37,7 @@
     "react-native-switch": "^1.5.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
+    "react-native-webview": "^13.12.4",
     "realm": "^12.14.0"
   },
   "devDependencies": {

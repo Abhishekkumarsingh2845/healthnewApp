@@ -1,45 +1,110 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import Article from './article.schema';
-import { useQuery, useRealm } from '@realm/react';
-import { BSON } from 'realm';
-import { ArticleType } from './article.interface';
+import {useQuery, useRealm} from '@realm/react';
+import {BSON} from 'realm';
+import {ArticleType} from './article.interface';
 import Favorite from '../favorite/favorite.schema';
 
-
 export const useGetArticles = () => {
-    const articles = useQuery(Article).sorted('publishedAt', true,);
-    // console.log("RUN GET>>>")
-    return articles;
+  const articles = useQuery(Article).sorted('publishedAt', true);
+  // console.log("RUN GET>>>")
+  return articles;
 };
 export const useGetFavArticles = () => {
-    const articles = useQuery(Article).filtered(`isLiked==true`).sorted('publishedAt', true,);
-    // console.log("RUN GET>>>")
-    return articles;
+  const articles = useQuery(Article)
+    .filtered(`isLiked==true`)
+    .sorted('publishedAt', true);
+  // console.log("RUN GET>>>")
+  return articles;
 };
 export const useGetArticlesById = (id: BSON.ObjectId) => {
-    console.log(id, "ID>>>")
-    const articles = useQuery(Article).filtered(`_id == $0`,id);
-    return articles[0];
+  console.log(id, 'ID>>>');
+  const articles = useQuery(Article).filtered(`_id == $0`, id);
+  return articles[0];
 };
 export const useToggleLikeArticle = () => {
-    const realm = useRealm()
-    const toggleLike = useCallback((id: BSON.ObjectId) => {
-        console.log("Called...");
-        const article = realm.objectForPrimaryKey(Article.schema.name, id) as ArticleType;
+  const realm = useRealm();
+
+  const toggleLike = useCallback(
+    (id: BSON.ObjectId) => {
+      console.log('Called...', id);
+      const article = realm.objectForPrimaryKey(
+        Article.schema.name,
+        id,
+      ) as ArticleType;
+      console.log('Called...');
+
+      realm.write(() => {
+        article.isLiked = !(article?.isLiked ?? false);
+        const fav = realm
+          .objects(Favorite.schema.name)
+          .filtered(`articleId == $0`, article._id);
+        if (fav.length > 0) {
+          console.log('Delete');
+          realm.delete(fav);
+        }
+        if (article.isLiked) {
+          console.log('ADD');
+          realm.create(Favorite.schema.name, {
+            _id: new BSON.ObjectId(),
+            articleId: article._id,
+          });
+        }
+      });
+    },
+    [realm],
+  );
+
+  const saveSingleArticle = (newArticle: ArticleType) => {
+    try {
+      realm &&
         realm.write(() => {
-            article.isLiked = !article.isLiked ?? false
-            const fav = realm.objects(Favorite.schema.name).filtered(`articleId == $0`,article._id);
-            if(fav.length>0){
-                console.log('Delete')
-                realm.delete(fav);
-            }
-            if(article.isLiked){
-                console.log('ADD')
-                realm.create(Favorite.schema.name,{_id:new BSON.ObjectId(), articleId:article._id})
-            }
-        })
-    }, [realm])
-    return { toggleLike };
+          const articleId = new BSON.ObjectId(newArticle._id);
+          let data = {
+            ...newArticle,
+            _id: articleId,
+          };
+          const fav = realm
+            .objects(Favorite.schema.name)
+            .filtered(`articleId == $0`, articleId);
+          if (fav.length > 0) {
+            data['isLiked'] = true;
+          } else {
+            data['isLiked'] = false;
+          }
+          realm.create(Article.schema.name, data, Realm.UpdateMode.Modified);
+        });
+    } catch (error) {
+      console.log('->>>>', error);
+      throw error;
+    }
+  };
+
+  const saveManyArticles = useCallback(
+    (newArticles: Array<ArticleType>) => {
+      try {
+        newArticles.forEach(item => {
+          saveSingleArticle(item);
+        });
+      } catch (error) {
+        console.log('errorerror', error);
+
+        throw error;
+      }
+    },
+    [realm],
+  );
+
+  const deleteArticles = useCallback(() => {
+    realm &&
+      realm.write(() => {
+        const articles = realm.objects(Article.schema.name);
+        // console.log(articles, 'art..')
+        if (articles.length > 0) {
+          realm.delete(articles);
+        }
+      });
+  }, [realm]);
+
+  return {toggleLike, saveSingleArticle, deleteArticles, saveManyArticles};
 };
-
-

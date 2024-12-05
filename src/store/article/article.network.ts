@@ -16,3 +16,5 @@ export const fetchLatestArticles = async (params:{page:number, search:string}): 
         return catchHandling(error);
     }
 }
+
+

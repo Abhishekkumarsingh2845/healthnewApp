@@ -1,8 +1,15 @@
-import { NavigationContainer, DefaultTheme, useNavigation, StackActions } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
-import { RootStackParamList, Screen } from './models';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
-
+import {
+  NavigationContainer,
+  DefaultTheme,
+  useNavigation,
+  StackActions,
+} from '@react-navigation/native';
+import {useEffect, useState} from 'react';
+import {RootStackParamList, Screen} from './models';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 
 import SplashScreen from '../../screens/splash';
 // import Onboarding from '../../screens/onboarding';
@@ -16,51 +23,51 @@ import News from '../../screens/news';
 import Notifications from '../../screens/notifications';
 import Profile from '../../screens/profile';
 import NewsDetail from '../../screens/newDetail';
-import { useRealm } from '@realm/react';
+import {useRealm} from '@realm/react';
 
+import WebView from 'react-native-webview';
+import WebViewScreen from '../../screens/news/WebViewScreen';
+import ViewAll from '../../screens/trending/ViewAll';
+import Detailedtrend from '../../screens/trending/Detailedtrend';
 
 const MainNavigation = () => {
   const Stack = createStackNavigator<RootStackParamList>();
   const realm = useRealm();
 
-  useEffect(()=>{
-    return(()=>{
+  useEffect(() => {
+    return () => {
       realm.close();
-    })
-  },[])
-  
+    };
+  }, []);
+
   return (
     <>
       <NavigationContainer
-        
         theme={{
-          ...DefaultTheme, colors: {
+          ...DefaultTheme,
+          colors: {
             ...DefaultTheme.colors,
-          }
-        }} >
-
+          },
+        }}>
         <Stack.Navigator
           // initialRouteName={UserState.intialRoute}
-        initialRouteName={'BottomNavigation'}
+          initialRouteName={'BottomNavigation'}
           screenOptions={{
             headerShown: false,
             gestureEnabled: false,
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
           }}>
-          {
-
-            AppStack.map((item, index) => {
-              return (
-                <Stack.Screen
-                  key={index}
-                  name={item.name}
-                  component={item.screen}
-                  initialParams={item.initailParams}
-                  options={item.options}
-                />
-              );
-            })
-          }
+          {AppStack.map((item, index) => {
+            return (
+              <Stack.Screen
+                key={index}
+                name={item.name}
+                component={item.screen}
+                initialParams={item.initailParams}
+                options={item.options}
+              />
+            );
+          })}
         </Stack.Navigator>
       </NavigationContainer>
     </>
@@ -83,15 +90,15 @@ const AppStack: Array<Screen> = [
   {
     name: 'News',
     screen: News,
-    initailParams:{
-      title:"Latest News"
-    }
+    initailParams: {
+      title: 'Latest News',
+    },
   },
   {
     name: 'Search',
     screen: Search,
   },
-  
+
   {
     name: 'PrivacyPolicy',
     screen: PrivacyPolicy,
@@ -104,11 +111,19 @@ const AppStack: Array<Screen> = [
     name: 'About',
     screen: About,
   },
-  
+  {
+    name: 'WebViewScreen',
+    screen: WebViewScreen,
+  },
+
+  {
+    name: 'ViewAll',
+    screen: ViewAll,
+  },
+  {
+    name: 'Detailedtrend',
+    screen: Detailedtrend,
+  },
 ];
 
-
-
 export default MainNavigation;
-
-
