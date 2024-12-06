@@ -55,6 +55,20 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                 FontStyle.bold,
                 {
                   color: '#000000',
+                 
+                  fontFamily: Fonts.light,
+                  fontWeight: 400,
+                  fontSize: moderateScale(14),
+                  lineHeight: 16,
+                },
+              ]}>
+              {details.category}
+            </Text>
+            <Text
+              style={[
+                FontStyle.bold,
+                {
+                  color: '#000000',
                   marginVertical: moderateScale(10),
                   fontFamily: Fonts.bold,
                   fontWeight: 700,
@@ -79,8 +93,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             </Text>
 
             <TouchableOpacity style={style.showdoccontainer}>
-              {/* <Text style={style.showdocumenttxt}>Read Document</Text> */}
-              {/* <EntypoIcons
+              {/* <Text style={style.showdocumenttxt}>Read Document</Text>
+              <EntypoIcons
                 name="chevron-small-right"
                 color={Colors.primary}
                 size={moderateScale(25)}
@@ -97,7 +111,12 @@ const NewsDetail = (props: NewsDetailsPropType) => {
           }}>
           <Image
             source={require('../../../assets/images/rn.png')}
-            style={{width: 40, height: 40, resizeMode: 'contain',marginRight:5}}
+            style={{
+              width: 40,
+              height: 40,
+              resizeMode: 'contain',
+              marginRight: 5,
+            }}
           />
           <Text
             style={{
@@ -109,7 +128,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             Related New
           </Text>
         </View>
-   
+
         {articles && articles.length > 0 ? (
           <ScrollView
             horizontal
@@ -131,9 +150,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
         ) : (
           <Text style={style.noDataText}>No articles available</Text>
         )}
-        <View style={{marginVertical:15}}></View>
+        <View style={{marginVertical: 15}}></View>
       </ScrollView>
-
     </View>
   );
 };

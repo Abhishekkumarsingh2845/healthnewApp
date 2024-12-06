@@ -25,6 +25,7 @@ import { BSON } from 'realm';
 interface CardPropType extends ArticleType {
   containerStyle?: ViewStyle;
   onClick?: () => void;
+  onLike?:()=>void
 }
 const Card = (props: CardPropType) => {
   
@@ -34,6 +35,10 @@ const Card = (props: CardPropType) => {
     console.log("props===>>",props);
     
     const id =  new BSON.ObjectId(props._id);
+    if(props.onLike){
+      props.onLike();
+      return
+    }
     toggleLike( id);
   }, [props._id]);
   return (

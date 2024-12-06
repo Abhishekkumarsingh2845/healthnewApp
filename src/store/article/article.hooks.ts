@@ -4,6 +4,7 @@ import {useQuery, useRealm} from '@realm/react';
 import {BSON} from 'realm';
 import {ArticleType} from './article.interface';
 import Favorite from '../favorite/favorite.schema';
+import TrendingArticle from '../trending/trending.schema';
 
 export const useGetArticles = () => {
   const articles = useQuery(Article).sorted('publishedAt', true);
@@ -14,8 +15,11 @@ export const useGetFavArticles = () => {
   const articles = useQuery(Article)
     .filtered(`isLiked==true`)
     .sorted('publishedAt', true);
+    const treading:Array<any> = useQuery(TrendingArticle)
+    .filtered(`isLiked==true`)
+    .sorted('publishedAt', true) as any ;
   // console.log("RUN GET>>>")
-  return articles;
+  return articles.concat(treading);
 };
 export const useGetArticlesById = (id: BSON.ObjectId) => {
   console.log(id, 'ID>>>');

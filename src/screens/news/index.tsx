@@ -290,13 +290,15 @@ import {
   ActivityIndicator,
   Linking,
   SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 import Header from './components/header';
 import {Fonts} from '../../config/font.config';
 import {Colors} from '../../config/colors.config';
 import {TouchableOpacity} from 'react-native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 type Article = {
   _id: string;
   article_id: string;
@@ -305,6 +307,7 @@ type Article = {
   url: string;
   urlToImage: string;
   publishedAt: string;
+  updatedAt: Date;
   content: string;
   category: string;
   status: string;
@@ -351,10 +354,32 @@ const index = (props: NewsPropType) => {
 
   const renderArticle = ({item}: {item: Article}) => (
     <View style={styles.articleContainer}>
-      <Image source={{uri: item.urlToImage}} style={styles.articleImage} />
+      <ImageBackground
+        source={{uri: item.urlToImage}}
+        style={[styles.articleImage, styles.roundedImage]}
+        imageStyle={styles.roundedImage}>
+        <View
+          style={{
+            // backgroundColor: 'red',
+            alignItems: 'center',
+            margin: 10,
+            flexDirection: 'row',
+          }}>
+          <Ionicons
+            name={'time-outline'}
+            size={moderateScale(20)}
+            color={Colors.white}
+          />
+          <Text style={styles.tme}>{moment(item.publishedAt).fromNow()}</Text>
+        </View>
+      </ImageBackground>
+
       <View style={styles.articleContent}>
+        <Text style={styles.description}>{item.category}</Text>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.description}>{item.content}</Text>
+        <Text style={styles.overlayContent}>{item.content}</Text>
+
+        {item.url ? (
         <TouchableOpacity
           style={{width: '100%', paddingHorizontal: 15}}
           onPress={() => handleShowOriginal(item.url, item._id)}>
@@ -362,6 +387,7 @@ const index = (props: NewsPropType) => {
             show original
           </Text>
         </TouchableOpacity>
+      ) : null}
       </View>
     </View>
   );
@@ -403,7 +429,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: moderateScale(200),
     marginBottom: moderateScale(10),
-    borderRadius: 20,
+    resizeMode: 'contain',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
   },
   articleContent: {
     flex: 1,
@@ -423,6 +451,10 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.medium,
     marginBottom: 5,
   },
+  tme: {
+    // marginBottom: 20,
+    // marginHorizontal: 20,
+  },
   category: {
     fontSize: 12,
     color: '#888',
@@ -432,6 +464,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
     marginBottom: 10,
+  },
+
+  roundedImage: {
+    borderRadius: moderateScale(20), // Adjust the radius as needed
+    overflow: 'hidden',
   },
 });
 

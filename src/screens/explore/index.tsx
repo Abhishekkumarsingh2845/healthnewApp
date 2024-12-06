@@ -40,6 +40,9 @@ import axios from 'axios';
 import {useRealm, useQuery} from '@realm/react';
 
 import {useToggleTrendingLike} from '../../store/trending/trendinghook';
+import {BSON} from 'realm';
+import TrendingArticle from '../../store/trending/trending.schema';
+import Favorite from '../../store/favorite/favorite.schema';
 
 const Explore = () => {
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
@@ -50,14 +53,16 @@ const Explore = () => {
   const [showFilter, setShowFilter] = useState(false);
   const allArticles = useGetArticles();
   // console.log("allArticles==>>",allArticles)
+
+  const {toggleLike} = useToggleTrendingLike();
+
   const favArticles = useGetFavArticles();
   const [refreshing, setRefreshing] = useState(false);
 
-  const [trendingArticles, setTrendingArticles] = useState([]); 
+  const [trendingArticles, setTrendingArticles] = useState([]);
   const trendingArticlesFromRealm = useQuery('TrendingArticle');
 
   const art = useQuery('Article');
-  console.log('ooooooooooooooooooooooooooooo', art);
 
   const fetchTrendingArticles = async () => {
     try {
@@ -67,24 +72,23 @@ const Explore = () => {
       if (response.data.status && response.data.data.length > 0) {
         realm.write(() => {
           response.data.data.forEach((article: any) => {
+            const articleId = new BSON.ObjectId(article._id);
+            let data = {
+              ...article,
+              _id: articleId,
+            };
+            const fav = realm
+              .objects(Favorite.schema.name)
+              .filtered(`articleId == $0`, articleId);
+            if (fav.length > 0) {
+              data['isLiked'] = true;
+            } else {
+              data['isLiked'] = false;
+            }
             realm.create(
-              'TrendingArticle',
-              {
-                _id: article._id,
-                article_id: article.article_id,
-                title: article.title,
-                description: article.description,
-                url: article.url,
-                urlToImage: article.urlToImage,
-                publishedAt: article.publishedAt,
-                content: article.content,
-                createdAt: article.createdAt,
-                category: article.category,
-                status: article.status,
-                isActive: article.isActive,
-                isTrending: article.isTrending,
-              },
-              'modified',
+              TrendingArticle.schema.name,
+              data,
+              Realm.UpdateMode.Modified,
             );
           });
         });
@@ -96,11 +100,6 @@ const Explore = () => {
     }
   };
 
-
-
-
-
-  
   const getLatestArticle = async (page: number) => {
     const res = await fetchLatestArticles({page, search: ''});
     console.log('first:', res);
@@ -133,7 +132,6 @@ const Explore = () => {
     getCatories();
     init();
   }, []);
-  console.log('Categories:', getCatories);
 
   return (
     <>
@@ -153,6 +151,7 @@ const Explore = () => {
           }
           showsVerticalScrollIndicator={false}>
           <Categories />
+          {/* //latest new section */}
 
           {allArticles.length > 0 && (
             <CategorySection
@@ -207,6 +206,7 @@ const Explore = () => {
             </CategorySection>
           )}
 
+          {/* //trending section */}
           <CategorySection
             prefixAtTitle={
               <LottieView
@@ -229,14 +229,12 @@ const Explore = () => {
                   {...item}
                   onClick={() => {
                     let id;
-                    if (item._id) 
-                      {
+                    if (item._id) {
                       id =
                         typeof item._id.toHexString === 'function'
                           ? item._id.toHexString()
                           : item._id;
-                    }
-                     else {
+                    } else {
                       id = item.id;
                     }
 
@@ -244,19 +242,14 @@ const Explore = () => {
                       articleId: id,
                     });
                   }}
+                  onLike={() => {
+                    toggleLike(item?._id as any);
+                  }}
                 />
               ))}
             </ScrollView>
           </CategorySection>
-
-
-
-
-
-
-
-
-
+          {/* //favourite section */}
           {favArticles.length > 0 && (
             <CategorySection
               prefixAtTitle={
@@ -335,12 +328,6 @@ const style = StyleSheet.create({
 });
 
 export default Explore;
-
-
-
-
-
-
 
 // // testing schema manaual
 

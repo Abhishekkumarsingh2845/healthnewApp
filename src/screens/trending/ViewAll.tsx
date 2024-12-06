@@ -117,12 +117,6 @@
 
 // export default ViewAll;
 
-
-
-
-
-
-
 import React, {useState} from 'react';
 import {
   View,
@@ -176,14 +170,20 @@ const ViewAll: React.FC<Props> = props => {
       )}
 
       <View style={styles.articleContent}>
+      <Text style={styles.cat}>{item.category}</Text>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.description}>{item.url}</Text>
+        {item.url ? (
         <TouchableOpacity
-          style={styles.showOriginalButton}
+          style={{width: '100%', paddingHorizontal: 15}}
           onPress={() => handleShowOriginal(item.url, item._id)}>
-          <Text style={styles.showOriginalText}>Show Original</Text>
+          <Text style={{textAlign: 'right', color: Colors.primary}}>
+            show original
+          </Text>
         </TouchableOpacity>
+      ) : null}
+       
       </View>
     </View>
   );
@@ -239,6 +239,15 @@ const styles = StyleSheet.create({
     lineHeight: 28.13,
     color: '#000000',
   },
+  cat:
+  {
+    fontSize: 14,
+    fontWeight: '400',
+    marginBottom: 5,
+    fontFamily: Fonts.light,
+    lineHeight: 16.13,
+    color: '#000000',
+  },
   description: {
     fontSize: 16,
     fontWeight: '500',
@@ -251,7 +260,6 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 15,
     // backgroundColor:"red",
-   
   },
   showOriginalText: {
     textAlign: 'right',

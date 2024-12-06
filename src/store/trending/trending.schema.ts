@@ -18,10 +18,19 @@
 
 // trending.schema.ts]
 
+
+
+
+
+
+
+
+
+
 import Realm from 'realm';
 
 class TrendingArticle extends Realm.Object {
-  _id!: string;
+  _id!: Realm.BSON.ObjectId;;
   article_id!: string;
   title!: string;
   description!: string;
@@ -39,13 +48,14 @@ class TrendingArticle extends Realm.Object {
     name: 'TrendingArticle',
     primaryKey: '_id',
     properties: {
-      _id: 'string',
+      _id: 'objectId',
       article_id: 'string',
       title: 'string',
       description: 'string',
-
+      publishedAt: 'string?', 
       urlToImage: 'string',
-
+      isTrending: 'bool',
+      isLiked: 'bool',
       category: 'string',
      
     },
