@@ -41,7 +41,7 @@ const Banner = (props: CardPropType) => {
                     FontStyle.regular,
                     {color: Colors.white, fontSize: moderateScale(12)},
                   ]}>
-                  {moment(props.publishedAt).fromNow()}
+                  {moment(props.updatedAt).fromNow()}
                 </Text>
               </View>
             </View>

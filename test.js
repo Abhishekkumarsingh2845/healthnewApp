@@ -372,94 +372,94 @@ onViewAllPress={() => {
 
 
 
-import React, {useEffect} from 'react';
-import {View, Text, FlatList, Button, StyleSheet} from 'react-native';
-import axios from 'axios';
-import {useRealm, useQuery} from '@realm/react';
-import TrendingArticle from '../../store/trending/trending.schema';
+// import React, {useEffect} from 'react';
+// import {View, Text, FlatList, Button, StyleSheet} from 'react-native';
+// import axios from 'axios';
+// import {useRealm, useQuery} from '@realm/react';
+// import TrendingArticle from '../../store/trending/trending.schema';
 
-const IntailizeApp = () => {
-  const realm = useRealm();
+// const IntailizeApp = () => {
+//   const realm = useRealm();
 
-  // Query to get all TrendingArticles stored in Realm
-  const trendingArticles = useQuery('TrendingArticle');
+//   // Query to get all TrendingArticles stored in Realm
+//   const trendingArticles = useQuery('TrendingArticle');
 
-  // Fetch data from API and store it in Realm
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const response = await axios.get(
-          'http://15.206.16.230:4000/api/v1/android/trendingarticle',
-        );
-        if (response.data.status && response.data.data.length > 0) {
-          // Store fetched articles into Realm
-          realm.write(() => {
-            response.data.data.forEach((article: any) => {
-              realm.create(
-                'TrendingArticle',
-                {
-                  _id: article._id,
-                  article_id: article.article_id,
-                  title: article.title,
-                  description: article.description,
-                  url: article.url,
-                  urlToImage: article.urlToImage,
-                  publishedAt: article.publishedAt,
-                  content: article.content,
-                  category: article.category,
-                  status: article.status,
-                  isActive: article.isActive,
-                  isTrending: article.isTrending,
-                },
-                'modified',
-              ); // 'modified' to update existing entries
-            });
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-      }
-    };
+//   // Fetch data from API and store it in Realm
+//   useEffect(() => {
+//     const fetchArticles = async () => {
+//       try {
+//         const response = await axios.get(
+//           'http://15.206.16.230:4000/api/v1/android/trendingarticle',
+//         );
+//         if (response.data.status && response.data.data.length > 0) {
+//           // Store fetched articles into Realm
+//           realm.write(() => {
+//             response.data.data.forEach((article: any) => {
+//               realm.create(
+//                 'TrendingArticle',
+//                 {
+//                   _id: article._id,
+//                   article_id: article.article_id,
+//                   title: article.title,
+//                   description: article.description,
+//                   url: article.url,
+//                   urlToImage: article.urlToImage,
+//                   publishedAt: article.publishedAt,
+//                   content: article.content,
+//                   category: article.category,
+//                   status: article.status,
+//                   isActive: article.isActive,
+//                   isTrending: article.isTrending,
+//                 },
+//                 'modified',
+//               ); // 'modified' to update existing entries
+//             });
+//           });
+//         }
+//       } catch (error) {
+//         console.error('Error fetching articles:', error);
+//       }
+//     };
 
-    fetchArticles();
-  }, [realm]);
+//     fetchArticles();
+//   }, [realm]);
 
-  // Render the list of trending articles
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Trending Articles</Text>
-      <FlatList
-        data={trendingArticles}
-        keyExtractor={item => item._id}
-        renderItem={({item}) => (
-          <View style={styles.articleItem}>
-            <Text>{item.title}</Text>
-          </View>
-        )}
-      />
-    </View>
-  );
-};
+//   // Render the list of trending articles
+//   return (
+//     <View style={styles.container}>
+//       <Text style={styles.title}>Trending Articles</Text>
+//       <FlatList
+//         data={trendingArticles}
+//         keyExtractor={item => item._id}
+//         renderItem={({item}) => (
+//           <View style={styles.articleItem}>
+//             <Text>{item.title}</Text>
+//           </View>
+//         )}
+//       />
+//     </View>
+//   );
+// };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  articleItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 20,
+//     backgroundColor: '#fff',
+//   },
+//   title: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     marginBottom: 20,
+//   },
+//   articleItem: {
+//     padding: 10,
+//     borderBottomWidth: 1,
+//     borderBottomColor: '#ccc',
+//   },
+// });
 
-export default IntailizeApp;
+// export default IntailizeApp;
 
 
 
@@ -813,3 +813,62 @@ export default IntailizeApp;
               })}
             </ScrollView>
           </CategorySection>
+
+
+
+
+
+
+
+
+
+  //new treding articles fetching without data delte admin panel
+  // const fetchTrendingArticles = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       'http://15.206.16.230:4000/api/v1/android/trendingarticle',
+  //     );
+  //     if (response.data.status && response.data.data.length > 0) {
+  //       realm.write(() => {
+  //         response.data.data.forEach((article: any) => {
+  //           const articleId = new BSON.ObjectId(article._id);
+  //           let data = {
+  //             ...article,
+  //             _id: articleId,
+  //           };
+  //           const fav = realm
+  //             .objects(Favorite.schema.name)
+  //             .filtered(`articleId == $0`, articleId);
+
+  //           if (fav.length > 0) {
+  //             data['isLiked'] = true;
+  //           } else {
+  //             data['isLiked'] = false;
+  //           }
+
+  //           realm.create(
+  //             TrendingArticle.schema.name,
+  //             data,
+  //             Realm.UpdateMode.Modified,
+  //           );
+  //         });
+  //       });
+  //       const aa = realm.objects('TrendingArticle');
+  //       // console.log('aa', aa);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching trending articles:', error);
+  //   }
+  // };
+
+
+
+
+
+
+
+
+   // favourite functionality  with duplicate
+  // const trendingFavArticles = usetrendingFavArticles(); // Trending favorites
+  // const latestFavArticles = useGetFavArticles();
+  // const favArticles = [...trendingFavArticles, ...latestFavArticles];

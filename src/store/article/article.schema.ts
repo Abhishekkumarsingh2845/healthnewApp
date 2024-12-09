@@ -9,7 +9,7 @@ class Article extends Realm.Object {
   content!: string;
   url!: string;
   urlToImage!: string;
-  createdAt!: Date;
+  updatedAt!: Date;
   category!: string;
   publishedAt!: Date;
   status!: ArticleStatus;
@@ -32,7 +32,7 @@ class Article extends Realm.Object {
       isActive: {type: 'bool', default: false},
       isPublished: {type: 'string', optional: true},
       isLiked: {type: 'bool', default: false},
-      createdAt: {
+      updatedAt: {
         type: 'date',
         optional: true,
       },

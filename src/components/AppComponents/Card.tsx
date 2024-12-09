@@ -64,9 +64,9 @@ const Card = (props: CardPropType) => {
                   style={style.icon}
                   resizeMode={'contain'}
                 />
-                {/* <Text style={[FontStyle.titleSemibold, style.label]}>
+                <Text style={[FontStyle.titleSemibold, style.label]}>
                   {props.category}
-                </Text> */}
+                </Text>
               </View>
 
               <View style={[Style.flexRow, {gap: moderateScale(7)}]}>
@@ -105,7 +105,7 @@ const Card = (props: CardPropType) => {
                     FontStyle.regular,
                     {color: Colors.white, fontSize: moderateScale(12)},
                   ]}>
-                  {moment(props.createdAt).fromNow()}
+                  {moment(props.updatedAt).fromNow()}
                 </Text>
               </View>
             </View>

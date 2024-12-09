@@ -59,9 +59,9 @@ const Category = (props: CategoryPropType) => {
     return props.catName.replace('-', ' ');
   }, [props.catName]);
   const img = useMemo(() => {
-    return props.catImagegreen;
-  }, [props.catImagegreen]);
-
+    return props.catImageblack;
+  }, [props.catImageblack]);
+  const isAll = props.catName === 'All';
   return (
     <View
       style={[
@@ -72,15 +72,17 @@ const Category = (props: CategoryPropType) => {
           alignItems: 'center',
         },
       ]}>
-      <Image
-        source={typeof img === 'string' ? {uri: img} : img} // If catImage is a URL (string), use { uri: img }, otherwise use the asset directly
-        style={{
-          width: 25,
-          height: 25,
-          resizeMode: 'contain',
-          // backgroundColor: 'red',
-        }} // You may need to adjust the size of the image
-      />
+     {!isAll && (
+        <Image
+          source={typeof img === 'string' ? {uri: img} : img} // If catImage is a URL (string), use { uri: img }, otherwise use the asset directly
+          style={{
+            width: 25,
+            height: 25,
+            resizeMode: 'contain',
+            // backgroundColor: 'red',
+          }} // You may need to adjust the size of the image
+        />
+      )}
       <Text style={[props.isActive ? style.activeTitle : style.inactiveTtitle]}>
         {name}
       </Text>

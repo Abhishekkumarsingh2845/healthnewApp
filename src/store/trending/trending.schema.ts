@@ -36,12 +36,14 @@ class TrendingArticle extends Realm.Object {
   description!: string;
   url!: string;
   urlToImage!: string;
+  updatedAt!: Date;
   publishedAt?: string;
   content!: string;
   category!: string;
   status!: string;
   isActive!: boolean;
   isTrending!: boolean;
+  isLiked!: boolean;
   
 
   static schema = {
@@ -52,11 +54,12 @@ class TrendingArticle extends Realm.Object {
       article_id: 'string',
       title: 'string',
       description: 'string',
-      publishedAt: 'string?', 
+      publishedAt: 'string?',
       urlToImage: 'string',
       isTrending: 'bool',
-      isLiked: 'bool',
       category: 'string',
+      updatedAt: 'date',
+      isLiked: {type: 'bool', default: false},
      
     },
   };

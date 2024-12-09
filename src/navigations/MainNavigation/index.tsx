@@ -29,6 +29,7 @@ import WebView from 'react-native-webview';
 import WebViewScreen from '../../screens/news/WebViewScreen';
 import ViewAll from '../../screens/trending/ViewAll';
 import Detailedtrend from '../../screens/trending/Detailedtrend';
+import Favviewall from '../../screens/favscn/Favviewall';
 
 const MainNavigation = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -123,6 +124,10 @@ const AppStack: Array<Screen> = [
   {
     name: 'Detailedtrend',
     screen: Detailedtrend,
+  },
+  {
+    name: 'Favviewall',
+    screen: Favviewall,
   },
 ];
 

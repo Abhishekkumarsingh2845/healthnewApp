@@ -6,6 +6,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import AppSafeAreaView from '../../components/AppSafeAreaView';
 import Banner from './components/banner';
@@ -55,7 +56,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                 FontStyle.bold,
                 {
                   color: '#000000',
-                 
+
                   fontFamily: Fonts.light,
                   fontWeight: 400,
                   fontSize: moderateScale(14),
@@ -91,6 +92,29 @@ const NewsDetail = (props: NewsDetailsPropType) => {
               ]}>
               {details.content}
             </Text>
+
+            {details.url ? (
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(details.url);
+                }}>
+                <Text
+                  style={[
+                    FontStyle.regular,
+                    {
+                      fontWeight: '400',
+                      fontFamily: Fonts.light,
+                      lineHeight: moderateScale(23),
+                      fontSize: moderateScale(15),
+                      color: '#1D1D1D',
+                    },
+                  ]}>
+                  Show Original
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              null
+            )}
 
             <TouchableOpacity style={style.showdoccontainer}>
               {/* <Text style={style.showdocumenttxt}>Read Document</Text>
@@ -141,6 +165,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                   key={article._id.toString()}
                   title={article.title}
                   content={article.content}
+                  category={article.category}
+                  updatedAt={article.updatedAt}
                   urlToImage={article.urlToImage} // Pass `urlToImage` as a prop
                   description={article.description} // Pass `description` as a prop
                   style={{marginRight: moderateScale(10)}} // Add spacing between cards

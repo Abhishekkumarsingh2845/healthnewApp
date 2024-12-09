@@ -3,7 +3,7 @@ import { BSON } from "realm";
 export interface CategoryType {
     _id?: BSON.ObjectId,
     catName:String,
-    catImagegreen?:String,
+    catImageblack?:String,
     image?:String,
     createdAt:Date,
     updatedAt:Date

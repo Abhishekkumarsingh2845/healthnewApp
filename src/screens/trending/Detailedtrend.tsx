@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Linking,
   SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import {moderateScale} from 'react-native-size-matters';
@@ -22,6 +23,9 @@ import Card from '../../components/AppComponents/card';
 import CategorySection from '../../components/CategorySections';
 import LottieView from 'lottie-react-native';
 import {Lottie} from '../../generated/image.assets';
+import Banner from '../newDetail/components/banner';
+import Article from '../../store/article/article.schema';
+import TrendingArticle from '../../store/trending/trending.schema';
 
 type RootStackParamList = {
   NewsDetail: {articleId: string};
@@ -41,7 +45,10 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
   // const params = props.route.params;
-
+  const articles = useQuery(Article);
+  const details = articles.find(
+    article => article._id.toString() === articleId,
+  );
   const fetchArticleDetails = async () => {
     try {
       const response = await axios.get(
@@ -70,15 +77,39 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   }
 
   return (
-    <ScrollView style={{flex: 1}} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{flex: 1}}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}>
       <SafeAreaView />
       <Header icon={undefined} title={'Trending/Popular New'} />
       <View style={styles.container}>
+        <Banner {...details} />
         {article ? (
           <>
-            <Image source={{uri: article.urlToImage}} style={styles.image} />
+            <Text style={styles.title}>{article.category}</Text>
             <Text style={styles.title}>{article.title}</Text>
             <Text style={styles.description}>{article.content}</Text>
+            {article.url ? (
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(article.url);
+                }}>
+                <Text
+                  style={[
+                    FontStyle.regular,
+                    {
+                      fontWeight: '400',
+                      fontFamily: Fonts.light,
+                      lineHeight: moderateScale(23),
+                      fontSize: moderateScale(15),
+                      color: '#1D1D1D',
+                    },
+                  ]}>
+                  Show Original
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </>
         ) : (
           <Text style={styles.error}>Article not found</Text>

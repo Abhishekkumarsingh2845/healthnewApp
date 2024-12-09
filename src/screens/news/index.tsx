@@ -291,6 +291,7 @@ import {
   Linking,
   SafeAreaView,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import {moderateScale} from 'react-native-size-matters';
 import Header from './components/header';
@@ -299,6 +300,11 @@ import {Colors} from '../../config/colors.config';
 import {TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
+import {useGetArticles} from '../../store/article/article.hooks';
+import Card from '../../components/AppComponents/card';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackParamList} from '../../navigations/MainNavigation/models';
+import AppSafeAreaView from '../../components/AppSafeAreaView';
 type Article = {
   _id: string;
   article_id: string;
@@ -320,7 +326,7 @@ const index = (props: NewsPropType) => {
   const [loading, setLoading] = useState<boolean>(true);
   const params = props.route.params;
   const [openedArticles, setOpenedArticles] = useState<Set<string>>(new Set()); // Store opened article IDs
-
+  const allArticles = useGetArticles();
   const handleShowOriginal = (url: string, id: string) => {
     if (openedArticles.has(id)) {
       // If article has been opened before, open URL directly
@@ -352,63 +358,28 @@ const index = (props: NewsPropType) => {
     fetchArticles();
   }, []);
 
-  const renderArticle = ({item}: {item: Article}) => (
-    <View style={styles.articleContainer}>
-      <ImageBackground
-        source={{uri: item.urlToImage}}
-        style={[styles.articleImage, styles.roundedImage]}
-        imageStyle={styles.roundedImage}>
-        <View
-          style={{
-            // backgroundColor: 'red',
-            alignItems: 'center',
-            margin: 10,
-            flexDirection: 'row',
-          }}>
-          <Ionicons
-            name={'time-outline'}
-            size={moderateScale(20)}
-            color={Colors.white}
-          />
-          <Text style={styles.tme}>{moment(item.publishedAt).fromNow()}</Text>
-        </View>
-      </ImageBackground>
-
-      <View style={styles.articleContent}>
-        <Text style={styles.description}>{item.category}</Text>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.overlayContent}>{item.content}</Text>
-
-        {item.url ? (
-        <TouchableOpacity
-          style={{width: '100%', paddingHorizontal: 15}}
-          onPress={() => handleShowOriginal(item.url, item._id)}>
-          <Text style={{textAlign: 'right', color: Colors.primary}}>
-            show original
-          </Text>
-        </TouchableOpacity>
-      ) : null}
-      </View>
-    </View>
-  );
-
   return (
-    <View style={styles.container}>
+    <AppSafeAreaView>
       <SafeAreaView />
       <Header {...params} />
-      <View style={{marginTop: 25}}></View>
-      {loading ? (
-        <ActivityIndicator size="large" color="#007BFF" />
-      ) : (
-        <FlatList
-          data={articles}
-          showsVerticalScrollIndicator={false}
-          renderItem={renderArticle}
-          keyExtractor={item => item._id}
-          contentContainerStyle={styles.listContent}
-        />
-      )}
-    </View>
+      {/* <View style={{marginTop: 25}}></View> */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {allArticles.map((item, index) => {
+          return (
+            <Card
+              key={index}
+              onClick={() => {
+                const id = item._id.toHexString();
+                Nav.navigate('NewsDetail', {
+                  _id: id,
+                } as NewsDetailsPropType);
+              }}
+              {...item}
+            />
+          );
+        })}
+      </ScrollView>
+    </AppSafeAreaView>
   );
 };
 
