@@ -106,6 +106,11 @@
 // export default SearchBar;
 
 
+
+
+
+
+
 import {
   TextInput,
   View,
@@ -203,3 +208,5 @@ const styles = StyleSheet.create({
 });
 
 export default SearchBar;
+
+

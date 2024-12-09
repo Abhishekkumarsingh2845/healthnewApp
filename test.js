@@ -872,3 +872,128 @@ onViewAllPress={() => {
   // const trendingFavArticles = usetrendingFavArticles(); // Trending favorites
   // const latestFavArticles = useGetFavArticles();
   // const favArticles = [...trendingFavArticles, ...latestFavArticles];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Image, StyleSheet, TextInput } from 'react-native';
+
+const PublishedArticles = () => {
+  const [articles, setArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    // Make the API request when the component mounts
+    fetch('http://15.206.16.230:4000/api/v1/android/published-articles?search=test')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status) {
+          setArticles(data.data.articles); // Set the articles from the response
+          setFilteredArticles(data.data.articles); // Initially display all articles
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data: ', error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Filter articles based on search query
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query === '') {
+      setFilteredArticles(articles); // Show all articles if search query is empty
+    } else {
+      const filtered = articles.filter((article) =>
+        article.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredArticles(filtered);
+    }
+  };
+
+  if (loading) {
+    return <Text>Loading...</Text>; // Show a loading text while fetching data
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Published Articles</Text>
+       Search Bar 
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search by title..."
+        value={searchQuery}
+        onChangeText={handleSearch}
+      />
+      <FlatList
+        data={filteredArticles}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <View style={styles.articleContainer}>
+            <Image source={{ uri: item.urlToImage }} style={styles.articleImage} />
+            <Text style={styles.articleTitle}>{item.title}</Text>
+            <Text style={styles.articleDescription}>{item.description}</Text>
+            <Text style={styles.articleCategory}>Category: {item.category}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingLeft: 8,
+    borderRadius: 8,
+  },
+  articleContainer: {
+    marginBottom: 20,
+  },
+  articleImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+  },
+  articleTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  articleDescription: {
+    fontSize: 14,
+    marginTop: 4,
+  },
+  articleCategory: {
+    fontSize: 12,
+    color: 'gray',
+    marginTop: 4,
+  },
+});
+
+export default PublishedArticles;
