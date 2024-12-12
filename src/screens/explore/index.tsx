@@ -24,6 +24,9 @@ import {
   useGetFavArticles,
   useToggleLikeArticle,
 } from '../../store/article/article.hooks';
+
+
+
 import {NewsDetailsPropType} from '../newDetail';
 import {NewsListType} from '../news/types/enum';
 import {NewsPropType} from '../news/types/interface';
@@ -31,72 +34,85 @@ import {useCategory} from '../../store/category/category.hooks';
 
 // import {useRealm, useQuery} from '@realm/react';
 
-// import {useDeleteTrendingArticles} from '../../store/trending/trendinghook';
-
 import {
   useToggleTrendingLike,
   usetrendingFavArticles,
+  useDeleteTrendingArticles,
 } from '../../store/trending/trendinghook';
 import {BSON} from 'realm';
 import TrendingArticle from '../../store/trending/trending.schema';
 import Favorite from '../../store/favorite/favorite.schema';
 import axios from 'axios';
+import FilterCategory from '../../store/filtercategory/filtercatergory.schema';
 
 const Explore = () => {
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   const realm = useRealm();
   const {getCatories} = useCategory();
-
-  const {deleteArticles, saveManyArticles} = useToggleLikeArticle();
-
+  const {saveManyArticles, deleteArticles} = useToggleLikeArticle();
   const [showFilter, setShowFilter] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('All');
   const allArticles = useGetArticles();
-  // console.log("allArticles==>>",allArticles)
-
+  // console.log('allArticles==>>', allArticles);
   const {toggleLike} = useToggleTrendingLike();
+
   const [favArticless, setFavArticles] = useState([]);
+
   const trendingFavArticles = usetrendingFavArticles(); // Trending favorites
   const latestFavArticles = useGetFavArticles();
-  const combinedFavArticles = [...trendingFavArticles, ...latestFavArticles];
-  const favArticles = combinedFavArticles.filter((article, index, self) => {
-    return (
-      index ===
-      self.findIndex(
-        t => t._id === article._id || t.id === article.id, // Compare article IDs
-      )
-    );
+  const combinedFavArticlesMap = new Map();
+  trendingFavArticles.forEach(article => {
+    const id = article._id?.toString() || article.id;
+    combinedFavArticlesMap.set(id, article);
+  });
+  latestFavArticles.forEach(article => {
+    const id = article._id?.toString() || article.id;
+    combinedFavArticlesMap.set(id, article);
   });
 
-  console.log('fav->>>', favArticles);
+  const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
+
+  // console.log('qpqpqppqppqppqpqpqpqpppppqpq', combinedFavArticles);
+  // const favArticles = combinedFavArticles.filter((article, index, self) => {
+  //   return (
+  //     index ===
+  //     self.findIndex(
+  //       t => t._id === article._id || t.id === article.id, // Compare article IDs
+  //     )
+  //   );
+  // });
+  // console.log('fav->>>', favArticles);
   // const favArticles = usetrendingFavArticles();
   // const favArticles = useGetFavArticles();
   const [refreshing, setRefreshing] = useState(false);
-
   const [trendingArticles, setTrendingArticles] = useState([]);
   const trendingArticlesFromRealm = useQuery('TrendingArticle');
-  console.log('treding new ->>>', trendingArticlesFromRealm.toJSON());
+  // console.log('schema data of treding', trendingArticlesFromRealm.toJSON());
   const art = useQuery('Article');
-  // console.log("latest new ->>>",art.toJSON());
-  // const {deleteTrendingArticles} = useDeleteTrendingArticles();
+
+  // console.log('schema data of latest', art.toJSON());
 
   //new treding articles fetching with data delte admin panel
   const fetchTrendingArticles = async () => {
+    // const {deleteTrendingArticles} = useDeleteTrendingArticles();
     try {
+      // deleteTrendingArticles();
       const response = await axios.get(
         'http://15.206.16.230:4000/api/v1/android/trendingarticle',
       );
+      // deleteTrendingArticles();
+      const aa = response.data;
+      // console.log('Api data of the trending response', aa);
 
       if (response.data.status && response.data.data.length > 0) {
-        // Get the current articles in the Realm database
         const currentArticles = realm.objects(TrendingArticle.schema.name);
 
-        // Create an array of IDs from the API response
         const fetchedArticleIds = response.data.data.map(
           (article: any) => article._id,
         );
 
         realm.write(() => {
-          // Loop through the response articles and update/create in the Realm database
+          // deleteTrendingArticles();
           response.data.data.forEach((article: any) => {
             const articleId = new BSON.ObjectId(article._id);
             let data = {
@@ -104,7 +120,6 @@ const Explore = () => {
               _id: articleId,
             };
 
-            // Check if the article is liked by the user
             const fav = realm
               .objects(Favorite.schema.name)
               .filtered(`articleId == $0`, articleId);
@@ -134,34 +149,98 @@ const Explore = () => {
 
   const getLatestArticle = async (page: number) => {
     const res = await fetchLatestArticles({page, search: ''});
-    console.log('first:', res);
+    // console.log('first:', res);
     if (page == 1) {
       deleteArticles();
     }
     if (res.status) {
       if (res?.response?.articles) {
-        console.log(
-          'Fetched Articles-kjcjnejkcbnjekbcjkbc:',
-          res?.response?.articles,
-        );
+        const ss = res?.response?.articles;
+        // console.log('Api data of the latest', ss);
         saveManyArticles(res?.response?.articles);
+        // console.log('datattttattatatatatta', saveManyArticles);
       }
     } else {
       errorLog(res.message);
     }
   };
 
+  //two for Latest
+  const filteredArticles =
+    activeCategory === 'All'
+      ? allArticles
+      : allArticles.filter(article => article.category === activeCategory);
+  //two for Trending
+  const filteredTrendingArticles =
+    activeCategory === 'All'
+      ? trendingArticlesFromRealm
+      : trendingArticlesFromRealm.filter(
+          article => article.category === activeCategory,
+        );
+  //two for Favorite
+  const filteredfavArticles =
+    activeCategory === 'All'
+      ? combinedFavArticles
+      : combinedFavArticles.filter(
+          article => article.category === activeCategory,
+        );
+
+  // Determine which articles to show
   const init = async () => {
-    setRefreshing(true);
+    // setRefreshing(true);
     await getLatestArticle(1);
     await fetchTrendingArticles();
     setRefreshing(false);
   };
 
+  const flt = useQuery(FilterCategory);
+
+  useEffect(() => {}, [flt]);
+  // console.log('xxxxx', flt);
+  const nameret = flt.map(xx => xx.name);
+  // console.log('-----', nameret);
+  const oo = allArticles;
+  // console.log('000-', oo);
+  const ll = typeof nameret;
+  // console.log('types of the vair', ll);
+
+  const filtercat = allArticles.filter(article =>
+    nameret.includes(article.category),
+  );
+  // console.log('Filtered Articles:', filtercat);
+
+  const fi =
+    activeCategory === 'All'
+      ? nameret.length > 0
+        ? allArticles.filter(article => nameret.includes(article.category)) // Filter by nameret if it's not empty
+        : allArticles // Show all articles if nameret is empty
+      : allArticles.filter(article => article.category === activeCategory);
+
+  const fl =
+    activeCategory === 'All'
+      ? nameret.length > 0
+        ? trendingArticlesFromRealm.filter(article =>
+            nameret.includes(article.category),
+          ) // Filter by nameret if it's not empty
+        : trendingArticlesFromRealm // Show all articles if nameret is empty
+      : trendingArticlesFromRealm.filter(
+          article => article.category === activeCategory,
+        );
+
+  const ffv =
+    activeCategory === 'All'
+      ? nameret.length > 0
+        ? combinedFavArticles.filter(article =>
+            nameret.includes(article.category),
+          ) // Filter by nameret if it's not empty
+        : combinedFavArticles // Show all articles if nameret is empty
+      : combinedFavArticles.filter(
+          article => article.category === activeCategory,
+        );
+
   useEffect(() => {
     console.log('RUN/');
     getCatories();
-
     init();
   }, []);
 
@@ -173,6 +252,7 @@ const Explore = () => {
             setShowFilter(true);
           }}
         />
+
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -182,10 +262,8 @@ const Explore = () => {
             />
           }
           showsVerticalScrollIndicator={false}>
-          <Categories />
-        
-
-          {allArticles.length > 0 && (
+          <Categories onCategoryChange={setActiveCategory} />
+          {filteredArticles.length > 0 && (
             <CategorySection
               prefixAtTitle={
                 <LottieView
@@ -220,7 +298,7 @@ const Explore = () => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {allArticles.map((item, index) => {
+                {fi.map((item, index) => {
                   return (
                     <Card
                       key={index}
@@ -240,51 +318,53 @@ const Explore = () => {
 
           {/* //trending section */}
 
-          <CategorySection
-            prefixAtTitle={
-              <LottieView
-                source={Lottie.trending}
-                autoPlay
-                loop
-                style={{width: moderateScale(30), height: moderateScale(30)}}
-              />
-            }
-            title="Trending News"
-            titleStyle={style.title}
-            headerContainerStyle={style.header}
-            left="View All"
-            moreStyle={style.moreStyle}
-            onViewAllPress={() => Nav.navigate('ViewAll')}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {trendingArticlesFromRealm.map((item, index) => (
-                <Card
-                  key={index}
-                  {...item}
-                  onClick={() => {
-                    let id;
-                    if (item._id) {
-                      id =
-                        typeof item._id.toHexString === 'function'
-                          ? item._id.toHexString()
-                          : item._id;
-                    } else {
-                      id = item.id;
-                    }
-
-                    Nav.navigate('Detailedtrend', {
-                      articleId: id,
-                    });
-                  }}
-                  onLike={() => {
-                    toggleLike(item?._id as any);
-                  }}
+          {filteredTrendingArticles.length > 0 && (
+            <CategorySection
+              prefixAtTitle={
+                <LottieView
+                  source={Lottie.trending}
+                  autoPlay
+                  loop
+                  style={{width: moderateScale(30), height: moderateScale(30)}}
                 />
-              ))}
-            </ScrollView>
-          </CategorySection>
+              }
+              title="Trending News"
+              titleStyle={style.title}
+              headerContainerStyle={style.header}
+              left="View All"
+              moreStyle={style.moreStyle}
+              onViewAllPress={() => Nav.navigate('ViewAll')}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {fl.map((item, index) => (
+                  <Card
+                    key={index}
+                    {...item}
+                    onClick={() => {
+                      let id;
+                      if (item._id) {
+                        id =
+                          typeof item._id.toHexString === 'function'
+                            ? item._id.toHexString()
+                            : item._id;
+                      } else {
+                        id = item.id;
+                      }
+
+                      Nav.navigate('Detailedtrend', {
+                        articleId: id,
+                      });
+                    }}
+                    onLike={() => {
+                      toggleLike(item?._id as any);
+                    }}
+                  />
+                ))}
+              </ScrollView>
+            </CategorySection>
+          )}
 
           {/* //favourite section */}
-          {favArticles.length > 0 && (
+          {filteredfavArticles.length > 0 && (
             <CategorySection
               prefixAtTitle={
                 <Image
@@ -322,7 +402,7 @@ const Explore = () => {
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
-                {favArticles.map((item, index) => {
+                {ffv.map((item, index) => {
                   return (
                     <Card
                       {...item}
@@ -363,265 +443,8 @@ const style = StyleSheet.create({
 
 export default Explore;
 
-// // testing schema manaual
-// import React, {useEffect} from 'react';
-// import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
-// import axios from 'axios';
-// import {useRealm, useQuery} from '@realm/react';
-// import TrendingArticle from '../../store/trending/trending.schema';
-
-// const IntailizeApp = () => {
-//   const realm = useRealm();
-
-//   // Query to get all TrendingArticles stored in Realm
-//   const trendingArticles = useQuery('TrendingArticle');
-
-//   // Fetch data from API and store it in Realm
-//   useEffect(() => {
-//     const fetchArticles = async () => {
-//       try {
-//         const response = await axios.get(
-//           'http://15.206.16.230:4000/api/v1/android/trendingarticle',
-//         );
-//         if (response.data.status && response.data.data.length > 0) {
-//           // Store fetched articles into Realm
-//           realm.write(() => {
-//             response.data.data.forEach((article: any) => {
-//               realm.create(
-//                 'TrendingArticle',
-//                 {
-//                   _id: article._id,
-//                   article_id: article.article_id,
-//                   title: article.title,
-//                   description: article.description,
-//                   url: article.url,
-//                   urlToImage: article.urlToImage,
-//                   publishedAt: article.publishedAt,
-//                   content: article.content,
-//                   category: article.category,
-//                   status: article.status,
-//                   isActive: article.isActive,
-//                   isTrending: article.isTrending,
-//                 },
-//                 'modified',
-//               ); // 'modified' to update existing entries
-//             });
-//           });
-//           const aa = realm.objects('TrendingArticle');
-//           console.log('->>> Trending Articles:', aa);
-//         }
-//       } catch (error) {
-//         console.error('Error fetching articles:', error);
-//       }
-//     };
-
-//     fetchArticles();
-//   }, [realm]);
-
-//   // Render the list of trending articles (image, title, and description)
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Trending Articles</Text>
-//       <FlatList
-//         data={trendingArticles}
-//         keyExtractor={item => item._id}
-//         renderItem={({item}) => (
-//           <View style={styles.articleItem}>
-//             {item.urlToImage ? (
-//               <Image
-//                 source={{uri: item.urlToImage}}
-//                 style={styles.articleImage}
-//                 resizeMode="cover"
-//               />
-//             ) : null}
-//             <Text style={styles.articleTitle}>{item.title}</Text>
-//             {/* <Text style={styles.articleTitle}>{item.description}</Text> */}
-//             <Text style={styles.articleTitle}>{item.content}</Text>
-
-//             <Text style={styles.articleTitle}>{item.publishedAt}</Text>
-//           </View>
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//     backgroundColor: '#fff',
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//   },
-//   articleItem: {
-//     padding: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#ccc',
-//   },
-//   articleImage: {
-//     width: '100%',
-//     height: 200,
-//     marginBottom: 10,
-//   },
-//   articleTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginBottom: 5,
-//   },
-//   articleDescription: {
-//     fontSize: 14,
-//     fontWeight: 'bold',
-//     color: '#555',
-//   },
-// });
-
-// export default IntailizeApp;
-
-// api data of trending in the realm confirm
-// import React, {useEffect, useState} from 'react';
-// import {View, Text, FlatList, StyleSheet, Image} from 'react-native';
-// import axios from 'axios';
-// import {useRealm, useQuery} from '@realm/react';
-// import TrendingArticle from '../../store/trending/trending.schema';
-
-// const IntailizeApp = () => {
-//   const realm = useRealm();
-//   const [error, setError] = useState(''); // State to manage error messages
-
-//   // Query to get all TrendingArticles stored in Realm
-//   const trendingArticles = useQuery('TrendingArticle');
-
-//   // Fetch data from API and store it in Realm
-//   useEffect(() => {
-//     const fetchArticles = async () => {
-//       try {
-//         const response = await axios.get(
-//           'http://15.206.16.230:4000/api/v1/android/trendingarticle',
-//         );
-//         if (response.data.status && response.data.data.length > 0) {
-//           // Store fetched articles into Realm
-//           realm.write(() => {
-//             response.data.data.forEach((article: any) => {
-//               if (!article.article_id) {
-//                 console.warn('Missing article_id for article:', article);
-//                 return; // Skip articles missing article_id
-//               }
-
-//               realm.create(
-//                 'TrendingArticle', // Corrected the typo here from 'TrendingArtile' to 'TrendingArticle'
-//                 {
-//                   _id: article._id,
-//                   article_id: article.article_id, // Ensure this is always available
-//                   title: article.title,
-//                   description: article.description,
-//                   url: article.url,
-//                   urlToImage: article.urlToImage,
-//                   publishedAt: article.publishedAt,
-//                   content: article.content,
-//                   category: article.category,
-//                   status: article.status,
-//                   isActive: article.isActive,
-//                   isTrending: article.isTrending,
-//                 },
-//                 'modified', // 'modified' to update existing entries
-//               );
-//             });
-//           });
-//           const aa = realm.objects('TrendingArticle');
-//           console.log('->>> Trending Articles:', aa);
-//         }
-//       } catch (error) {
-//         console.error('Error fetching articles:', error);
-//         setError('An error occurred while fetching the articles.'); // Set the error message
-//       }
-//     };
-
-//     fetchArticles();
-//   }, [realm]);
-
-//   // Render the list of trending articles (image, title, and description)
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Trending Artices</Text>
-//       {error ? ( // Conditionally render the error message if there's an error
-//         <Text style={styles.errorText}>{error}</Text>
-//       ) : (
-//         <FlatList
-//           data={trendingArticles}
-//           keyExtractor={item => item._id}
-//           renderItem={({item}) => (
-//             <View style={styles.articleItem}>
-//               {item.urlToImage && (
-//                 <Image
-//                   source={{uri: item.urlToImage}}
-//                   style={styles.articleImage}
-//                   resizeMode="cover"
-//                 />
-//               )}
-//               <Text style={styles.articleTitle}>{item.title}</Text>
-//               <Text style={styles.articleDescription}>{item.description}</Text>
-//             </View>
-//           )}
-//         />
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//     backgroundColor: '#fff',
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//   },
-//   articleItem: {
-//     padding: 10,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#ccc',
-//   },
-//   articleImage: {
-//     width: '100%',
-//     height: 200,
-//     marginBottom: 10,
-//   },
-//   articleTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginBottom: 5,
-//   },
-//   articleDescription: {
-//     fontSize: 14,
-//     color: '#555',
-//   },
-//   errorText: {
-//     color: 'red', // Style the error message
-//     fontSize: 16,
-//     marginBottom: 20,
-//   },
-// });
-
-// export default IntailizeApp;
-
-// Main code
-// // original code of explore after garv fix
-
-// import {
-//   Image,
-//   RefreshControl,
-//   ScrollView,
-//   StyleSheet,
-//   Text,
-//   View,
-// } from 'react-native';
+// import {StyleSheet, Image, Text, View} from 'react-native';
+// import {RefreshControl, ScrollView} from 'react-native';
 // import AppSafeAreaView from '../../components/AppSafeAreaView';
 // import Header from './components/header';
 // import Categories from '../../components/AppComponents/categories';
@@ -635,7 +458,7 @@ export default Explore;
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import {NavigationProp, useNavigation} from '@react-navigation/native';
 // import {RootStackParamList} from '../../navigations/MainNavigation/models';
-
+// import {useRealm, useQuery} from '@realm/react';
 // import FilterModal from '../../components/AppComponents/filterModal';
 // import {useCallback, useEffect, useState} from 'react';
 // import LottieView from 'lottie-react-native';
@@ -650,41 +473,95 @@ export default Explore;
 // import {NewsListType} from '../news/types/enum';
 // import {NewsPropType} from '../news/types/interface';
 // import {useCategory} from '../../store/category/category.hooks';
-// import axios from 'axios';
 
-// import {useRealm, useQuery} from '@realm/react';
+// // import {useRealm, useQuery} from '@realm/react';
 
-// import {useToggleTrendingLike} from '../../store/trending/trendinghook';
+// // import {useDeleteTrendingArticles} from '../../store/trending/trendinghook';
+
+// import {
+//   useToggleTrendingLike,
+//   usetrendingFavArticles,
+// } from '../../store/trending/trendinghook';
 // import {BSON} from 'realm';
 // import TrendingArticle from '../../store/trending/trending.schema';
 // import Favorite from '../../store/favorite/favorite.schema';
+// import axios from 'axios';
 
 // const Explore = () => {
 //   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
 //   const realm = useRealm();
 //   const {getCatories} = useCategory();
 //   const {deleteArticles, saveManyArticles} = useToggleLikeArticle();
-
 //   const [showFilter, setShowFilter] = useState(false);
+//   const [activeCategory, setActiveCategory] = useState('All');
 //   const allArticles = useGetArticles();
 //   // console.log("allArticles==>>",allArticles)
-
 //   const {toggleLike} = useToggleTrendingLike();
+//   const [favArticless, setFavArticles] = useState([]);
+//   const trendingFavArticles = usetrendingFavArticles(); // Trending favorites
+//   const latestFavArticles = useGetFavArticles();
+//   // const combinedFavArticles = [
+//   //   ...trendingFavArticles,
+//   //   ...latestFavArticles,
+//   // ].filter(
+//   //   (article, index, self) =>
+//   //     index ===
+//   //     self.findIndex(
+//   //       t => t._id?.toString() === article._id?.toString() || t.id === article.id // Compare using the same identifier
+//   //     )
+//   // );
 
-//   const favArticles = useGetFavArticles();
+//   const combinedFavArticlesMap = new Map();
+
+//   // Add articles from trendingFavArticles
+//   trendingFavArticles.forEach(article => {
+//     const id = article._id?.toString() || article.id;
+//     combinedFavArticlesMap.set(id, article);
+//   });
+
+//   // Add articles from latestFavArticles
+//   latestFavArticles.forEach(article => {
+//     const id = article._id?.toString() || article.id;
+//     combinedFavArticlesMap.set(id, article);
+//   });
+
+//   // Convert Map back to array
+//   const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
+
+//   // console.log('qpqpqppqppqppqpqpqpqpppppqpq', combinedFavArticles);
+//   const favArticles = combinedFavArticles.filter((article, index, self) => {
+//     return (
+//       index ===
+//       self.findIndex(
+//         t => t._id === article._id || t.id === article.id, // Compare article IDs
+//       )
+//     );
+//   });
+//   // console.log('fav->>>', favArticles);
+//   // const favArticles = usetrendingFavArticles();
+//   // const favArticles = useGetFavArticles();
 //   const [refreshing, setRefreshing] = useState(false);
-
 //   const [trendingArticles, setTrendingArticles] = useState([]);
 //   const trendingArticlesFromRealm = useQuery('TrendingArticle');
-
+//   // console.log('treding new ->>>', trendingArticlesFromRealm.toJSON());
 //   const art = useQuery('Article');
 
+//   // console.log("latest new ->>>",art.toJSON());
+//   // const {deleteTrendingArticles} = useDeleteTrendingArticles();
+//   //new treding articles fetching with data delte admin panel
 //   const fetchTrendingArticles = async () => {
 //     try {
 //       const response = await axios.get(
 //         'http://15.206.16.230:4000/api/v1/android/trendingarticle',
 //       );
+
 //       if (response.data.status && response.data.data.length > 0) {
+//         const currentArticles = realm.objects(TrendingArticle.schema.name);
+
+//         const fetchedArticleIds = response.data.data.map(
+//           (article: any) => article._id,
+//         );
+
 //         realm.write(() => {
 //           response.data.data.forEach((article: any) => {
 //             const articleId = new BSON.ObjectId(article._id);
@@ -692,32 +569,36 @@ export default Explore;
 //               ...article,
 //               _id: articleId,
 //             };
+
 //             const fav = realm
 //               .objects(Favorite.schema.name)
 //               .filtered(`articleId == $0`, articleId);
-//             if (fav.length > 0) {
-//               data['isLiked'] = true;
-//             } else {
-//               data['isLiked'] = false;
-//             }
+//             data['isLiked'] = fav.length > 0;
+
+//             // Create or modify the trending article in the Realm database
 //             realm.create(
 //               TrendingArticle.schema.name,
 //               data,
 //               Realm.UpdateMode.Modified,
 //             );
 //           });
+
+//           // Loop through the current articles in the Realm DB
+//           // Remove articles that are not present in the fetched list (deleted by admin)
+//           currentArticles.forEach((currentArticle: any) => {
+//             if (!fetchedArticleIds.includes(currentArticle._id.toString())) {
+//               realm.delete(currentArticle); // Delete the article from Realm DB
+//             }
+//           });
 //         });
-//         const aa = realm.objects('TrendingArticle');
-//         console.log('aa', aa);
 //       }
 //     } catch (error) {
 //       console.error('Error fetching trending articles:', error);
 //     }
 //   };
-
 //   const getLatestArticle = async (page: number) => {
 //     const res = await fetchLatestArticles({page, search: ''});
-//     console.log('first:', res);
+//     // console.log('first:', res);
 //     if (page == 1) {
 //       deleteArticles();
 //     }
@@ -734,17 +615,29 @@ export default Explore;
 //     }
 //   };
 
+//   const filteredArticles =
+//     activeCategory === 'All'
+//       ? allArticles
+//       : allArticles.filter(article => article.category === activeCategory);
+
+//   const filteredTrendingArticles =
+//     activeCategory === 'All'
+//       ? trendingArticlesFromRealm
+//       : trendingArticlesFromRealm.filter(
+//           article => article.category === activeCategory,
+//         );
+
 //   const init = async () => {
 //     setRefreshing(true);
 //     await getLatestArticle(1);
 //     await fetchTrendingArticles();
-
 //     setRefreshing(false);
 //   };
 
 //   useEffect(() => {
 //     console.log('RUN/');
 //     getCatories();
+
 //     init();
 //   }, []);
 
@@ -756,6 +649,7 @@ export default Explore;
 //             setShowFilter(true);
 //           }}
 //         />
+
 //         <ScrollView
 //           refreshControl={
 //             <RefreshControl
@@ -765,9 +659,7 @@ export default Explore;
 //             />
 //           }
 //           showsVerticalScrollIndicator={false}>
-//           <Categories />
-//           {/* //latest new section */}
-
+//           <Categories onCategoryChange={setActiveCategory} />
 //           {allArticles.length > 0 && (
 //             <CategorySection
 //               prefixAtTitle={
@@ -803,7 +695,7 @@ export default Explore;
 //               <ScrollView
 //                 horizontal={true}
 //                 showsHorizontalScrollIndicator={false}>
-//                 {allArticles.map((item, index) => {
+//                 {filteredArticles.map((item, index) => {
 //                   return (
 //                     <Card
 //                       key={index}
@@ -814,106 +706,6 @@ export default Explore;
 //                         } as NewsDetailsPropType);
 //                       }}
 //                       {...item}
-//                     />
-//                   );
-//                 })}
-//               </ScrollView>
-//             </CategorySection>
-//           )}
-
-//           {/* //trending section */}
-//           <CategorySection
-//             prefixAtTitle={
-//               <LottieView
-//                 source={Lottie.trending}
-//                 autoPlay
-//                 loop
-//                 style={{width: moderateScale(30), height: moderateScale(30)}}
-//               />
-//             }
-//             title="Trending News"
-//             titleStyle={style.title}
-//             headerContainerStyle={style.header}
-//             left="View All"
-//             moreStyle={style.moreStyle}
-//             onViewAllPress={() => Nav.navigate('ViewAll')}>
-//             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-//               {trendingArticlesFromRealm.map((item, index) => (
-//                 <Card
-//                   key={index}
-//                   {...item}
-//                   onClick={() => {
-//                     let id;
-//                     if (item._id) {
-//                       id =
-//                         typeof item._id.toHexString === 'function'
-//                           ? item._id.toHexString()
-//                           : item._id;
-//                     } else {
-//                       id = item.id;
-//                     }
-
-//                     Nav.navigate('Detailedtrend', {
-//                       articleId: id,
-//                     });
-//                   }}
-//                   onLike={() => {
-//                     toggleLike(item?._id as any);
-//                   }}
-//                 />
-//               ))}
-//             </ScrollView>
-//           </CategorySection>
-//           {/* //favourite section */}
-//           {favArticles.length > 0 && (
-//             <CategorySection
-//               prefixAtTitle={
-//                 <Image
-//                   tintColor={Colors.error}
-//                   source={Icons.ic_love}
-//                   style={{
-//                     width: moderateScale(20),
-//                     height: moderateScale(20),
-//                     marginHorizontal: moderateScale(4),
-//                   }}
-//                 />
-//               }
-//               title={'Favorites News'}
-//               titleStyle={style.title}
-//               headerContainerStyle={style.header}
-//               left={'View All'}
-//               moreStyle={style.moreStyle}
-//               onViewAllPress={() => {
-//                 Nav.navigate('Favviewall', {
-//                   title: 'Favorites News',
-//                   type: NewsListType.Favourite,
-//                   icon: (
-//                     <Image
-//                       tintColor={Colors.error}
-//                       source={Icons.ic_love}
-//                       style={{
-//                         width: moderateScale(20),
-//                         height: moderateScale(20),
-//                         marginHorizontal: moderateScale(4),
-//                       }}
-//                     />
-//                   ),
-//                 } as NewsPropType);
-//               }}>
-//               <ScrollView
-//                 horizontal={true}
-//                 showsHorizontalScrollIndicator={false}>
-//                 {favArticles.map((item, index) => {
-//                   return (
-//                     <Card
-//                       {...item}
-//                       key={index}
-//                       onClick={() => {
-//                         const id = item._id.toHexString();
-//                         Nav.navigate('NewsDetail', {
-//                           _id: id,
-//                         } as NewsDetailsPropType);
-//                       }}
 //                     />
 //                   );
 //                 })}
@@ -944,7 +736,128 @@ export default Explore;
 
 // export default Explore;
 
-//filter functionality by Filter Api
+// top catergory filter
+// import React, {useState} from 'react';
+// import {
+//   StyleSheet,
+//   Text,
+//   View,
+//   ScrollView,
+//   RefreshControl,
+//   TouchableOpacity,
+// } from 'react-native';
+// import AppSafeAreaView from '../../components/AppSafeAreaView';
+// import Header from './components/header';
+// import Categories from '../../components/AppComponents/categories';
+// import CategorySection from '../../components/CategorySections';
+// import {moderateScale} from 'react-native-size-matters';
+// import {Colors} from '../../config/colors.config';
+// import {FontStyle} from '../../config/style.config';
+// import Card from '../../components/AppComponents/card';
+// import {useNavigation, NavigationProp} from '@react-navigation/native';
+// import {RootStackParamList} from '../../navigations/MainNavigation/models';
+// import {fetchLatestArticles} from '../../store/article/article.network';
+// import {useGetArticles} from '../../store/article/article.hooks';
+// import {NewsDetailsPropType} from '../newDetail';
+// import {NewsListType} from '../news/types/enum';
+// import {NewsPropType} from '../news/types/interface';
+
+// const Explore = () => {
+//   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+//   const allArticles = useGetArticles();
+//   const [refreshing, setRefreshing] = useState(false);
+//   const [activeCategory, setActiveCategory] = useState('All');
+
+//   const filteredArticles =
+//     activeCategory === 'All'
+//       ? allArticles
+//       : allArticles.filter(article => article.category === activeCategory);
+
+//   const handleRefresh = async () => {
+//     setRefreshing(true);
+//     await fetchLatestArticles({page: 1, search: ''});
+//     setRefreshing(false);
+//   };
+
+//   return (
+//     <>
+//       <AppSafeAreaView>
+//         <Header />
+//         <ScrollView
+//           refreshControl={
+//             <RefreshControl
+//               colors={[Colors.primary]}
+//               refreshing={refreshing}
+//               onRefresh={handleRefresh}
+//             />
+//           }
+//           showsVerticalScrollIndicator={false}>
+//           {/* Pass category filter callback */}
+//           <Categories onCategoryChange={setActiveCategory} />
+
+//           {/* Latest News Section */}
+//           <CategorySection
+//             title="Latest News"
+//             titleStyle={style.title}
+//             headerContainerStyle={style.header}
+//             left="View All"
+//             moreStyle={style.moreStyle}
+//             onViewAllPress={() => {
+//               Nav.navigate('News', {
+//                 title: 'Latest News',
+//                 type: NewsListType.Latest,
+//               } as NewsPropType);
+//             }}>
+//             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//               {filteredArticles.map((item, index) => (
+//                 <Card
+//                   key={index}
+//                   onClick={() => {
+//                     const id = item._id.toHexString();
+//                     Nav.navigate('NewsDetail', {
+//                       _id: id,
+//                     } as NewsDetailsPropType);
+//                   }}
+//                   {...item}
+//                 />
+//               ))}
+//             </ScrollView>
+//           </CategorySection>
+//         </ScrollView>
+//       </AppSafeAreaView>
+//     </>
+//   );
+// };
+
+// const style = StyleSheet.create({
+//   title: {
+//     color: Colors.black,
+//   },
+//   header: {
+//     paddingHorizontal: moderateScale(0),
+//   },
+//   moreStyle: {
+//     color: Colors.primary,
+//     ...FontStyle.titleSemibold,
+//   },
+//   filterButtonContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-around',
+//     marginVertical: moderateScale(10),
+//   },
+//   filterButton: {
+//     padding: moderateScale(10),
+//     borderRadius: moderateScale(5),
+//     backgroundColor: 'red',
+//   },
+//   filterButtonText: {
+//     color: Colors.white,
+//     fontWeight: 'bold',
+//   },
+// });
+// export default Explore;
+
+// //filter functionality by Filter Api
 // import React, {useState, useEffect} from 'react';
 // import {
 //   View,

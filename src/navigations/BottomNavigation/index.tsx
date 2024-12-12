@@ -7,7 +7,7 @@ import {Colors} from '../../config/colors.config';
 import {Size} from '../../config/size.config';
 import {moderateScale} from 'react-native-size-matters';
 import Explore from '../../screens/explore';
-import Favorite from '../../screens/favorite';
+import Favviewall from '../../screens/favscn/Favviewall';
 import Profile from '../../screens/profile';
 import {Icons} from '../../generated/image.assets';
 
@@ -80,8 +80,8 @@ const Tabs: Array<TabType> = [
     activeIcon: Icons.ic_active_explore,
   },
   {
-    name: 'Favorite',
-    component: Favorite,
+    name: 'Favviewall',
+    component: Favviewall,
     label: 'Favorite',
     icon: Icons.ic_fav,
     activeIcon: Icons.ic_active_love,

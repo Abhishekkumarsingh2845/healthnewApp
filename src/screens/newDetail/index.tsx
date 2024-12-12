@@ -51,7 +51,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             <Header {...details} />
             <View style={{marginTop: 10}}></View>
             <Banner {...details} />
-            <Text
+            {/* <Text
               style={[
                 FontStyle.bold,
                 {
@@ -64,7 +64,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                 },
               ]}>
               {details.category}
-            </Text>
+            </Text> */}
             <Text
               style={[
                 FontStyle.bold,
@@ -106,7 +106,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                       fontFamily: Fonts.light,
                       lineHeight: moderateScale(23),
                       fontSize: moderateScale(15),
-                      color: '#1D1D1D',
+                      textAlign:"right",
+                      color: Colors.primary,
                     },
                   ]}>
                   Show Original

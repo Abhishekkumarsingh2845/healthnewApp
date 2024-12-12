@@ -223,7 +223,14 @@
 
 // export default Search;
 
-import {FlatList, Text, View, Image, StyleSheet} from 'react-native';
+import {
+  FlatList,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import SearchBar from '../../components/SearchBar';
 import {useEffect, useState} from 'react';
 import {moderateScale} from 'react-native-size-matters';
@@ -232,6 +239,7 @@ import {Spacing} from '../../config/size.config';
 import AppImage from '../../components/AppImage';
 import {Icons} from '../../generated/image.assets';
 import BackButton from '../../components/BackButton';
+import {useNavigation} from '@react-navigation/native';
 
 interface Article {
   _id: string;
@@ -246,11 +254,15 @@ const Search = () => {
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const navigation = useNavigation(); // Navigation hook
   useEffect(() => {
-    fetch(
-      'http://15.206.16.230:4000/api/v1/android/published-articles?search=test',
-    )
+    fetchArticles();
+  }, []);
+
+  const fetchArticles = (query: string = '') => {
+    setLoading(true);
+    const url = `http://15.206.16.230:4000/api/v1/android/published-articles?search=${query}`;
+    fetch(url)
       .then(response => response.json())
       .then(data => {
         if (data.status) {
@@ -262,23 +274,25 @@ const Search = () => {
         console.error('Error fetching data: ', error);
       })
       .finally(() => setLoading(false));
-  }, []);
+  };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query === '') {
       setFilteredArticles(articles);
     } else {
-      const filtered = articles.filter(article =>
-        article.title.toLowerCase().includes(query.toLowerCase()),
-      );
-      setFilteredArticles(filtered);
+      fetchArticles(query);
     }
   };
 
   if (loading) {
     return <Text>Loading...</Text>;
   }
+
+  const handleArticlePress = (articleId: string) => {
+    // Navigate to the NewsDetail screen with the selected article's _id
+    navigation.navigate('NewsDetail', {_id: articleId});
+  };
 
   return (
     <View style={{paddingHorizontal: 12, paddingTop: Spacing.topSpace}}>
@@ -308,7 +322,6 @@ const Search = () => {
 
       <View
         style={{
-        //   backgroundColor: Colors.white,
           borderRadius: moderateScale(10),
           padding: moderateScale(4),
         }}>
@@ -326,13 +339,16 @@ const Search = () => {
           data={filteredArticles}
           keyExtractor={item => item._id}
           renderItem={({item}) => (
-            <View style={{width: '100%', flexDirection: 'row',marginTop:10}}>
+            <TouchableOpacity
+              style={{width: '100%', flexDirection: 'row', marginTop: 10}}
+              onPress={() => handleArticlePress(item._id)} // Handle the article press
+            >
               <Image
                 source={{uri: item.urlToImage}}
-                style={{width: 40, height: 40,resizeMode:"contain"}}
+                style={{width: 40, height: 40, resizeMode: 'contain'}}
               />
               <Text style={styles.articleTitle}>{item.title}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       </View>
@@ -364,7 +380,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginTop: 8,
-    marginLeft:10,
+    marginLeft: 10,
   },
   articleDescription: {
     fontSize: 14,

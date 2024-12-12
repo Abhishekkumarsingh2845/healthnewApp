@@ -997,3 +997,200 @@ const styles = StyleSheet.create({
 });
 
 export default PublishedArticles;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+show  latest new by deafult and filter wise 
+
+
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import AppSafeAreaView from '../../components/AppSafeAreaView';
+import Header from './components/header';
+import Categories from '../../components/AppComponents/categories';
+import CategorySection from '../../components/CategorySections';
+import { moderateScale } from 'react-native-size-matters';
+import { Colors } from '../../config/colors.config';
+import { FontStyle } from '../../config/style.config';
+import Card from '../../components/AppComponents/card';
+import LottieView from 'lottie-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { fetchLatestArticles } from '../../store/article/article.network';
+import { useCategory } from '../../store/category/category.hooks';
+import { Lottie } from '../../generated/image.assets';
+const Explore = () => {
+  const Nav = useNavigation();
+  const { getCatories } = useCategory();
+  const [selectedCategory, setSelectedCategory] = useState(''); // Default is an empty string
+  const [allArticles, setAllArticles] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchArticles = async () => {
+    const res = await fetchLatestArticles({ page: 1, search: '' });
+    if (res.status) {
+      setAllArticles(res.response.articles);
+    }
+  };
+
+  // If no category is selected, show all articles
+  const filteredArticles = selectedCategory
+    ? allArticles.filter(item => item.category === selectedCategory)
+    : allArticles; // Show all articles if no category is selected
+
+  const init = async () => {
+    setRefreshing(true);
+    await fetchArticles();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    getCatories();
+    init();
+  }, []);
+
+  const toggleCategorySelection = (category) => {
+    // If the same category is selected again, unselect it (reset to show all articles)
+    setSelectedCategory(prevCategory => prevCategory === category ? '' : category);
+  };
+
+  return (
+    <AppSafeAreaView>
+      <Header />
+      <View style={style.categoryButtonsContainer}>
+        <TouchableOpacity
+          style={style.categoryButton}
+          onPress={() => toggleCategorySelection('Technology Health')}>
+          <Text style={style.categoryButtonText}>Technology Health</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={style.categoryButton}
+          onPress={() => toggleCategorySelection('Physical Health')}>
+          <Text style={style.categoryButtonText}>Physical Health</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            colors={[Colors.primary]}
+            refreshing={refreshing}
+            onRefresh={init}
+          />
+        }
+        showsVerticalScrollIndicator={false}>
+        <Categories />
+
+        <CategorySection
+          prefixAtTitle={
+            <LottieView
+              source={Lottie.latest}
+              autoPlay
+              loop
+              style={{ width: moderateScale(30), height: moderateScale(30) }}
+            />
+          }
+          title={'Latest News'}
+          titleStyle={style.title}
+          headerContainerStyle={style.header}
+          left={'View All'}
+          moreStyle={style.moreStyle}
+          onViewAllPress={() => {
+            Nav.navigate('News', {
+              title: 'Latest News',
+            });
+          }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            {filteredArticles.map((item, index) => (
+              <Card
+                key={index}
+                onClick={() => {
+                  Nav.navigate('NewsDetail', {
+                    _id: item._id.toHexString(),
+                  });
+                }}
+                {...item}
+              />
+            ))}
+          </ScrollView>
+        </CategorySection>
+      </ScrollView>
+    </AppSafeAreaView>
+  );
+};
+
+
+
+const style = StyleSheet.create({
+  categoryButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: moderateScale(20),
+    paddingHorizontal: moderateScale(20),
+  },
+  categoryButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(20),
+    borderRadius: moderateScale(5),
+  },
+  categoryButtonText: {
+    color: Colors.white,
+    fontSize: moderateScale(14),
+    ...FontStyle.titleSemibold,
+  },
+  title: {
+    color: Colors.black,
+  },
+  header: {
+    paddingHorizontal: moderateScale(0),
+  },
+  moreStyle: {
+    color: Colors.primary,
+    ...FontStyle.titleSemibold,
+  },
+});
+
+export default Explore;
+

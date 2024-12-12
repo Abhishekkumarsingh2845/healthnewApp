@@ -1,67 +1,189 @@
+// import {
+//   Image,
+//   ImageSourcePropType,
+//   Pressable,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   View,
+// } from 'react-native';
+// import {ReactNode, memo, useMemo, useState} from 'react';
+// import {moderateScale} from 'react-native-size-matters';
+// import {FontStyle} from '../../config/style.config';
+// import {Colors} from '../../config/colors.config';
+// import {Fonts} from '../../config/font.config';
+// import {Icons, Images} from '../../generated/image.assets';
+// import {useCategory} from '../../store/category/category.hooks';
+// import {CategoryType} from '../../store/category/category.interface';
+
+// const Categories = () => {
+//   const {categories} = useCategory();
+//   const [activeIndex, setActiveIndex] = useState(0);
+
+//   return (
+//     <>
+//       <View style={style.container}>
+//         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+//           {categories.map((item, index) => {
+//             // console.log('render');
+//             const isActive = activeIndex == index ? true : false;
+//             return (
+//               <Pressable
+//                 key={index}
+//                 onPress={() => {
+//                   setActiveIndex(index);
+//                   console.log(`Selected Category: ${item.catName}`);
+//                 }}>
+//                 <MemomizedCategories
+//                   inActiveIcColor={''}
+//                   {...item}
+//                   isActive={isActive}
+//                 />
+//               </Pressable>
+//             );
+//           })}
+//         </ScrollView>
+//       </View>
+//     </>
+//   );
+// };
+
+// interface CategoryPropType extends CategoryType {
+//   isActive?: boolean;
+//   inActiveIcColor: string;
+//   // value: string,
+//   // icon?: ImageSourcePropType
+// }
+// const Category = (props: CategoryPropType) => {
+//   // const Icon = props.icon;
+//   const name = useMemo(() => {
+//     return props.catName.replace('-', ' ');
+//   }, [props.catName]);
+//   const img = useMemo(() => {
+//     return props.catImageblack;
+//   }, [props.catImageblack]);
+//   const isAll = props.catName === 'All';
+//   return (
+//     <View
+//       style={[
+//         style.catgoryContainer,
+//         {
+//           backgroundColor: props.isActive ? Colors.primary : Colors.white,
+//           borderColor: props.isActive ? Colors.primary : Colors.black,
+//           alignItems: 'center',
+//         },
+//       ]}>
+//       {!isAll && (
+//         <Image
+//           source={typeof img === 'string' ? {uri: img} : img} // If catImage is a URL (string), use { uri: img }, otherwise use the asset directly
+//           style={{
+//             width: 25,
+//             height: 25,
+//             resizeMode: 'contain',
+//             // backgroundColor: 'red',
+//           }} // You may need to adjust the size of the image
+//         />
+//       )}
+//       <Text style={[props.isActive ? style.activeTitle : style.inactiveTtitle]}>
+//         {name}
+//       </Text>
+//     </View>
+//   );
+// };
+
+// const style = StyleSheet.create({
+//   container: {
+//     marginTop: moderateScale(20),
+//     marginBottom: moderateScale(10),
+
+//     // marginVertical: moderateScale()
+//   },
+//   catgoryContainer: {
+//     marginHorizontal: moderateScale(2),
+//     paddingHorizontal: moderateScale(14),
+//     backgroundColor: '#F2F4F7',
+//     borderRadius: moderateScale(20),
+//     flexDirection: 'row',
+//     gap: moderateScale(3),
+//     marginRight: moderateScale(8),
+//     paddingVertical: moderateScale(8),
+//     borderWidth: 1,
+//   },
+//   activeTitle: {
+//     fontFamily: Fonts.semibold,
+//     fontSize: moderateScale(14),
+//     color: Colors.white,
+//   },
+//   inactiveTtitle: {
+//     fontFamily: Fonts.regular,
+//     color: Colors.black,
+//     fontSize: moderateScale(14),
+//   },
+// });
+// const MemomizedCategories = Category;
+// export default memo(Categories);
+
+
+
+
+
+import React, {useState, useMemo, memo} from 'react';
 import {
   Image,
-  ImageSourcePropType,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
-import {ReactNode, memo, useMemo, useState} from 'react';
 import {moderateScale} from 'react-native-size-matters';
 import {FontStyle} from '../../config/style.config';
 import {Colors} from '../../config/colors.config';
 import {Fonts} from '../../config/font.config';
-import {Icons, Images} from '../../generated/image.assets';
 import {useCategory} from '../../store/category/category.hooks';
-import {CategoryType} from '../../store/category/category.interface';
 
-const Categories = () => {
+const Categories = ({onCategoryChange}: {onCategoryChange: (category: string) => void}) => {
   const {categories} = useCategory();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   return (
-    <>
-      <View style={style.container}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          {categories.map((item, index) => {
-            // console.log('render');
-            const isActive = activeIndex == index ? true : false;
-            return (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  setActiveIndex(index);
-                }}>
-                <MemomizedCategories
-                  inActiveIcColor={''}
-                  {...item}
-                  isActive={isActive}
-                />
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-      </View>
-    </>
+    <View style={style.container}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        {categories.map((item, index) => {
+          const isActive = activeCategory === item.catName;
+
+          return (
+            <Pressable
+              key={index}
+              onPress={() => {
+                setActiveCategory(item.catName);
+                onCategoryChange(item.catName); // Notify parent about category change
+              }}>
+              <MemomizedCategories
+                inActiveIcColor=""
+                {...item}
+                isActive={isActive}
+              />
+            </Pressable>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 };
 
-interface CategoryPropType extends CategoryType {
+interface CategoryPropType {
   isActive?: boolean;
   inActiveIcColor: string;
-  // value: string,
-  // icon?: ImageSourcePropType
+  catName: string;
+  catImageblack: string | ImageSourcePropType;
 }
+
 const Category = (props: CategoryPropType) => {
-  // const Icon = props.icon;
-  const name = useMemo(() => {
-    return props.catName.replace('-', ' ');
-  }, [props.catName]);
-  const img = useMemo(() => {
-    return props.catImageblack;
-  }, [props.catImageblack]);
+  const name = useMemo(() => props.catName.replace('-', ' '), [props.catName]);
+  const img = useMemo(() => props.catImageblack, [props.catImageblack]);
   const isAll = props.catName === 'All';
+
   return (
     <View
       style={[
@@ -69,33 +191,30 @@ const Category = (props: CategoryPropType) => {
         {
           backgroundColor: props.isActive ? Colors.primary : Colors.white,
           borderColor: props.isActive ? Colors.primary : Colors.black,
-          alignItems: 'center',
+          alignItems:"center",
+          paddingHorizontal: isAll ? moderateScale(20) : moderateScale(14),
+          paddingVertical: isAll ? moderateScale(10) : moderateScale(8),
         },
       ]}>
-     {!isAll && (
+      {!isAll && (
         <Image
-          source={typeof img === 'string' ? {uri: img} : img} // If catImage is a URL (string), use { uri: img }, otherwise use the asset directly
-          style={{
-            width: 25,
-            height: 25,
-            resizeMode: 'contain',
-            // backgroundColor: 'red',
-          }} // You may need to adjust the size of the image
+          source={typeof img === 'string' ? {uri: img} : img}
+          style={{width: 25, height: 25, resizeMode: 'contain'}}
         />
       )}
-      <Text style={[props.isActive ? style.activeTitle : style.inactiveTtitle]}>
+      <Text style={props.isActive ? style.activeTitle : style.inactiveTtitle}>
         {name}
       </Text>
     </View>
   );
 };
 
+const MemomizedCategories = memo(Category);
+
 const style = StyleSheet.create({
   container: {
     marginTop: moderateScale(20),
     marginBottom: moderateScale(10),
-
-    // marginVertical: moderateScale()
   },
   catgoryContainer: {
     marginHorizontal: moderateScale(2),
@@ -119,8 +238,29 @@ const style = StyleSheet.create({
     fontSize: moderateScale(14),
   },
 });
-const MemomizedCategories = Category;
+
 export default memo(Categories);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, {memo, useEffect, useState} from 'react';
 // import {

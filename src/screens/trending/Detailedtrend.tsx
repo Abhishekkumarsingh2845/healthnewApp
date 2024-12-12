@@ -65,6 +65,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   };
 
   useEffect(() => {
+   
     fetchArticleDetails();
   }, [articleId]);
 
@@ -87,7 +88,6 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
         <Banner {...details} />
         {article ? (
           <>
-            <Text style={styles.title}>{article.category}</Text>
             <Text style={styles.title}>{article.title}</Text>
             <Text style={styles.description}>{article.content}</Text>
             {article.url ? (
@@ -99,11 +99,12 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
                   style={[
                     FontStyle.regular,
                     {
+                      textAlign:"right",
                       fontWeight: '400',
                       fontFamily: Fonts.light,
                       lineHeight: moderateScale(23),
                       fontSize: moderateScale(15),
-                      color: '#1D1D1D',
+                      color: Colors.primary,
                     },
                   ]}>
                   Show Original
@@ -130,25 +131,25 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
         left={'View All'}
         moreStyle={Style.moreStyle}
       />
-      <View>
-        <ScrollView style={styles.container} horizontal>
-          <View style={styles.cardContainer}>
-            {trendingArticles
-              .filter(item => {
-                // Exclude the current article by comparing IDs
-                const currentId =
-                  typeof item._id?.toHexString === 'function'
-                    ? item._id.toHexString()
-                    : item._id || item.id;
-                return currentId !== articleId;
-              })
-              .map((item, index) => (
-                <Card key={index} {...item} />
-              ))}
-          </View>
-        </ScrollView>
-        <View style={{marginVertical: 20}}></View>
-      </View>
+
+      <ScrollView
+        style={styles.container}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}>
+        {trendingArticles
+          .filter(item => {
+            // Exclude the current article by comparing IDs
+            const currentId =
+              typeof item._id?.toHexString === 'function'
+                ? item._id.toHexString()
+                : item._id || item.id;
+            return currentId !== articleId;
+          })
+          .map((item, index) => (
+            <Card key={index} {...item} />
+          ))}
+      </ScrollView>
+      <View style={{marginVertical: 20}}></View>
     </ScrollView>
   );
 };
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(22),
     fontWeight: '700',
-    marginTop: 20,
+    // marginTop: 20,
     color: '#000000',
     fontFamily: Fonts.medium,
     lineHeight: 28,
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     color: Colors.grey,
   },
   description: {
-    fontSize: moderateScale(16),
+    fontSize: moderateScale(15),
     marginTop: 20,
     color: '#1D1D1D',
     lineHeight: 23,
@@ -205,9 +206,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
-  title: {
-    color: Colors.black,
-  },
+ 
   header: {
     paddingHorizontal: moderateScale(0),
   },

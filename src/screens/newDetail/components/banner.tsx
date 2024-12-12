@@ -11,6 +11,7 @@ import {Colors} from '../../../config/colors.config';
 import {Size} from '../../../config/size.config';
 import {ArticleType} from '../../../store/article/article.interface';
 import moment from 'moment';
+import { Fonts } from '../../../config/font.config';
 
 interface CardPropType extends ArticleType {
   containerStyle?: ViewStyle;
@@ -27,6 +28,23 @@ const Banner = (props: CardPropType) => {
             style={style.image}
             resizeMode={'stretch'}
           />
+          <Text
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 20,
+              fontFamily:Fonts.regular,
+              fontWeight:"400",
+              color: Colors.white,
+              textTransform: 'capitalize',
+              lineHeight:20,
+              fontSize: 15,
+            }}>
+            {props.category}
+          </Text>
+          {/* <Text style={[FontStyle.titleSemibold, style.label]}>
+                  {props.category}
+                </Text> */}
           {/* Overlay */}
           <View style={style.overlay}>
             <View style={{position: 'absolute', bottom: '5%', left: '5%'}}>

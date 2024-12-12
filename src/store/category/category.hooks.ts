@@ -26,14 +26,14 @@ export const useCategory = () => {
         console.log('->->', res);
         const list: Array<CategoryType> = res.response;
         list.forEach((item, index) => {
-            console.log('------------------------->', list.length);
+            // console.log('------------------------->', list.length);
           addCategory(item);
          
         });
       }
     } else {
       showToastMessage(res.message, 'error');
-      console.log('------------------------->', res);
+      // console.log('------------------------->', res);
     }
   }, []);
 

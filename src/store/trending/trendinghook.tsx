@@ -26,14 +26,14 @@ export const useToggleTrendingLike = () => {
           .filtered(`articleId == $0`, article._id);
 
         if (fav.length > 0) {
-          console.log('Delete');
+          console.log('Delete trending progress');
           realm.delete(fav);
           const fa = realm.objects(Favorite.schema.name);
-          console.log('deleting terding articles', fa.toJSON());
+          console.log('deleting terding articles completed', fa.toJSON());
         }
 
         if (article.isLiked) {
-          console.log('ADD');
+          console.log('ADD trending progress');
           realm.create(Favorite.schema.name, {
             _id: new BSON.ObjectId(),
             articleId: article._id,
@@ -62,19 +62,22 @@ export const usetrendingFavArticles = () => {
  
 };
 
-// export const useDeleteTrendingArticles = () => {
-//   const realm = useRealm();
 
-//   const deleteTrendingArticles = useCallback(() => {
-//     realm.write(() => {
-//       const trendingArticles = realm.objects(TrendingArticle.schema.name);
-//       console.log('Deleting all trending articles:', trendingArticles.toJSON());
 
-//       if (trendingArticles.length > 0) {
-//         realm.delete(trendingArticles); // Deletes all trending articles
-//       }
-//     });
-//   }, [realm]);
 
-//   return {deleteTrendingArticles};
-// };
+export const useDeleteTrendingArticles = () => {
+  const realm = useRealm();
+
+  const deleteTrendingArticles = useCallback(() => {
+    realm.write(() => {
+      const trendingArticles = realm.objects(TrendingArticle.schema.name);
+      console.log('Deleting all trending articles:', trendingArticles.toJSON());
+
+      if (trendingArticles.length > 0) {
+        realm.delete(trendingArticles); // Deletes all trending articles
+      }
+    });
+  }, [realm]);
+
+  return {deleteTrendingArticles};
+};

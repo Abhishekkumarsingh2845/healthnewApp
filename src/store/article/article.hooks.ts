@@ -20,17 +20,12 @@ export const useGetFavArticles = () => {
     .sorted('publishedAt', true);
 
   return articles;
- 
 };
 export const useGetArticlesById = (id: BSON.ObjectId) => {
   console.log(id, 'ID>>>');
   const articles = useQuery(Article).filtered(`_id == $0`, id);
   return articles[0];
 };
-
-
-
-
 
 export const useToggleLikeArticle = () => {
   const realm = useRealm();
@@ -53,44 +48,24 @@ export const useToggleLikeArticle = () => {
           console.log('Delete');
           realm.delete(fav);
           const favE = realm.objects(Favorite.schema.name);
-          console.log('Delete->>>>>>>>>>>>>>>>>>>>>>>', favE.toJSON());
+          console.log('Delete latest data', favE.toJSON());
         }
         if (article.isLiked) {
-          console.log('ADD');
+          console.log('Add');
           realm.create(Favorite.schema.name, {
             _id: new BSON.ObjectId(),
             articleId: article._id,
           });
           const favEnt = realm.objects(Favorite.schema.name);
-          console.log('ADD->>>>>>>>>>>>>>>>>>>', favEnt.toJSON());
+          console.log(
+            'Adding latest data->>>>>>>>>>>>>>>>>>>',
+            favEnt.toJSON(),
+          );
         }
       });
     },
     [realm],
   );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const saveSingleArticle = (newArticle: ArticleType) => {
     try {
@@ -146,14 +121,8 @@ export const useToggleLikeArticle = () => {
   return {toggleLike, saveSingleArticle, deleteArticles, saveManyArticles};
 };
 
-
-
-
-
-
-
 //   const treading:Array<any> = useQuery(TrendingArticle)
-  //   .filtered(`isLiked==true`)
-  //   .sorted('publishedAt', true) as any ;
-  // // console.log("RUN GET>>>")
-   // .concat(treading);
+//   .filtered(`isLiked==true`)
+//   .sorted('publishedAt', true) as any ;
+// // console.log("RUN GET>>>")
+// .concat(treading);
