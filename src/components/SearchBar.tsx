@@ -178,7 +178,7 @@ const SearchBar = (props: SearchBarProps) => {
             setSearch('');
             props.onSubmit && props.onSubmit(search);
           }}>
-          <AntDesignIcons name="search1" size={20} color="black" />
+          {/* <AntDesignIcons name="search1" size={20} color="black" /> */}
         </TouchableOpacity>
       )}
     </TouchableOpacity>

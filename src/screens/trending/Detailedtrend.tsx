@@ -16,7 +16,7 @@ import {Colors} from '../../config/colors.config';
 import {FontStyle, Style} from '../../config/style.config';
 import {useNavigation, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Header from '../news/components/header';
+
 import {Fonts} from '../../config/font.config';
 import {useQuery} from '@realm/react';
 import Card from '../../components/AppComponents/card';
@@ -26,6 +26,7 @@ import {Lottie} from '../../generated/image.assets';
 import Banner from '../newDetail/components/banner';
 import Article from '../../store/article/article.schema';
 import TrendingArticle from '../../store/trending/trending.schema';
+import Header from '../newDetail/components/header';
 
 type RootStackParamList = {
   NewsDetail: {articleId: string};
@@ -65,7 +66,6 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   };
 
   useEffect(() => {
-   
     fetchArticleDetails();
   }, [articleId]);
 
@@ -77,17 +77,63 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
     );
   }
 
+  const getCategoryImageUrl = category => {
+    if (category === 'Technology Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316870222-900829952.png';
+    } else if (category === 'Physical Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316938942-504121852.png';
+    } else if (category === 'Financial Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png';
+    } else if (category === 'Community Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
+    } else if (category === 'Occupational Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
+    } else if (category === 'Enironmental Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
+    } else if (category === 'Medical Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
+    }
+    return null; // Return null if category doesn't match
+  };
+
   return (
     <ScrollView
       style={{flex: 1}}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
       <SafeAreaView />
-      <Header icon={undefined} title={'Trending/Popular New'} />
+      {/* <Header icon={undefined} title={'Trending/Popular New'} /> */}
+      <Header {...details} />
       <View style={styles.container}>
         <Banner {...details} />
         {article ? (
           <>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Image
+                source={{url: getCategoryImageUrl(article.category)}}
+                style={{width: 30, height: 30}}
+              />
+
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#000000',
+                  // marginVertical: moderateScale(10),
+                  fontFamily: Fonts.bold,
+                  fontWeight: 400,
+                  marginLeft: 10,
+
+                  lineHeight: 16,
+                }}>
+                {article.category}
+              </Text>
+            </View>
+
             <Text style={styles.title}>{article.title}</Text>
             <Text style={styles.description}>{article.content}</Text>
             {article.url ? (
@@ -99,7 +145,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
                   style={[
                     FontStyle.regular,
                     {
-                      textAlign:"right",
+                      textAlign: 'right',
                       fontWeight: '400',
                       fontFamily: Fonts.light,
                       lineHeight: moderateScale(23),
@@ -125,10 +171,10 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
             style={{width: moderateScale(30), height: moderateScale(30)}}
           />
         }
-        title={'Latest News'}
+        title={'Related News'}
         titleStyle={Style.title}
         headerContainerStyle={Style.header}
-        left={'View All'}
+        // left={'View All'}
         moreStyle={Style.moreStyle}
       />
 
@@ -206,7 +252,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
- 
+
   header: {
     paddingHorizontal: moderateScale(0),
   },

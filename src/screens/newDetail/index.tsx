@@ -33,6 +33,25 @@ export interface NewsDetailsPropType
 }
 
 const NewsDetail = (props: NewsDetailsPropType) => {
+  const getCategoryImageUrl = category => {
+    if (category === 'Technology Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316870222-900829952.png';
+    } else if (category === 'Physical Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316938942-504121852.png';
+    } else if (category === 'Financial Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png';
+    } else if (category === 'Community Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
+    } else if (category === 'Occupational Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
+    } else if (category === 'Enironmental Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
+    } else if (category === 'Medical Health') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
+    }
+    return null; // Return null if category doesn't match
+  };
+
   const params = props.route.params || {}; // Safely handle missing params
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -65,6 +84,39 @@ const NewsDetail = (props: NewsDetailsPropType) => {
               ]}>
               {details.category}
             </Text> */}
+
+            <View
+              style={{
+                alignItems: 'center',
+                // marginVertical: moderateScale(10),
+                flexDirection: 'row',
+              }}>
+              <Image
+                source={{uri: getCategoryImageUrl(details.category)}}
+                style={{
+                  width: 30,
+                  height: 30,
+                  resizeMode: 'contain',
+                }}
+              />
+              <Text
+                style={[
+                  FontStyle.bold,
+                  {
+                    color: '#000000',
+                    // marginVertical: moderateScale(10),
+                    fontFamily: Fonts.bold,
+                    fontWeight: 400,
+                    marginLeft: 10,
+                    fontSize: moderateScale(14),
+
+                    lineHeight: 16,
+                  },
+                ]}>
+                {details.category}
+              </Text>
+            </View>
+
             <Text
               style={[
                 FontStyle.bold,
@@ -106,25 +158,16 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                       fontFamily: Fonts.light,
                       lineHeight: moderateScale(23),
                       fontSize: moderateScale(15),
-                      textAlign:"right",
+                      textAlign: 'right',
                       color: Colors.primary,
                     },
                   ]}>
                   Show Original
                 </Text>
               </TouchableOpacity>
-            ) : (
-              null
-            )}
+            ) : null}
 
-            <TouchableOpacity style={style.showdoccontainer}>
-              {/* <Text style={style.showdocumenttxt}>Read Document</Text>
-              <EntypoIcons
-                name="chevron-small-right"
-                color={Colors.primary}
-                size={moderateScale(25)}
-              /> */}
-            </TouchableOpacity>
+            <TouchableOpacity style={style.showdoccontainer}></TouchableOpacity>
           </>
         )}
 
@@ -170,7 +213,17 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                   updatedAt={article.updatedAt}
                   urlToImage={article.urlToImage} // Pass `urlToImage` as a prop
                   description={article.description} // Pass `description` as a prop
-                  style={{marginRight: moderateScale(10)}} // Add spacing between cards
+                  style={{marginRight: moderateScale(10)}}
+
+                  // isLiked={article.isLiked ?? false}
+                  // Add spacing between cards
+                  // onClick={() => {
+                  //   const id = articles._id;
+                  //   Nav.navigate('NewsDetail', {
+                  //     _id: id,
+                  //   } as NewsDetailsPropType);
+                  // }}
+                  // {...articles}
                 />
               ))}
           </ScrollView>

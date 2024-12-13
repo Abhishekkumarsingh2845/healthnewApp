@@ -92,7 +92,9 @@ const FilterModal = props => {
             <Text style={{fontWeight: 'bold', color: Colors.black}}>
               Filter(3)
             </Text>
-            <Text style={{color: Colors.black}}>Clear All</Text>
+            <TouchableOpacity onPress={() => props.modalClose(false)}>
+              <Text style={{color: Colors.black}}>Clear All</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={{flexDirection: 'row'}}>
@@ -215,8 +217,8 @@ const Categories = ({
                 style={{
                   width: 20,
                   height: 20,
-                  alignItems:"center",
-                  justifyContent:"center",
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderWidth: 1,
                   borderColor: '#000',
                   backgroundColor:

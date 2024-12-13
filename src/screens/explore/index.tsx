@@ -25,8 +25,6 @@ import {
   useToggleLikeArticle,
 } from '../../store/article/article.hooks';
 
-
-
 import {NewsDetailsPropType} from '../newDetail';
 import {NewsListType} from '../news/types/enum';
 import {NewsPropType} from '../news/types/interface';
