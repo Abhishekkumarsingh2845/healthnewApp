@@ -6,10 +6,12 @@ import BottomSheet, {
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
+  FlatList,
   Modal,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -182,11 +184,15 @@ const Categories = ({
     'Environmental Health',
     'Medical Health',
   ];
-
+  const [data, setdata] = useState('');
+  const [query, setquery] = useState('');
   const handleSelectCategory = (category: string): void => {
     setSelected(selected === category ? null : category);
   };
 
+
+  const searchdata=categories.filter(item=>item.toLowerCase().includes(query.toLowerCase()));
+  
   return (
     <View>
       <View style={categorStyle.container}>
@@ -194,14 +200,12 @@ const Categories = ({
         <Text style={[FontStyle.regular, {color: Colors.black}]}>
           Select the category which you want to see.
         </Text>
-        <SearchBar
-          placholder={'Search'}
-          label={''}
-          type={'input'}
-          containerStyle={categorStyle.search}
-        />
-        <View style={{padding: 10}}>
-          {categories.map((category, index) => (
+      
+        <TextInput value={query}
+        onChangeText={setquery}
+        style={{borderWidth:0.2,borderRadius:5}}/>
+        <View style={{padding: 10,height:350}}>
+          {searchdata.map((category, index) => (
             <TouchableOpacity
               key={index}
               style={{
@@ -245,6 +249,100 @@ const Categories = ({
     </View>
   );
 };
+
+
+
+
+
+// const Categories = ({
+//   selected,
+//   setSelected,
+// }: {
+//   selected: string | null;
+//   setSelected: (category: string | null) => void;
+// }) => {
+//   const categories = [
+//     'Technology Health',
+//     'Physical Health',
+//     'Financial Health',
+//     'Community Health',
+//     'Occupational Health',
+//     'Environmental Health',
+//     'Medical Health',
+//   ];
+
+//   const [query, setQuery] = useState('');
+
+//   const handleSelectCategory = (category: string): void => {
+//     setSelected(selected === category ? null : category);
+//   };
+
+//   // Filtered data based on search query
+//   const searchData = categories.filter(item =>
+//     item.toLowerCase().includes(query.toLowerCase())
+//   );
+
+//   return (
+//     <View style={{ padding: 20 }}>
+//       <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
+//         Categories
+//       </Text>
+//       <Text style={{ fontSize: 16, color: 'black', marginBottom: 10 }}>
+//         Select the category which you want to see.
+//       </Text>
+
+//       {/* Search Bar */}
+//       <TextInput
+//         value={query}
+//         onChangeText={setQuery}
+//         placeholder="Search category"
+//         style={{
+//           backgroundColor: 'lightgray',
+//           padding: 10,
+//           borderRadius: 5,
+//           marginBottom: 20,
+//         }}
+//       />
+
+//       {/* Category List */}
+//       <View style={{height:450}}>
+//         {searchData.map((category, index) => (
+//           <TouchableOpacity
+//             key={index}
+//             style={{
+//               flexDirection: 'row',
+//               alignItems: 'center',
+//               padding: 10,
+//               height:50,
+//               borderRadius: 5,
+//               marginBottom: 10,
+//             }}
+//             onPress={() => handleSelectCategory(category)}>
+//             <View
+//               style={{
+//                 width: 20,
+//                 height: 20,
+//                 alignItems: 'center',
+//                 justifyContent: 'center',
+//                 borderWidth: 1,
+//                 borderColor: '#000',
+//                 marginRight: 10,
+//                 borderRadius: 5,
+//               }}>
+//               {selected === category && (
+//                 <Image
+//                   source={require('./../../../assets/images/check.png')}
+//                   style={{ width: 16, height: 16, resizeMode: 'contain' }}
+//                 />
+//               )}
+//             </View>
+//             <Text style={{ color: 'black' }}>{category}</Text>
+//           </TouchableOpacity>
+//         ))}
+//       </View>
+//     </View>
+//   );
+// };
 
 const SortBy = () => {
   const [selectedIndex, setSeletedIndex] = useState<number>(0);

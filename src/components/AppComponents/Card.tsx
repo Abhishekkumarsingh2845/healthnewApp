@@ -259,7 +259,7 @@ const getCategoryImageUrl = category => {
     return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png');
   } else if (category === 'Occupational Health') {
     return ("https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png");
-  } else if (category === 'Enironmental Health') {
+  } else if (category === 'Environmental Health') {
     return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png');
   } else if (category === 'Medical Health') {
     return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png');
