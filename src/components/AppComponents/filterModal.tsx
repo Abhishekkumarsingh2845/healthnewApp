@@ -7,8 +7,10 @@ import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   FlatList,
+  KeyboardAvoidingView,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -28,6 +30,7 @@ import {AppBlurModalPropType} from '../AppBlurModal';
 import {useQuery, useRealm} from '@realm/react';
 import FilterCategory from '../../store/filtercategory/filtercatergory.schema';
 import {Image} from 'react-native';
+import {Fonts} from '../../config/font.config';
 
 interface FilterModalPropType extends AppBlurModalPropType {}
 const intailFilterOptions = [
@@ -83,6 +86,10 @@ const FilterModal = props => {
       <AppBottomSheet
         modalVisible={props.modalOpenFlag}
         setModalVisible={props.modalClose}>
+          <ScrollView
+          
+          showsVerticalScrollIndicator={false}
+          >
         <View>
           <View
             style={{
@@ -163,6 +170,8 @@ const FilterModal = props => {
             onClick={handleApplyFilter}
           />
         </View>
+        </ScrollView>
+
       </AppBottomSheet>
     </>
   );
@@ -190,69 +199,136 @@ const Categories = ({
     setSelected(selected === category ? null : category);
   };
 
+  const searchdata = categories.filter(item =>
+    item.toLowerCase().includes(query.toLowerCase()),
+  );
 
-  const searchdata=categories.filter(item=>item.toLowerCase().includes(query.toLowerCase()));
-  
   return (
-    <View>
-      <View style={categorStyle.container}>
-        <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
-        <Text style={[FontStyle.regular, {color: Colors.black}]}>
-          Select the category which you want to see.
-        </Text>
-      
-        <TextInput value={query}
-        onChangeText={setquery}
-        style={{borderWidth:0.2,borderRadius:5}}/>
-        <View style={{padding: 10,height:350}}>
-          {searchdata.map((category, index) => (
-            <TouchableOpacity
-              key={index}
+    <View style={categorStyle.container}>
+      <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
+      <Text style={[FontStyle.regular, {color: Colors.black}]}>
+        Select the category which you want to see.
+      </Text>
+
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: '100%',
+          borderWidth: 1.5,
+          borderColor: '#EDF1F3',
+          borderRadius: 10,
+          // paddingVertical: 1,
+        }}>
+        <Image
+          source={require('../../../assets/images/ss.png')}
+          style={{width: 18, height: 18, marginLeft: 10}}
+        />
+
+        <TextInput
+          value={query}
+          onChangeText={setquery}
+          placeholder="Search By Interest"
+          placeholderTextColor={'black'}
+          style={{
+            // borderWidth: 1.5,
+            // borderRadius: 8,
+            paddingVertical: 10,
+            fontSize: 15,
+            fontFamily: Fonts.medium,
+            fontWeight: '400',
+            marginLeft: 10,
+            // borderColor: '#EDF1F3',
+            // paddingLeft: 20,
+            // width:"100%"
+            // backgroundColor:"red",
+            flex: 1,
+          }}
+        />
+      </View>
+
+      <TouchableOpacity
+        // key={index}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: '#EDF1F3',
+          borderRadius: 5,
+          paddingVertical: 15,
+        }}
+        // onPress={() => handleSelectCategory(category)}
+      >
+        <View
+          style={{
+            width: 20,
+            height: 20,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: 1,
+            borderColor: '#000',
+
+            marginRight: 10,
+            borderRadius: 5,
+          }}>
+          {/* <Image
+              source={require('./../../../assets/images/check.png')}
               style={{
-                flexDirection: 'row',
+                width: 16,
+                height: 16,
+                resizeMode: 'contain',
+              }}
+            /> */}
+        </View>
+        <Text style={{color: 'black'}}>Select All (120)</Text>
+      </TouchableOpacity>
+
+      <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
+        {searchdata.map((category, index) => (
+          <TouchableOpacity
+            key={index}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 8,
+              paddingVertical: 6,
+              backgroundColor:
+                selected === category ? 'transparent' : 'transparent',
+              borderRadius: 5,
+            }}
+            onPress={() => handleSelectCategory(category)}>
+            <View
+              style={{
+                width: 20,
+                height: 20,
                 alignItems: 'center',
-                padding: 10,
+                justifyContent: 'center',
+                borderWidth: 1,
+                borderColor: '#000',
                 backgroundColor:
                   selected === category ? 'transparent' : 'transparent',
+                marginRight: 10,
                 borderRadius: 5,
-              }}
-              onPress={() => handleSelectCategory(category)}>
-              <View
-                style={{
-                  width: 20,
-                  height: 20,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderWidth: 1,
-                  borderColor: '#000',
-                  backgroundColor:
-                    selected === category ? 'transparent' : 'transparent',
-                  marginRight: 10,
-                  borderRadius: 5,
-                }}>
-                {selected === category && (
-                  <Image
-                    source={require('./../../../assets/images/check.png')}
-                    style={{
-                      width: 16,
-                      height: 16,
-                      resizeMode: 'contain',
-                    }}
-                  />
-                )}
-              </View>
-              <Text style={{color: 'black'}}>{category}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+              }}>
+              {selected === category && (
+                <Image
+                  source={require('./../../../assets/images/check.png')}
+                  style={{
+                    width: 16,
+                    height: 16,
+                    resizeMode: 'contain',
+                  }}
+                />
+              )}
+            </View>
+            <Text style={{color: 'black'}}>{category}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
 };
-
-
-
-
 
 // const Categories = ({
 //   selected,

@@ -28,7 +28,7 @@ const Banner = (props: CardPropType) => {
             style={style.image}
             resizeMode={'stretch'}
           />
-          <Text
+          {/* <Text
             style={{
               position: 'absolute',
               top: 10,
@@ -41,7 +41,7 @@ const Banner = (props: CardPropType) => {
               fontSize: 15,
             }}>
             {props.category}
-          </Text>
+          </Text> */}
           {/* <Text style={[FontStyle.titleSemibold, style.label]}>
                   {props.category}
                 </Text> */}

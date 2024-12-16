@@ -225,12 +225,13 @@
 
 // export default memo(Card);
 
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useState} from 'react';
 import {
   Image,
   Pressable,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -271,14 +272,25 @@ const Card = props => {
   const {toggleLike} = useToggleLikeArticle();
 
   const onLike = useCallback(() => {
+
+    console.log("likedkkkkkkkkkkkkk")
     const id = new BSON.ObjectId(props._id);
     if (props.onLike) {
       props.onLike();
       return;
     }
     toggleLike(id);
+    
+    console.log("li")
   }, [props._id]);
 
+
+
+  const [state,setstate]=useState(false);
+  const chg=()=>
+  {
+    setstate(!state);
+  }
   return (
     <Pressable
       style={[style.box, props.containerStyle]}
@@ -337,6 +349,8 @@ const Card = props => {
                 ]}>
                 {moment(props.updatedAt).fromNow()}
               </Text>
+            
+              
             </View>
           </View>
         </View>

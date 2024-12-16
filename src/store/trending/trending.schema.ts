@@ -18,19 +18,10 @@
 
 // trending.schema.ts]
 
-
-
-
-
-
-
-
-
-
 import Realm from 'realm';
 
 class TrendingArticle extends Realm.Object {
-  _id!: Realm.BSON.ObjectId;;
+  _id!: Realm.BSON.ObjectId;
   article_id!: string;
   title!: string;
   description!: string;
@@ -44,7 +35,6 @@ class TrendingArticle extends Realm.Object {
   isActive!: boolean;
   isTrending!: boolean;
   isLiked!: boolean;
-  
 
   static schema = {
     name: 'TrendingArticle',
@@ -60,7 +50,6 @@ class TrendingArticle extends Realm.Object {
       category: 'string',
       updatedAt: 'date',
       isLiked: {type: 'bool', default: false},
-     
     },
   };
 }

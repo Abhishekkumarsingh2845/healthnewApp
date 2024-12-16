@@ -495,8 +495,8 @@ const ViewAll = () => {
   return (
     <>
       <AppSafeAreaView>
-        <SafeAreaView/>
-      <Header icon={undefined} title={'Trending/Popular New'} />
+        <SafeAreaView />
+        <Header icon={undefined} title={'Trending/Popular New'} />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           {trendingArticlesFromRealm.map((item, index) => (

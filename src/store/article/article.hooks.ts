@@ -29,7 +29,6 @@ export const useGetArticlesById = (id: BSON.ObjectId) => {
 
 export const useToggleLikeArticle = () => {
   const realm = useRealm();
-
   const toggleLike = useCallback(
     (id: BSON.ObjectId) => {
       console.log('Called...', id);
@@ -37,15 +36,15 @@ export const useToggleLikeArticle = () => {
         Article.schema.name,
         id,
       ) as ArticleType;
-      const treadingArticle = realm.objectForPrimaryKey(
-        TrendingArticle.schema.name,
-        id,
-      ) as ArticleType;
+      // const treadingArticle = realm.objectForPrimaryKey(
+      //   TrendingArticle.schema.name,
+      //   id,
+      // ) as ArticleType;
       console.log('Called...');
 
       realm.write(() => {
         article.isLiked = !(article?.isLiked ?? false);
-        treadingArticle.isLiked = !(treadingArticle?.isLiked ?? false);
+        // treadingArticle.isLiked = !(treadingArticle?.isLiked ?? false);
         const fav = realm
           .objects(Favorite.schema.name)
           .filtered(`articleId == $0`, article._id);
@@ -55,7 +54,13 @@ export const useToggleLikeArticle = () => {
           const favE = realm.objects(Favorite.schema.name);
           console.log('Delete latest data', favE.toJSON());
         }
-        if (article.isLiked && treadingArticle.isLiked) {
+        if (article.isLiked 
+          
+          // &&
+          
+          
+          // treadingArticle.isLiked
+        ) {
           console.log('Add');
           realm.create(Favorite.schema.name, {
             _id: new BSON.ObjectId(),
@@ -131,3 +136,9 @@ export const useToggleLikeArticle = () => {
 //   .sorted('publishedAt', true) as any ;
 // // console.log("RUN GET>>>")
 // .concat(treading);
+
+
+
+
+
+

@@ -1,3 +1,5 @@
+
+
 import {Image, Pressable, SafeAreaView, StyleSheet, View} from 'react-native';
 import BackButton from '../../../components/BackButton';
 import AppImage from '../../../components/AppImage';
@@ -12,21 +14,24 @@ import {
   useToggleLikeArticle,
 } from '../../../store/article/article.hooks';
 import {BSON} from 'realm';
-import {useRealm} from '@realm/react';
+import {useQuery, useRealm} from '@realm/react';
 import Article from '../../../store/article/article.schema';
+import TrendingArticle from '../../../store/trending/trending.schema';
+import { TrendingTypeArticle } from '../../../store/trending/trending.interface';
 
-const Header = (props: ArticleType) => {
+const Header = (props:TrendingTypeArticle ) => {
   const objId = new BSON.ObjectId(props._id);
   const realm = useRealm();
   console.log('HEADER>>>');
   const details = realm.objectForPrimaryKey(
-    Article.schema.name,
+    TrendingArticle.schema.name,
     objId,
-  ) as ArticleType;
-  console.log('yyyyyyy', details);
+  ) as TrendingTypeArticle;
   // const details = useGetArticlesById(new BSON.ObjectId(props._id)) as ArticleType;
   const {toggleLike} = useToggleLikeArticle();
-
+  console.log("y",details);
+const aa=useQuery('TrendingArticle');
+console.log("lll",aa);
   return (
     <SafeAreaView
       style={[
@@ -34,8 +39,7 @@ const Header = (props: ArticleType) => {
         {
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: 10,
-          // paddingTop: Spacing.topSpace,
+          paddingTop: Spacing.topSpace,
         },
       ]}>
       <View
@@ -68,12 +72,12 @@ const Header = (props: ArticleType) => {
           onPress={() => {
             toggleLike(props._id);
           }}>
-          <Image
+          {/* <Image
             resizeMode={'contain'}
             source={details.isLiked ? Icons.ic_active_love : Icons.ic_heart}
             style={style.icon}
             tintColor={details.isLiked ? Colors.primary : Colors.black}
-          />
+          /> */}
         </Pressable>
         <Image
           resizeMode={'contain'}

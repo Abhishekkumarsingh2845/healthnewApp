@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Platform,
   ScrollView,
@@ -26,6 +26,7 @@ import CategorySection from '../../components/CategorySections';
 import LottieView from 'lottie-react-native';
 import {Lottie} from '../../generated/image.assets';
 import {Image} from 'react-native';
+import {useToggleTrendingLike} from '../../store/trending/trendinghook';
 
 export interface NewsDetailsPropType
   extends StackScreenProps<RootStackParamList, 'NewsDetail'> {
@@ -44,20 +45,22 @@ const NewsDetail = (props: NewsDetailsPropType) => {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
     } else if (category === 'Occupational Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
-    } else if (category === 'Enironmental Health') {
+    } else if (category === 'Environmental Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
     } else if (category === 'Medical Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
     }
     return null; // Return null if category doesn't match
   };
-
+  const {toggleLike} = useToggleTrendingLike();
   const params = props.route.params || {}; // Safely handle missing params
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
 
+
+ 
   const articles = useQuery(Article); // Fetch all articles
   const objId = params._id; // Assuming _id is passed directly as a string
-
+  console.log('lllllllllllll', articles);
   // Optional: Fetch individual article details
   const details = articles.find(article => article._id.toString() === objId);
 
@@ -204,27 +207,23 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             contentContainerStyle={{paddingHorizontal: moderateScale(0)}}>
             {articles
               .filter(article => article._id.toString() !== objId) // Exclude the current article by its _id
-              .map(article => (
+              .map((item, index) => (
                 <Card
-                  key={article._id.toString()}
-                  title={article.title}
-                  content={article.content}
-                  category={article.category}
-                  updatedAt={article.updatedAt}
-                  urlToImage={article.urlToImage} // Pass `urlToImage` as a prop
-                  description={article.description} // Pass `description` as a prop
+                  key={item._id.toString()}
+                  title={item.title}
+                  // Passing isLiked state to Card component
+                  content={item.content}
+                  category={item.category}
+                  updatedAt={item.updatedAt}
+                  urlToImage={item.urlToImage} // Pass `urlToImage` as a prop
+                  description={item.description} // Pass `description` as a prop
                   style={{marginRight: moderateScale(10)}}
-
-                  // isLiked={article.isLiked ?? false}
-                  // Add spacing between cards
-                  // onClick={() => {
-                  //   const id = articles._id;
-                  //   Nav.navigate('NewsDetail', {
-                  //     _id: id,
-                  //   } as NewsDetailsPropType);
-                  // }}
-                  // {...articles}
+                  onLike={() => {
+                    toggleLike(item?._id as any);
+                  }}
+                 
                 />
+
               ))}
           </ScrollView>
         ) : (

@@ -4,10 +4,14 @@ import {useGetFavArticles} from '../../store/article/article.hooks';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigations/MainNavigation/models';
 import Card from '../../components/AppComponents/card';
-import Header from '../news/components/header';
+import Header from '../favorite/components/header';
 import Categories from '../../components/AppComponents/categories';
-import {usetrendingFavArticles} from '../../store/trending/trendinghook';
+import {
+  useToggleTrendingLike,
+  usetrendingFavArticles,
+} from '../../store/trending/trendinghook';
 import AppSafeAreaView from '../../components/AppSafeAreaView';
+import {Icons} from '../../generated/image.assets';
 const Favviewall = () => {
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   // const favArticles = useGetFavArticles();
@@ -15,17 +19,36 @@ const Favviewall = () => {
 
   const trendingFavArticles = usetrendingFavArticles(); // Trending favorites
   const latestFavArticles = useGetFavArticles();
+  // const combinedFavArticlesMap = new Map();
+  // trendingFavArticles.forEach(article => {
+  //   const id = article._id?.toString() || article.id;
+  //   combinedFavArticlesMap.set(id, article);
+  // });
+  // latestFavArticles.forEach(article => {
+  //   const id = article._id?.toString() || article.id;
+  //   combinedFavArticlesMap.set(id, article);
+  // });
+  // const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
+
+
   const combinedFavArticlesMap = new Map();
+
   trendingFavArticles.forEach(article => {
     const id = article._id?.toString() || article.id;
-    combinedFavArticlesMap.set(id, article);
-  });
-  latestFavArticles.forEach(article => {
-    const id = article._id?.toString() || article.id;
-    combinedFavArticlesMap.set(id, article);
+    combinedFavArticlesMap.set(id, {...article, source: 'trending'}); // Add source
   });
 
+  latestFavArticles.forEach(article => {
+    const id = article._id?.toString() || article.id;
+    combinedFavArticlesMap.set(id, {...article, source: 'latest'}); // Add source
+  });
+
+  // Convert map to array
   const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
+
+
+
+
   const filteredfavArticles =
     activeCategory === 'All'
       ? combinedFavArticles
@@ -33,10 +56,16 @@ const Favviewall = () => {
           article => article.category === activeCategory,
         );
 
+  const trendingArticlesSource = combinedFavArticles
+    .filter(article => article.source === 'trending')
+    .map(article => article.source); // This will store an array of "trending"
+  console.log('variable', trendingArticlesSource);
+
+  const {toggleLike} = useToggleTrendingLike();
   return (
     <AppSafeAreaView>
       <SafeAreaView />
-      <Header icon={undefined} title={'Favorites News'} />
+      <Header />
 
       <Categories onCategoryChange={setActiveCategory} />
 
@@ -52,6 +81,12 @@ const Favviewall = () => {
                   _id: id,
                 } as NewsDetailsPropType);
               }}
+              {...(trendingArticlesSource.length > 0 && {
+                onLike: () => toggleLike(item?._id as any),
+              })}
+              // onLike={() => {
+              //   toggleLike(item?._id as any);
+              // }}
             />
           );
         })}

@@ -9,6 +9,7 @@ import {
   Linking,
   SafeAreaView,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import axios from 'axios';
 import {moderateScale} from 'react-native-size-matters';
@@ -22,11 +23,14 @@ import {useQuery} from '@realm/react';
 import Card from '../../components/AppComponents/card';
 import CategorySection from '../../components/CategorySections';
 import LottieView from 'lottie-react-native';
-import {Lottie} from '../../generated/image.assets';
+import {Icons, Images, Lottie} from '../../generated/image.assets';
 import Banner from '../newDetail/components/banner';
 import Article from '../../store/article/article.schema';
 import TrendingArticle from '../../store/trending/trending.schema';
+
 import Header from '../newDetail/components/header';
+import BackButton from '../../components/BackButton';
+import {useToggleTrendingLike} from '../../store/trending/trendinghook';
 
 type RootStackParamList = {
   NewsDetail: {articleId: string};
@@ -42,14 +46,36 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   route,
 }) => {
   const {articleId} = route.params;
+  console.log('dd', articleId);
   const [article, setArticle] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
+  console.log('trendingschema', trendingArticles);
+  const articlevar = trendingArticles.map(item => item.article_id);
+  console.log('articlesid', articlevar);
   // const params = props.route.params;
   const articles = useQuery(Article);
   const details = articles.find(
     article => article._id.toString() === articleId,
   );
+  const {toggleLike} = useToggleTrendingLike();
+  console.log('jkv jrn v', typeof toggleLike);
+  const articleIdToFind = articleId;
+
+  // Extract the single article object
+  const singleArticle = trendingArticles.find(
+    article => article._id == articleIdToFind,
+  );
+
+  console.log('Single Article:', singleArticle);
+  const lllg = singleArticle.isLiked;
+  console.log('sss', lllg);
+  const mm = singleArticle._id;
+  console.log('vv', mm);
+
+  // const ff=singleArticle.map(item=>item.isLiked);
+  // console.log("lgg",ff);
+
   const fetchArticleDetails = async () => {
     try {
       const response = await axios.get(
@@ -57,6 +83,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
       );
       if (response.data.status) {
         setArticle(response.data.data);
+        console.log('liked response', response.data.data);
       }
     } catch (error) {
       console.error('Error fetching article:', error);
@@ -88,7 +115,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
     } else if (category === 'Occupational Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
-    } else if (category === 'Enironmental Health') {
+    } else if (category === 'Environmental Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
     } else if (category === 'Medical Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
@@ -98,14 +125,69 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
 
   return (
     <ScrollView
-      style={{flex: 1}}
+      style={{flex: 1, paddingHorizontal: 20}}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}>
       <SafeAreaView />
       {/* <Header icon={undefined} title={'Trending/Popular New'} /> */}
-      <Header {...details} />
+      {/* <Header {...details} /> */}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <View
+          style={[
+            Style.flexRow,
+            {alignItems: 'center', justifyContent: 'flex-start'},
+          ]}>
+          <BackButton
+            color={Colors.black}
+            size={moderateScale(20)}
+            style={{position: 'relative'}}
+          />
+          <Image
+            source={Images.appLogo}
+            resizeMode={'contain'}
+            tintColor={Colors.primary}
+            style={{width: moderateScale(105), height: moderateScale(40)}}
+          />
+        </View>
+        <View
+          style={[
+            Style.flexRow,
+            {
+              alignItems: 'center',
+              gap: moderateScale(10),
+              paddingTop: moderateScale(6),
+            },
+          ]}>
+          <TouchableOpacity
+            onPress={() => {
+              toggleLike(mm);
+            }}>
+            <Image
+              resizeMode={'contain'}
+              source={lllg ? Icons.ic_active_love : Icons.ic_heart}
+              // style={style.icon}
+              style={{width: 30, height: 30}}
+              tintColor={lllg ? Colors.primary : Colors.black}
+            />
+          </TouchableOpacity>
+          <Image
+            resizeMode={'contain'}
+            source={Icons.ic_move}
+            // style={style.icon}
+
+            style={{width: 30, height: 30}}
+            tintColor={Colors.black}
+          />
+        </View>
+      </View>
       <View style={styles.container}>
         <Banner {...details} />
+
         {article ? (
           <>
             <View
@@ -192,7 +274,8 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
             return currentId !== articleId;
           })
           .map((item, index) => (
-            <Card key={index} {...item} />
+            <Card key={index} {...item}
+             />
           ))}
       </ScrollView>
       <View style={{marginVertical: 20}}></View>
@@ -202,7 +285,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: moderateScale(16),
+    // paddingHorizontal: moderateScale(16),
   },
   image: {
     width: '100%',

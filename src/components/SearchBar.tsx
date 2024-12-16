@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     color: 'black',
     width: '80%',
     padding: 0,
+    paddingVertical:5,
   },
 });
 

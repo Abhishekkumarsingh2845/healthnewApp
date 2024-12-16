@@ -240,6 +240,7 @@ import AppImage from '../../components/AppImage';
 import {Icons} from '../../generated/image.assets';
 import BackButton from '../../components/BackButton';
 import {useNavigation} from '@react-navigation/native';
+import { Fonts } from '../../config/font.config';
 
 interface Article {
   _id: string;
@@ -295,13 +296,13 @@ const Search = () => {
   };
 
   return (
-    <View style={{paddingHorizontal: 12, paddingTop: Spacing.topSpace}}>
+    <View style={{paddingHorizontal: 12,}}>
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: 40,
+          marginTop: 20,
         }}>
         <BackButton
           style={{marginLeft: moderateScale(12), position: 'relative'}}
@@ -330,7 +331,10 @@ const Search = () => {
             {
               color: Colors.black,
               paddingTop: moderateScale(10),
-              fontSize: moderateScale(15),
+              fontSize: moderateScale(18),
+             fontFamily:Fonts.medium,
+             fontWeight:"700",
+            
             },
           ]}>
           Recent Search
@@ -345,7 +349,7 @@ const Search = () => {
             >
               <Image
                 source={{uri: item.urlToImage}}
-                style={{width: 40, height: 40, resizeMode: 'contain'}}
+                style={{width: 30, height: 30, resizeMode: 'contain'}}
               />
               <Text style={styles.articleTitle}>{item.title}</Text>
             </TouchableOpacity>
@@ -373,14 +377,17 @@ const styles = StyleSheet.create({
   },
   articleImage: {
     width: '100%',
-    height: 200,
+    height: 100,
     borderRadius: 8,
   },
   articleTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontFamily:Fonts.light,
+    fontWeight: "700",
+    // fontWeight:"400",
     marginTop: 8,
     marginLeft: 10,
+    color:"black",
   },
   articleDescription: {
     fontSize: 14,

@@ -14,6 +14,7 @@ import {FontStyle} from '../../config/style.config';
 import Header from '../newDetail/components/header';
 import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import { Fonts } from '../../config/font.config';
 
 const Notifications = () => {
   const navigation = useNavigation();
@@ -48,7 +49,7 @@ const Notifications = () => {
   }
 
   return (
-    <View style={{marginTop: 50, paddingHorizontal: 20}}>
+    <View style={{marginTop: 20, paddingHorizontal: 20}}>
      
       <TouchableOpacity
         onPress={() => navigation.goBack()} // Navigate back on press
@@ -58,7 +59,7 @@ const Notifications = () => {
           source={require('./../../../assets/images/back.png')} // Replace with your image URL or local image path
           style={{width:25,height:20,resizeMode:"contain"}}
         />
-        <Text style={{textAlign: 'center',marginLeft:100}}>Notification</Text>
+        <Text style={{textAlign: 'center',marginLeft:100,fontSize:18,fontFamily:Fonts.medium,fontWeight:"700",color:"#000000"}}>Notification</Text>
        
       </TouchableOpacity>
 

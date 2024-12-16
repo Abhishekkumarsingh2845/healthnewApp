@@ -3,6 +3,7 @@ import {BSON} from 'realm';
 import {useCallback} from 'react';
 import TrendingArticle from './trending.schema';
 import Favorite from './../favorite/favorite.schema';
+import { TrendingTypeArticle } from './trending.interface';
 
 export const useToggleTrendingLike = () => {
   const realm = useRealm();
@@ -13,7 +14,7 @@ export const useToggleTrendingLike = () => {
       const article = realm.objectForPrimaryKey(
         TrendingArticle.schema.name,
         id,
-      ) as any;
+      ) as TrendingTypeArticle;
 
       console.log('Called...');
       console.log(article, 'art..');
@@ -49,9 +50,7 @@ export const useToggleTrendingLike = () => {
   return {toggleLike};
 };
 
-
 export const usetrendingFavArticles = () => {
-
   // console.log("ccccc->>",ll);
 
   const articles = useQuery(TrendingArticle)
@@ -59,11 +58,7 @@ export const usetrendingFavArticles = () => {
     .sorted('publishedAt', true);
 
   return articles;
- 
 };
-
-
-
 
 export const useDeleteTrendingArticles = () => {
   const realm = useRealm();
@@ -81,3 +76,5 @@ export const useDeleteTrendingArticles = () => {
 
   return {deleteTrendingArticles};
 };
+
+

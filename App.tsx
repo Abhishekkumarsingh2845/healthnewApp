@@ -3,11 +3,16 @@ import IntailizeApp from './src/components/IntializeApp';
 import {RealmProvider, useRealm} from '@realm/react';
 // import { realmConfig } from './src/store';
 import {realmConfig} from './src/store';
+import { SafeAreaView } from 'react-native';
 function App(): React.JSX.Element {
   return (
+  
     <RealmProvider schema={realmConfig}  deleteRealmIfMigrationNeeded={true} >
+ 
       <IntailizeApp />
+
     </RealmProvider>
+   
   );
 }
 
