@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Platform,
   ScrollView,
@@ -52,10 +52,11 @@ const NewsDetail = (props: NewsDetailsPropType) => {
     }
     return null; // Return null if category doesn't match
   };
+
+
   const {toggleLike} = useToggleTrendingLike();
   const params = props.route.params || {}; // Safely handle missing params
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
-
 
  
   const articles = useQuery(Article); // Fetch all articles
@@ -208,18 +209,26 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             {articles
               .filter(article => article._id.toString() !== objId) // Exclude the current article by its _id
               .map((item, index) => (
-                <Card
+                   <Card
+                   onClick={() => {
+                    const id = item._id.toHexString();
+                    Nav.navigate('NewsDetail', {
+                      _id: id,
+                    } as NewsDetailsPropType);
+                  }}
                   key={item._id.toString()}
                   title={item.title}
                   // Passing isLiked state to Card component
                   content={item.content}
                   category={item.category}
                   updatedAt={item.updatedAt}
+                  // isLiked={item.isLiked}
                   urlToImage={item.urlToImage} // Pass `urlToImage` as a prop
                   description={item.description} // Pass `description` as a prop
                   style={{marginRight: moderateScale(10)}}
                   onLike={() => {
                     toggleLike(item?._id as any);
+                    
                   }}
                  
                 />

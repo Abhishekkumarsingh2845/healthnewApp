@@ -158,6 +158,13 @@
 
 // export default Profile;
 
+
+
+
+
+
+
+
 import {
   FlatList,
   Image,
@@ -224,7 +231,7 @@ const Profile = () => {
               paddingHorizontal: 5,
               marginBottom: 10,
             }}>
-            <View style={{alignItems: 'center', flexDirection: 'row'}}>
+            {/* <View style={{alignItems: 'center', flexDirection: 'row'}}>
               <Image
                 source={require('../../../assets/images/bell.png')}
                 style={{width: 35, height: 35}}
@@ -242,7 +249,7 @@ const Profile = () => {
             </View>
             <View>
               <SwitchBtn toggle={toggle} setToggle={setToggle} />
-            </View>
+            </View> */}
           </View>
           <Card
             title="About us"

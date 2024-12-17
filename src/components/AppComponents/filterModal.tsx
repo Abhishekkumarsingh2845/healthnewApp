@@ -6,6 +6,7 @@ import BottomSheet, {
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
+  Button,
   FlatList,
   KeyboardAvoidingView,
   Modal,
@@ -31,7 +32,9 @@ import {useQuery, useRealm} from '@realm/react';
 import FilterCategory from '../../store/filtercategory/filtercatergory.schema';
 import {Image} from 'react-native';
 import {Fonts} from '../../config/font.config';
-
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import Article from '../../store/article/article.schema';
+import {useGetArticles} from '../../store/article/article.hooks';
 interface FilterModalPropType extends AppBlurModalPropType {}
 const intailFilterOptions = [
   {
@@ -58,6 +61,20 @@ const FilterModal = props => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const realm = useRealm();
+
+
+
+  // const allArticles = useGetArticles();
+  // const startDate = new Date('2024-12-17T06:43:40.179Z');
+  // const endDate = new Date('2024-12-17T06:49:07.000Z');
+  // const fsss = allArticles.filter(article => {
+  //   const updatedAt = new Date(article.updatedAt).getTime();
+  //   return updatedAt >= startDate.getTime() && updatedAt <= endDate.getTime();
+  // });
+
+
+
+  // console.log('pppppppppppppppppppp', fsss);
 
   const handleApplyFilter = () => {
     try {
@@ -86,92 +103,90 @@ const FilterModal = props => {
       <AppBottomSheet
         modalVisible={props.modalOpenFlag}
         setModalVisible={props.modalClose}>
-          <ScrollView
-          
-          showsVerticalScrollIndicator={false}
-          >
-        <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+                marginBottom: moderateScale(10),
+              }}>
+              <Text style={{fontWeight: 'bold', color: Colors.black}}>
+                Filter(3)
+              </Text>
+              <TouchableOpacity onPress={() => props.modalClose(false)}>
+                <Text style={{color: Colors.black}}>Clear All</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <View
+                style={{
+                  width: '35%',
+                  height: '100%',
+                  borderRightWidth: 1,
+                  borderColor: Colors.borderColor,
+                  paddingRight: moderateScale(15),
+                }}>
+                {filterOptions.map((item, index) => (
+                  <Pressable
+                    key={`filter-${index}`}
+                    onPress={() => setSelectedIndex(index)}
+                    style={[
+                      styles.btn,
+                      index !== selectedIndex && {
+                        backgroundColor: 'transparent',
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        color:
+                          index === selectedIndex ? Colors.white : Colors.black,
+                      }}>
+                      {item.title}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  paddingHorizontal: moderateScale(4),
+                }}>
+                {selectedIndex === 0 && (
+                  <Categories
+                    selected={selectedCategory}
+                    setSelected={setSelectedCategory}
+                  />
+                )}
+                {selectedIndex === 1 && <SortBy />}
+                {selectedIndex === 2 && <Date />}
+              </View>
+            </View>
+          </View>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
-              marginBottom: moderateScale(10),
+              paddingTop: moderateScale(10),
             }}>
-            <Text style={{fontWeight: 'bold', color: Colors.black}}>
-              Filter(3)
-            </Text>
-            <TouchableOpacity onPress={() => props.modalClose(false)}>
-              <Text style={{color: Colors.black}}>Clear All</Text>
-            </TouchableOpacity>
+            <AppButton
+              label="Cancel"
+              textStyle={styles.textPrimary}
+              btnstyle={{...styles.actionBtn, ...styles.borderedActionBtn}}
+              onClick={() => props.modalClose(false)}
+            />
+            <AppButton
+              label="Apply Filter"
+              btnstyle={styles.actionBtn}
+              onClick={handleApplyFilter}
+            />
           </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <View
-              style={{
-                width: '35%',
-                height: '100%',
-                borderRightWidth: 1,
-                borderColor: Colors.borderColor,
-                paddingRight: moderateScale(15),
-              }}>
-              {filterOptions.map((item, index) => (
-                <Pressable
-                  key={`filter-${index}`}
-                  onPress={() => setSelectedIndex(index)}
-                  style={[
-                    styles.btn,
-                    index !== selectedIndex && {backgroundColor: 'transparent'},
-                  ]}>
-                  <Text
-                    style={{
-                      color:
-                        index === selectedIndex ? Colors.white : Colors.black,
-                    }}>
-                    {item.title}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                paddingHorizontal: moderateScale(4),
-              }}>
-              {selectedIndex === 0 && (
-                <Categories
-                  selected={selectedCategory}
-                  setSelected={setSelectedCategory}
-                />
-              )}
-              {selectedIndex === 1 && <SortBy />}
-              {selectedIndex === 2 && <Date />}
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-            paddingTop: moderateScale(10),
-          }}>
-          <AppButton
-            label="Cancel"
-            textStyle={styles.textPrimary}
-            btnstyle={{...styles.actionBtn, ...styles.borderedActionBtn}}
-            onClick={() => props.modalClose(false)}
-          />
-          <AppButton
-            label="Apply Filter"
-            btnstyle={styles.actionBtn}
-            onClick={handleApplyFilter}
-          />
-        </View>
         </ScrollView>
-
       </AppBottomSheet>
     </>
   );
@@ -246,43 +261,6 @@ const Categories = ({
           }}
         />
       </View>
-
-      <TouchableOpacity
-        // key={index}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingHorizontal: 10,
-          borderBottomWidth: 1,
-          borderBottomColor: '#EDF1F3',
-          borderRadius: 5,
-          paddingVertical: 15,
-        }}
-        // onPress={() => handleSelectCategory(category)}
-      >
-        <View
-          style={{
-            width: 20,
-            height: 20,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 1,
-            borderColor: '#000',
-
-            marginRight: 10,
-            borderRadius: 5,
-          }}>
-          {/* <Image
-              source={require('./../../../assets/images/check.png')}
-              style={{
-                width: 16,
-                height: 16,
-                resizeMode: 'contain',
-              }}
-            /> */}
-        </View>
-        <Text style={{color: 'black'}}>Select All (120)</Text>
-      </TouchableOpacity>
 
       <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
         {searchdata.map((category, index) => (
@@ -422,6 +400,7 @@ const Categories = ({
 
 const SortBy = () => {
   const [selectedIndex, setSeletedIndex] = useState<number>(0);
+
   return (
     <View>
       <View style={categorStyle.container}>
@@ -472,6 +451,38 @@ const SortBy = () => {
   );
 };
 const Date = () => {
+  const [isDatePickerVisible, setDatePickerVisibility] =
+    useState<boolean>(false);
+  const check = useQuery(Article);
+  console.log('dd', check);
+  const [todate, tosetdate] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [currentField, setCurrentField] = useState<string>('');
+
+  const showDatePicker = (field: 'from' | 'to'): void => {
+    setCurrentField(field); // Set which field is being updated
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+
+
+ 
+  const handleConfirm = (date: Date) => {
+    const formattedDate = date.toLocaleDateString();
+
+    // Conditionally update based on currentField
+    if (currentField === 'from') {
+      setSelectedDate(formattedDate);
+    } else if (currentField === 'to') {
+      tosetdate(formattedDate);
+    }
+
+    hideDatePicker();
+  };
   return (
     <View>
       <View style={categorStyle.container}>
@@ -495,33 +506,74 @@ const Date = () => {
               marginLeft: moderateScale(4),
               minHeight: Size.screenHeight * 0.25,
             }}>
-            {['From', 'To'].map((item, index) => {
-              return (
-                <View
-                  key={`sort-${index}`}
-                  style={[
-                    Style.flexRow,
-                    {
-                      paddingVertical: moderateScale(10),
-                      flexWrap: 'nowrap',
-                      justifyContent: 'space-between',
-                    },
-                  ]}>
-                  <Text>{item}: </Text>
-                  <View style={[Style.flexRow, dateStyle.dateFeild]}>
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+              }}
+              onPress={() => showDatePicker('from')}>
+              <Text>From:</Text>
+              <View
+                style={[
+                  Style.flexRow,
+                  {
+                    paddingVertical: moderateScale(10),
+                    flexWrap: 'nowrap',
+                    justifyContent: 'space-between',
+                  },
+                ]}>
+                <View style={[Style.flexRow, dateStyle.dateFeild]}>
+                  {selectedDate ? (
+                    <Text>{selectedDate}</Text>
+                  ) : (
                     <Text>dd/mm/yyyy</Text>
-                    <Icons
-                      name={'calendar'}
-                      color={Colors.gray}
-                      size={moderateScale(16)}
-                    />
-                  </View>
+                  )}
+                  <Icons
+                    name={'calendar'}
+                    color={Colors.gray}
+                    size={moderateScale(16)}
+                  />
                 </View>
-              );
-            })}
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+              }}
+              onPress={() => showDatePicker('to')}>
+              <Text>To:</Text>
+              <View
+                style={[
+                  Style.flexRow,
+                  {
+                    paddingVertical: moderateScale(10),
+                    flexWrap: 'nowrap',
+                    justifyContent: 'space-between',
+                  },
+                ]}>
+                <View style={[Style.flexRow, dateStyle.dateFeild]}>
+                  {todate ? <Text>{todate}</Text> : <Text>dd/mm/yyyy</Text>}
+                  <Icons
+                    name={'calendar'}
+                    color={Colors.gray}
+                    size={moderateScale(16)}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={hideDatePicker}
+      />
     </View>
   );
 };

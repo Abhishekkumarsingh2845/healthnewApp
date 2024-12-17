@@ -17,7 +17,7 @@ import {Colors} from '../../config/colors.config';
 import {FontStyle, Style} from '../../config/style.config';
 import {useNavigation, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
+import {NavigationProp} from '@react-navigation/native';
 import {Fonts} from '../../config/font.config';
 import {useQuery} from '@realm/react';
 import Card from '../../components/AppComponents/card';
@@ -72,7 +72,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   console.log('sss', lllg);
   const mm = singleArticle._id;
   console.log('vv', mm);
-
+  const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   // const ff=singleArticle.map(item=>item.isLiked);
   // console.log("lgg",ff);
 
@@ -171,7 +171,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
               resizeMode={'contain'}
               source={lllg ? Icons.ic_active_love : Icons.ic_heart}
               // style={style.icon}
-              style={{width: 30, height: 30}}
+              style={{width: 25, height: 25}}
               tintColor={lllg ? Colors.primary : Colors.black}
             />
           </TouchableOpacity>
@@ -275,6 +275,12 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
           })
           .map((item, index) => (
             <Card key={index} {...item}
+            onClick={() => {
+              const id = item._id.toHexString();
+              Nav.navigate('Detailedtrend', {
+                articleId: id,
+              } as NewsDetailsPropType);
+            }}
              />
           ))}
       </ScrollView>

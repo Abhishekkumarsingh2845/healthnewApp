@@ -107,6 +107,17 @@ const Explore = () => {
 
   // console.log('schema data of latest', art.toJSON());
 
+ 
+
+  const startDate = new Date("2024-12-17T06:43:40.179Z");
+const endDate = new Date("2024-12-17T06:49:07.000Z");
+const fsss = allArticles.filter(article => {
+  const updatedAt = new Date(article.updatedAt).getTime();
+  return updatedAt >= startDate.getTime() && updatedAt <= endDate.getTime();
+});
+console.log('Filtered Articles:', fsss);
+ 
+
   //new treding articles fetching with data delte admin panel
   const fetchTrendingArticles = async () => {
     // const {deleteTrendingArticles} = useDeleteTrendingArticles();
@@ -119,7 +130,8 @@ const Explore = () => {
       const aa = response.data;
       // console.log('Api data of the trending response', aa);
 
-      if (response.data.status && response.data.data.length > 0) {
+      if (response.data.status && response.data.data.length > 0) 
+        {
         const currentArticles = realm.objects(TrendingArticle.schema.name);
 
         const fetchedArticleIds = response.data.data.map(
@@ -157,11 +169,78 @@ const Explore = () => {
           });
         });
       }
+      else{
+        console.log("no artilces");
+      }
     } catch (error) {
       console.error('Error fetching trending articles:', error);
     }
   };
 
+
+
+
+
+
+
+
+
+  // const fetchTrendingArticles = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       'http://15.206.16.230:4000/api/v1/android/trendingarticle',
+  //     );
+  
+  //     // Check if the response contains valid data
+  //     if (response.data.status && response.data.data.length == 0) {
+  //       const fetchedArticleIds = response.data.data.map(
+  //         (article: any) => article._id,
+  //       );
+  
+  //       realm.write(() => {
+  //         // Update Realm with the latest fetched articles
+  //         response.data.data.forEach((article: any) => {
+  //           const articleId = new BSON.ObjectId(article._id);
+  //           let data = {
+  //             ...article,
+  //             _id: articleId,
+  //           };
+  
+  //           const fav = realm
+  //             .objects(Favorite.schema.name)
+  //             .filtered(`articleId == $0`, articleId);
+  //           data['isLiked'] = fav.length > 0;
+  
+  //           // Create or modify the trending article in Realm
+  //           realm.create(
+  //             TrendingArticle.schema.name,
+  //             data,
+  //             Realm.UpdateMode.Modified,
+  //           );
+  //         });
+  
+  //         // Handle deleting articles from Realm that are not in the fetched data
+  //         const currentArticles = realm.objects(TrendingArticle.schema.name);
+  //         currentArticles.forEach((currentArticle: any) => {
+  //           if (!fetchedArticleIds.includes(currentArticle._id.toString())) {
+  //             realm.delete(currentArticle); // Delete the article from Realm DB
+  //           }
+  //         });
+  //       });
+  
+  //       // Now you can use the fetched data to update your UI
+  //       setTrendingArticles(response.data.data); // Use state or context to store this data
+  //     } else {
+  //       // If no data is available from the API, clear the UI or show no data message
+  //       setTrendingArticles([]); // Assuming you use a state to store and show the data
+  //       console.log("No articles available from API");
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching trending articles:', error);
+  //     // Handle the error (e.g., show an error message)
+  //   }
+  // };
+  
   const getLatestArticle = async (page: number) => {
     const res = await fetchLatestArticles({page, search: ''});
     // console.log('first:', res);
@@ -282,6 +361,7 @@ const Explore = () => {
           }
           showsVerticalScrollIndicator={false}>
           <Categories onCategoryChange={setActiveCategory} />
+
           {filteredArticles.length > 0 && (
             <CategorySection
               prefixAtTitle={
