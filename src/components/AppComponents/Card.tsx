@@ -249,6 +249,9 @@ import moment from 'moment';
 import {useToggleLikeArticle} from '../../store/article/article.hooks';
 
 // Define a function to get the category image URL
+
+
+
 const getCategoryImageUrl = category => {
   if (category === 'Technology Health') {
     return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316870222-900829952.png';
@@ -330,7 +333,7 @@ const Card = props => {
                   source={props.isLiked ? Icons.ic_active_love : Icons.ic_love}
                   style={style.iconn}
                   resizeMode={'contain'}
-                  tintColor={Colors.white}
+                  tintColor={props.isLiked?Colors.primary:Colors.white}
                 />
               </Pressable>
             </View>
@@ -449,8 +452,8 @@ const style = StyleSheet.create({
     height: moderateScale(30),
   },
   iconn: {
-    width: moderateScale(16),
-    height: moderateScale(16),
+    width: moderateScale(18),
+    height: moderateScale(18),
   },
   iconContainer: {
     backgroundColor: Colors.black,

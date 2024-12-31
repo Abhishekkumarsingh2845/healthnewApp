@@ -1,83 +1,140 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
-import AppSafeAreaView from '../../components/AppSafeAreaView';
 import axios from 'axios';
-import {Colors} from '../../config/colors.config';
-import {FontStyle} from '../../config/style.config';
-import Header from '../newDetail/components/header';
-import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import { Fonts } from '../../config/font.config';
+import {Colors} from '../../config/colors.config';
+import {Fonts} from '../../config/font.config';
+import messaging from '@react-native-firebase/messaging';
+import DeviceInfo from 'react-native-device-info';
 
 const Notifications = () => {
   const navigation = useNavigation();
-  const [notifications, setNotifications] = useState([]); // Store the notification data
-  const [loading, setloading] = useState(true);
-  // Fetch notifications from API
-  const fetchNotifications = async () => {
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const saveTokenToApi = async (deviceId, fcmToken) => {
     try {
       const response = await axios.post(
-        'http://15.206.16.230:4000/api/v1/admin/sendnotification',
+        'http://15.206.16.230:4000/api/v1/android/savingtokendata',
+        {
+          deviceId: deviceId,
+          fcmToken: fcmToken,
+        },
       );
-      if (response.data.success) {
-        setNotifications(response.data.data); // Set the fetched notifications in state
+      console.log('Response:', response.data);
+      if (response.data.message) {
+        Alert.alert('Success', response.data.message);
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-    } finally {
-      setloading(false);
+      console.error('Error saving token to API:', error);
+      Alert.alert('Error', 'Failed to save token to API');
     }
   };
 
   useEffect(() => {
-    fetchNotifications(); // Fetch notifications when the component mounts
+    const requestPermission = async () => {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        getFCMToken();
+        console.log('Notification permission granted.');
+      } else {
+        console.log('Notification permission denied.');
+      }
+    };
+
+    const getFCMToken = async () => {
+      try {
+        const fcmToken = await messaging().getToken();
+        console.log('FCM Token:', fcmToken);
+
+        const deviceId = await DeviceInfo.getUniqueId();
+        console.log('Device ID:', deviceId);
+
+        saveTokenToApi(deviceId, fcmToken);
+      } catch (error) {
+        console.error('Error getting FCM token:', error);
+      }
+    };
+
+    requestPermission();
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('Foreground notification:', remoteMessage);
+
+      const {notification: {title, body, android} = {}, data} = remoteMessage;
+
+      // Extract and store only the required fields
+      setNotifications(prev => {
+        const updatedNotifications = [
+          ...prev,
+          {
+            title: title || 'No Title',
+            body: body || 'No Body',
+            imageUrl: android?.imageUrl || null,
+            articleId: data?.articleId || 'No Article ID',
+            category: data?.category || 'No Category',
+            updatedAt: data?.updatedAt || new Date().toISOString(), // Use current date if no `updatedAt`
+          },
+        ];
+
+
+        return updatedNotifications.sort(
+          (a, b) => new Date(a.updatedAt) - new Date(b.updatedAt),
+        );
+      });
+    });
+
+    return unsubscribe;
   }, []);
 
   if (loading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator color={'red'} />
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator color="red" />
       </View>
     );
   }
 
   return (
-    <View style={{marginTop: 20, paddingHorizontal: 20}}>
-     
+    <View style={styles.container}>
       <TouchableOpacity
-        onPress={() => navigation.goBack()} // Navigate back on press
-        style={{alignItems:"center",flexDirection:"row"}}
-      >
-         <Image
-          source={require('./../../../assets/images/back.png')} // Replace with your image URL or local image path
-          style={{width:25,height:20,resizeMode:"contain"}}
+        onPress={() => navigation.goBack()}
+        style={styles.backButtonContainer}>
+        <Image
+          source={require('./../../../assets/images/back.png')}
+          style={styles.backButtonImage}
         />
-        <Text style={{textAlign: 'center',marginLeft:100,fontSize:18,fontFamily:Fonts.medium,fontWeight:"700",color:"#000000"}}>Notification</Text>
-       
+        <Text style={styles.backButtonText}>Notification</Text>
       </TouchableOpacity>
 
       <FlatList
         data={notifications}
         renderItem={({item}) => (
           <View style={styles.notificationContainer}>
-            {/* Image on the left */}
-            <View style={{flexDirection: 'row'}}>
+            {item.imageUrl && (
               <Image
-                source={require('./../../../assets/images/ic_privacy.png')} // Replace with your image URL or local image path
+                source={{uri: item.imageUrl}}
                 style={styles.notificationImage}
               />
-              <View style={styles.notificationTextContainer}>
-                <Text style={styles.notificationTitle}>{item.title}</Text>
-                <Text style={styles.notificationBody}>{item.body}</Text>
-              </View>
+            )}
+            <View style={{marginLeft: 30,marginRight:60}}>
+              <Text style={styles.notificationTitle}>{item.title}</Text>
+              <Text style={styles.notificationField}>{item.category}</Text>
             </View>
+
           </View>
         )}
         keyExtractor={(item, index) => `Notification-${index}`}
@@ -87,41 +144,77 @@ const Notifications = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    marginTop: 20,
+    paddingHorizontal: 20,
+  },
+  backButtonContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  backButtonImage: {
+    width: 25,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  backButtonText: {
+    textAlign: 'center',
+    marginLeft: 100,
+    fontSize: 18,
+    fontFamily: Fonts.medium,
+    fontWeight: '700',
+    color: '#000000',
+  },
   notificationContainer: {
-    padding: 10,
     marginTop: 10,
-    // backgroundColor: 'white',
-
-    borderColor: Colors.lightGray, // Add border color for visibility
+    borderColor: Colors.lightGray,
+    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   notificationTitle: {
     fontWeight: 'bold',
     fontSize: 16,
     color: Colors.black,
   },
-  notificationBody: {
+  notificationField: {
+    fontSize: 12,
+    color: Colors.gray,
     marginTop: 5,
-    color: Colors.gray, // Set a gray color for the body text
   },
   notificationImage: {
-    width: 40, // Adjust width as needed
-    height: 40, // Adjust height as needed
-    borderRadius: 20, // Make the image circular if it's a square
-    marginRight: 10, // Space between image and text
-  },
-  backButton: {
-    marginBottom: 20, // Space between back button and the content
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: Colors.primary, // Adjust the button color
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    width: 70,
+    height: 50,
+    resizeMode: 'cover',
+    marginTop: 10,
+    borderRadius: 10,
   },
 });
 
 export default Notifications;
+
+
+
+
+
+
+// import { StyleSheet, Text, View } from 'react-native'
+// import React from 'react'
+
+// const index = () => {
+//   return (
+//     <View>
+//       <Text>index</Text>
+//     </View>
+//   )
+// }
+
+// export default index
+
+// const styles = StyleSheet.create({})

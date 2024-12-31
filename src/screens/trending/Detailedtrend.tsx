@@ -49,6 +49,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   console.log('dd', articleId);
   const [article, setArticle] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
   const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
   console.log('trendingschema', trendingArticles);
   const articlevar = trendingArticles.map(item => item.article_id);
@@ -58,20 +59,17 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   const details = articles.find(
     article => article._id.toString() === articleId,
   );
-  const {toggleLike} = useToggleTrendingLike();
-  console.log('jkv jrn v', typeof toggleLike);
-  const articleIdToFind = articleId;
 
-  // Extract the single article object
+  const {toggleLike} = useToggleTrendingLike();
+  const articleIdToFind = articleId;
   const singleArticle = trendingArticles.find(
     article => article._id == articleIdToFind,
   );
 
-  console.log('Single Article:', singleArticle);
   const lllg = singleArticle.isLiked;
-  console.log('sss', lllg);
+
   const mm = singleArticle._id;
-  console.log('vv', mm);
+
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   // const ff=singleArticle.map(item=>item.isLiked);
   // console.log("lgg",ff);
@@ -156,8 +154,9 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
         </View>
         <View
           style={[
-            Style.flexRow,
+            // Style.flexRow,
             {
+              flexDirection: 'row',
               alignItems: 'center',
               gap: moderateScale(10),
               paddingTop: moderateScale(6),
@@ -175,6 +174,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
               tintColor={lllg ? Colors.primary : Colors.black}
             />
           </TouchableOpacity>
+
           <Image
             resizeMode={'contain'}
             source={Icons.ic_move}
@@ -197,8 +197,8 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
                 marginBottom: 10,
               }}>
               <Image
-                source={{url: getCategoryImageUrl(article.category)}}
-                style={{width: 30, height: 30}}
+                source={{uri: getCategoryImageUrl(article.category)}}
+                style={{width: 35, height: 35}}
               />
 
               <Text
@@ -274,14 +274,16 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
             return currentId !== articleId;
           })
           .map((item, index) => (
-            <Card key={index} {...item}
-            onClick={() => {
-              const id = item._id.toHexString();
-              Nav.navigate('Detailedtrend', {
-                articleId: id,
-              } as NewsDetailsPropType);
-            }}
-             />
+            <Card
+              key={index}
+              {...item}
+              onClick={() => {
+                const id = item._id.toHexString();
+                Nav.navigate('Detailedtrend', {
+                  articleId: id,
+                } as NewsDetailsPropType);
+              }}
+            />
           ))}
       </ScrollView>
       <View style={{marginVertical: 20}}></View>

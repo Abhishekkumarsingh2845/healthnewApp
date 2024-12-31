@@ -7,7 +7,7 @@ import Favorite from '../favorite/favorite.schema';
 import TrendingArticle from '../trending/trending.schema';
 
 export const useGetArticles = () => {
-  const articles = useQuery(Article).sorted('publishedAt', true);
+  const articles = useQuery(Article).sorted('updatedAt', true);
   // console.log("RUN GET>>>")
   return articles;
 };
@@ -17,7 +17,7 @@ export const useGetFavArticles = () => {
 
   const articles = useQuery(Article)
     .filtered(`isLiked==true`)
-    .sorted('publishedAt', true);
+    .sorted('updatedAt', true);
 
   return articles;
 };

@@ -61,7 +61,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
  
   const articles = useQuery(Article); // Fetch all articles
   const objId = params._id; // Assuming _id is passed directly as a string
-  console.log('lllllllllllll', articles);
+  // console.log('lllllllllllll', articles);
   // Optional: Fetch individual article details
   const details = articles.find(article => article._id.toString() === objId);
 

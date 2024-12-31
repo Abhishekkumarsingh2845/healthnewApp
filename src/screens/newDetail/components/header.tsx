@@ -1,4 +1,11 @@
-import {Image, Pressable, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import BackButton from '../../../components/BackButton';
 import AppImage from '../../../components/AppImage';
 import {Icons, Images} from '../../../generated/image.assets';
@@ -12,8 +19,11 @@ import {
   useToggleLikeArticle,
 } from '../../../store/article/article.hooks';
 import {BSON} from 'realm';
-import {useRealm} from '@realm/react';
+import {useQuery, useRealm} from '@realm/react';
 import Article from '../../../store/article/article.schema';
+import {useToggleTrendingLike} from '../../../store/trending/trendinghook';
+import TrendingArticle from '../../../store/trending/trending.schema';
+import {TrendingTypeArticle} from '../../../store/trending/trending.interface';
 
 const Header = (props: ArticleType) => {
   const objId = new BSON.ObjectId(props._id);
@@ -26,6 +36,10 @@ const Header = (props: ArticleType) => {
   console.log('yyyyyyy', details);
   // const details = useGetArticlesById(new BSON.ObjectId(props._id)) as ArticleType;
   const {toggleLike} = useToggleLikeArticle();
+  const dd = realm.objectForPrimaryKey(
+    TrendingArticle.schema.name,
+    objId,
+  ) as TrendingTypeArticle;
 
   return (
     <SafeAreaView
@@ -75,6 +89,28 @@ const Header = (props: ArticleType) => {
             tintColor={details.isLiked ? Colors.primary : Colors.black}
           />
         </Pressable>
+
+        {/* <Pressable
+  onPress={() => {
+    toggleLike(props._id); // Trigger your like toggle function
+  }}
+>
+  <Image
+    resizeMode={'contain'}
+    source={
+      (dd?.isLiked || details?.isLiked) // Check if either `dd` or `details` has `isLiked`
+        ? Icons.ic_active_love
+        : Icons.ic_heart
+    }
+    style={style.icon}
+    tintColor={
+      (dd?.isLiked || details?.isLiked) // Change the tint color based on `isLiked` status
+        ? Colors.primary
+        : Colors.black
+    }
+  /> */}
+        {/* </Pressable> */}
+
         <Image
           resizeMode={'contain'}
           source={Icons.ic_move}

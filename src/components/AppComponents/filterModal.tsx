@@ -35,6 +35,8 @@ import {Fonts} from '../../config/font.config';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Article from '../../store/article/article.schema';
 import {useGetArticles} from '../../store/article/article.hooks';
+import Datesch from '../../store/trending/datee/date.schema';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface FilterModalPropType extends AppBlurModalPropType {}
 const intailFilterOptions = [
   {
@@ -57,27 +59,38 @@ const FilterModal = props => {
     {title: 'Sort By'},
     {title: 'Date'},
   ]);
+  const [appliedDateRange, setAppliedDateRange] = useState<{
+    startDate: string;
+    endDate: string;
+  } | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
   const realm = useRealm();
+  const [dateFilter, setDateFilter] = useState(null);
 
-
-
-  // const allArticles = useGetArticles();
-  // const startDate = new Date('2024-12-17T06:43:40.179Z');
-  // const endDate = new Date('2024-12-17T06:49:07.000Z');
-  // const fsss = allArticles.filter(article => {
-  //   const updatedAt = new Date(article.updatedAt).getTime();
-  //   return updatedAt >= startDate.getTime() && updatedAt <= endDate.getTime();
-  // });
-
-
-
-  // console.log('pppppppppppppppppppp', fsss);
-
+  const handleClearAll = () => {
+    setSelectedCategory(null); // Reset the selected category
+    setDateFilter(null); // Reset the date filter if needed
+    setSelectedIndex(0); // Optionally, reset the selected tab
+    // props.modalClose(false); // Close the modal
+    realm.write(() => {
+      realm.delete(realm.objects(FilterCategory));
+    });
+    realm.write(() => {
+      const allDates = realm.objects(Datesch);
+      realm.delete(allDates);
+    });
+  };
   const handleApplyFilter = () => {
     try {
+      if (selectedIndex === 2 && appliedDateRange) {
+        // dateFilter();
+        // setAppliedDateRange({
+        //   startDate: selectedDate,
+        //   endDate: todate,
+        // }); // Save the applied date range
+      }
+
       if (selectedCategory) {
         realm.write(() => {
           // Clear existing categories
@@ -115,7 +128,16 @@ const FilterModal = props => {
               <Text style={{fontWeight: 'bold', color: Colors.black}}>
                 Filter(3)
               </Text>
-              <TouchableOpacity onPress={() => props.modalClose(false)}>
+              <TouchableOpacity
+                onPress={handleClearAll}
+
+                // onPress={
+                //   () =>
+                //   {
+                //     setSelectedCategory(null);
+                //     props.modalClose(false)
+                //     }}
+              >
                 <Text style={{color: Colors.black}}>Clear All</Text>
               </TouchableOpacity>
             </View>
@@ -163,7 +185,9 @@ const FilterModal = props => {
                   />
                 )}
                 {selectedIndex === 1 && <SortBy />}
-                {selectedIndex === 2 && <Date />}
+                {/* {selectedIndex === 2 && <Datee />} */}
+                {selectedIndex === 2 && <Datee  onDateRangeChange={range => setAppliedDateRange(range)}
+                 onHandleDate={setDateFilter} />}
               </View>
             </View>
           </View>
@@ -308,98 +332,34 @@ const Categories = ({
   );
 };
 
-// const Categories = ({
-//   selected,
-//   setSelected,
-// }: {
-//   selected: string | null;
-//   setSelected: (category: string | null) => void;
-// }) => {
-//   const categories = [
-//     'Technology Health',
-//     'Physical Health',
-//     'Financial Health',
-//     'Community Health',
-//     'Occupational Health',
-//     'Environmental Health',
-//     'Medical Health',
-//   ];
-
-//   const [query, setQuery] = useState('');
-
-//   const handleSelectCategory = (category: string): void => {
-//     setSelected(selected === category ? null : category);
-//   };
-
-//   // Filtered data based on search query
-//   const searchData = categories.filter(item =>
-//     item.toLowerCase().includes(query.toLowerCase())
-//   );
-
-//   return (
-//     <View style={{ padding: 20 }}>
-//       <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'black' }}>
-//         Categories
-//       </Text>
-//       <Text style={{ fontSize: 16, color: 'black', marginBottom: 10 }}>
-//         Select the category which you want to see.
-//       </Text>
-
-//       {/* Search Bar */}
-//       <TextInput
-//         value={query}
-//         onChangeText={setQuery}
-//         placeholder="Search category"
-//         style={{
-//           backgroundColor: 'lightgray',
-//           padding: 10,
-//           borderRadius: 5,
-//           marginBottom: 20,
-//         }}
-//       />
-
-//       {/* Category List */}
-//       <View style={{height:450}}>
-//         {searchData.map((category, index) => (
-//           <TouchableOpacity
-//             key={index}
-//             style={{
-//               flexDirection: 'row',
-//               alignItems: 'center',
-//               padding: 10,
-//               height:50,
-//               borderRadius: 5,
-//               marginBottom: 10,
-//             }}
-//             onPress={() => handleSelectCategory(category)}>
-//             <View
-//               style={{
-//                 width: 20,
-//                 height: 20,
-//                 alignItems: 'center',
-//                 justifyContent: 'center',
-//                 borderWidth: 1,
-//                 borderColor: '#000',
-//                 marginRight: 10,
-//                 borderRadius: 5,
-//               }}>
-//               {selected === category && (
-//                 <Image
-//                   source={require('./../../../assets/images/check.png')}
-//                   style={{ width: 16, height: 16, resizeMode: 'contain' }}
-//                 />
-//               )}
-//             </View>
-//             <Text style={{ color: 'black' }}>{category}</Text>
-//           </TouchableOpacity>
-//         ))}
-//       </View>
-//     </View>
-//   );
-// };
-
 const SortBy = () => {
-  const [selectedIndex, setSeletedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  // Load the selected index from AsyncStorage when the component mounts
+  useEffect(() => {
+    const loadSelectedIndex = async () => {
+      try {
+        const storedIndex = await AsyncStorage.getItem('selectedIndex');
+        if (storedIndex !== null) {
+          setSelectedIndex(parseInt(storedIndex, 10)); // Parse the value as a number
+        }
+      } catch (error) {
+        console.error('Error loading selected index:', error);
+      }
+    };
+
+    loadSelectedIndex();
+  }, []);
+
+  // Save the selected index to AsyncStorage when it changes
+  const handleSelection = async (index: number) => {
+    try {
+      await AsyncStorage.setItem('selectedIndex', index.toString());
+      setSelectedIndex(index);
+    } catch (error) {
+      console.error('Error saving selected index:', error);
+    }
+  };
 
   return (
     <View>
@@ -427,20 +387,26 @@ const SortBy = () => {
                     },
                   ]}>
                   <Pressable
-                    onPress={() => {
-                      setSeletedIndex(index);
-                    }}
+                    onPress={() => handleSelection(index)}
                     style={sortStyle.radioBtn}>
                     <View
                       style={{
                         backgroundColor:
-                          index == selectedIndex ? Colors.black : Colors.white,
+                          index === selectedIndex ? Colors.black : Colors.white,
                         flex: 1,
                         borderRadius: moderateScale(20),
                       }}
                     />
                   </Pressable>
-                  <Text>{item}</Text>
+
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: Fonts.medium,
+                      color: 'black',
+                    }}>
+                    {item}
+                  </Text>
                 </View>
               );
             })}
@@ -450,7 +416,16 @@ const SortBy = () => {
     </View>
   );
 };
-const Date = () => {
+
+export default SortBy;
+
+const Datee = ({
+  onDateRangeChange,
+  onHandleDate,
+}: {
+  onDateRangeChange: (range: {startDate: string; endDate: string}) => void;
+  onHandleDate: (handleDate: () => void) => void;
+}) => {
   const [isDatePickerVisible, setDatePickerVisibility] =
     useState<boolean>(false);
   const check = useQuery(Article);
@@ -467,12 +442,61 @@ const Date = () => {
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
+  const allArticles = useGetArticles();
 
+  // console.log('allArticles---->', JSON.stringify(allArticles));
+  const realm = useRealm();
 
+  useEffect(() => {
+    if (allArticles) {
+      FilterData(allArticles);
+    }
+  }, [allArticles]);
 
- 
+  const handleDate = useCallback(() => {
+    try {
+      realm.write(() => {
+        const allDates = realm.objects(Datesch);
+        realm.delete(allDates); // Clear previous dates
+        const isButtonPressed = selectedDate && todate ? true : false;
+        realm.create(Datesch, {
+          startDate: selectedDate,
+          endDate: todate,
+          isButtonPressed,
+        });
+      });
+    } catch (error) {
+      console.error('Realm error:', error);
+    }
+  }, [selectedDate, todate]);
+
+  useEffect(() => {
+    if (onHandleDate) {
+      onHandleDate(() => handleDate);
+    }
+  }, [handleDate]);
+  useEffect(() => {
+    if (onDateRangeChange) {
+      onDateRangeChange({ startDate: selectedDate, endDate: todate });
+    }
+  }, [selectedDate, todate]);
+  
+  const FilterData = (allArticles: any) => {
+    const startDate = new Date(selectedDate);
+    const endDate = new Date(todate);
+    // console.log('startdate type', typeof startDate);
+    const fsss = allArticles.filter(
+      (article: {updatedAt: string | number | Date}) => {
+        const updatedAt = new Date(article.updatedAt).getTime();
+        return (
+          updatedAt >= startDate.getTime() && updatedAt <= endDate.getTime()
+        );
+      },
+    );
+  };
+
   const handleConfirm = (date: Date) => {
-    const formattedDate = date.toLocaleDateString();
+    const formattedDate = date.toISOString().split('T')[0]; ;
 
     // Conditionally update based on currentField
     if (currentField === 'from') {
@@ -482,7 +506,10 @@ const Date = () => {
     }
 
     hideDatePicker();
+    // console.log('fromdata', selectedDate);
+    // console.log('fromdata', todate);
   };
+
   return (
     <View>
       <View style={categorStyle.container}>
@@ -500,6 +527,10 @@ const Date = () => {
           Date Range
         </Text>
 
+        {/* <TouchableOpacity onPress={handleDate}>
+          <Text>press</Text>
+        </TouchableOpacity> */}
+
         <View style={{padding: moderateScale(10), width: '100%'}}>
           <View
             style={{
@@ -513,13 +544,21 @@ const Date = () => {
                 width: '100%',
               }}
               onPress={() => showDatePicker('from')}>
-              <Text>From:</Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: Fonts.medium,
+                  color: 'black',
+                }}>
+                From:
+              </Text>
               <View
                 style={[
                   Style.flexRow,
                   {
                     paddingVertical: moderateScale(10),
                     flexWrap: 'nowrap',
+                   
                     justifyContent: 'space-between',
                   },
                 ]}>
@@ -545,7 +584,14 @@ const Date = () => {
                 width: '100%',
               }}
               onPress={() => showDatePicker('to')}>
-              <Text>To:</Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: Fonts.medium,
+                  color: 'black',
+                }}>
+                To:
+              </Text>
               <View
                 style={[
                   Style.flexRow,
@@ -553,6 +599,7 @@ const Date = () => {
                     paddingVertical: moderateScale(10),
                     flexWrap: 'nowrap',
                     justifyContent: 'space-between',
+                    marginLeft: 15,
                   },
                 ]}>
                 <View style={[Style.flexRow, dateStyle.dateFeild]}>

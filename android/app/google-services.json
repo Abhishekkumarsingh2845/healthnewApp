@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "362707370482",
+    "firebase_url": "https://fire-51c01-default-rtdb.firebaseio.com",
+    "project_id": "fire-51c01",
+    "storage_bucket": "fire-51c01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362707370482:android:9a722aeebe5a8068d02b6b",
+        "android_client_info": {
+          "package_name": "com.wholesome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362707370482-9dl7ni9bt2c3ho8l5vkhkabje65p403c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDszRFGyWicOUbN0C5_riQeE1X5aPkwFrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362707370482-9dl7ni9bt2c3ho8l5vkhkabje65p403c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "362707370482-sr22ingfd7lval3djeqo25v1gv0re8fh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.Ankproj"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

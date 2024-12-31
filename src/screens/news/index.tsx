@@ -280,6 +280,27 @@
 
 // / his is the manaual api hittin code
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -293,6 +314,7 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
+
 import {moderateScale} from 'react-native-size-matters';
 import Header from './components/header';
 import {Fonts} from '../../config/font.config';
@@ -322,6 +344,7 @@ type Article = {
 };
 
 const index = (props: NewsPropType) => {
+  const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const params = props.route.params;

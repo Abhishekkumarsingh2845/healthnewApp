@@ -1,49 +1,49 @@
-import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
-import notifee, { AndroidImportance, AndroidStyle, AndroidVisibility, EventType } from '@notifee/react-native';
-import { Colors } from '../config/colors.config';
-// import FileViewer from 'react-native-file-viewer';
-// import * as NavigationService from "react-navigation-helpers";
-// import ReactNativeBlobUtil from 'react-native-blob-util'
-export const getDeviceToken = async (): Promise<string> => {
-    const token: string = await messaging().getToken();
-    console.log("device token ", token);
-    return token;
-}
+// import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+// import notifee, { AndroidImportance, AndroidStyle, AndroidVisibility, EventType } from '@notifee/react-native';
+// import { Colors } from '../config/colors.config';
+// // import FileViewer from 'react-native-file-viewer';
+// // import * as NavigationService from "react-navigation-helpers";
+// // import ReactNativeBlobUtil from 'react-native-blob-util'
+// export const getDeviceToken = async (): Promise<string> => {
+//     const token: string = await messaging().getToken();
+//     console.log("device token ", token);
+//     return token;
+// }
 
-export const createPushNotification = async (remoteMessage: FirebaseMessagingTypes.RemoteMessage): Promise<void> => {
-    try{
+// export const createPushNotification = async (remoteMessage: FirebaseMessagingTypes.RemoteMessage): Promise<void> => {
+//     try{
 
-        console.log('remoteMessage ', remoteMessage);
-        const route: string = remoteMessage?.data?.route?.toString() ?? "Notification";
-        const data: string = remoteMessage?.data?.data?.toString()??"";
-        // Request permissions (required for iOS)
-        await notifee.requestPermission()
+//         console.log('remoteMessage ', remoteMessage);
+//         const route: string = remoteMessage?.data?.route?.toString() ?? "Notification";
+//         const data: string = remoteMessage?.data?.data?.toString()??"";
+//         // Request permissions (required for iOS)
+//         await notifee.requestPermission()
     
-        // Create a channel (required for Android)
-        const channelId = await notifee.createChannel({
-            id: 'fcm_fallback_notification_channel',
-            name: 'fcm_fallback_notification_channel',
-            importance: AndroidImportance.HIGH,
-            visibility: AndroidVisibility.PUBLIC,
-        });
+//         // Create a channel (required for Android)
+//         const channelId = await notifee.createChannel({
+//             id: 'fcm_fallback_notification_channel',
+//             name: 'fcm_fallback_notification_channel',
+//             importance: AndroidImportance.HIGH,
+//             visibility: AndroidVisibility.PUBLIC,
+//         });
     
-        // Display a notification
-        await notifee.displayNotification({
-            title: remoteMessage.data?.title.toString()??"",
-            android: {
-                channelId,
-                color: Colors.primary,
-                smallIcon: 'drawable/ic_logo', // optional, defaults to 'ic_launcher'.
-                // pressAction is needed if you want the notification to open the app when pressed
-                pressAction: {
-                    id: 'default',
-                },
-                style: { type: AndroidStyle.BIGTEXT, text: remoteMessage.data?.message.toString() ?? "" },
-            },
-        });
-    }catch(error){
-        console.log(error, 'error')
-    }
+//         // Display a notification
+//         await notifee.displayNotification({
+//             title: remoteMessage.data?.title.toString()??"",
+//             android: {
+//                 channelId,
+//                 color: Colors.primary,
+//                 smallIcon: 'drawable/ic_logo', // optional, defaults to 'ic_launcher'.
+//                 // pressAction is needed if you want the notification to open the app when pressed
+//                 pressAction: {
+//                     id: 'default',
+//                 },
+//                 style: { type: AndroidStyle.BIGTEXT, text: remoteMessage.data?.message.toString() ?? "" },
+//             },
+//         });
+//     }catch(error){
+//         console.log(error, 'error')
+//     }
     // const unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
     //     if (type == EventType.PRESS) {
     //         pressNotificationRouteFun(route,true,data);

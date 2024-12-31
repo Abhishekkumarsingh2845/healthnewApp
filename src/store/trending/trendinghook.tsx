@@ -5,6 +5,9 @@ import TrendingArticle from './trending.schema';
 import Favorite from './../favorite/favorite.schema';
 import { TrendingTypeArticle } from './trending.interface';
 
+
+
+
 export const useToggleTrendingLike = () => {
   const realm = useRealm();
 
@@ -16,12 +19,12 @@ export const useToggleTrendingLike = () => {
         id,
       ) as TrendingTypeArticle;
 
-      console.log('Called...');
+      console.log('Called trending');
       console.log(article, 'art..');
 
       realm.write(() => {
         article.isLiked = !(article?.isLiked ?? false);
-        console.log(article.isLiked, 'LIKED...');
+        console.log(article.isLiked, 'LIKED...trending ');
         const fav = realm
           .objects(Favorite.schema.name)
           .filtered(`articleId == $0`, article._id);
@@ -46,20 +49,21 @@ export const useToggleTrendingLike = () => {
     },
     [realm],
   );
-
+  
   return {toggleLike};
 };
+
+
 
 export const usetrendingFavArticles = () => {
   // console.log("ccccc->>",ll);
 
   const articles = useQuery(TrendingArticle)
     .filtered(`isLiked==true`)
-    .sorted('publishedAt', true);
+    .sorted('updatedAt', true);
 
   return articles;
 };
-
 export const useDeleteTrendingArticles = () => {
   const realm = useRealm();
 

@@ -231,6 +231,7 @@ const Profile = () => {
               paddingHorizontal: 5,
               marginBottom: 10,
             }}>
+              
             {/* <View style={{alignItems: 'center', flexDirection: 'row'}}>
               <Image
                 source={require('../../../assets/images/bell.png')}

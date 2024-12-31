@@ -5,9 +5,10 @@ import Favorite from "./favorite/favorite.schema";
 import Category from "./category/category.schema";
 import TrendingArticle from "./trending/trending.schema";
 import FilterCategory from "./filtercategory/filtercatergory.schema";
-export const realmConfig: (RealmObjectConstructor<AnyRealmObject> | ObjectSchema)[] = [Article, Favorite, Category, FilterCategory, TrendingArticle]
+import Datesch from "./trending/datee/date.schema";
+export const realmConfig: (RealmObjectConstructor<AnyRealmObject> | ObjectSchema)[] = [Article, Favorite, Category, FilterCategory,Datesch, TrendingArticle]
 const config = {
-   schema: [Favorite.schema,Article.schema, Category.schema,TrendingArticle.schema,FilterCategory.schema],
+   schema: [Favorite.schema,Article.schema, Category.schema,TrendingArticle.schema,FilterCategory.schema,Datesch.schema],
    deleteRealmIfMigrationNeeded: true,
    
 };

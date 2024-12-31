@@ -3,275 +3,64 @@ import IntailizeApp from './src/components/IntializeApp';
 import {RealmProvider, useRealm} from '@realm/react';
 // import { realmConfig } from './src/store';
 import {realmConfig} from './src/store';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native';
 function App(): React.JSX.Element {
   return (
-  
-    <RealmProvider schema={realmConfig}  deleteRealmIfMigrationNeeded={true} >
- 
+    <RealmProvider schema={realmConfig} deleteRealmIfMigrationNeeded={true}>
       <IntailizeApp />
-
     </RealmProvider>
-   
   );
 }
 
 export default App;
 
-// import React, { useState } from "react";
-// import { Button, View } from "react-native";
-// import DateTimePickerModal from "react-native-modal-datetime-picker";
-
-// const Example: React.FC = () => {
-//   const [isDatePickerVisible, setDatePickerVisibility] = useState<boolean>(false);
-
-//   const showDatePicker = (): void => {
-//     setDatePickerVisibility(true);
-//   };
-
-//   const hideDatePicker = (): void => {
-//     setDatePickerVisibility(false);
-//   };
-
-//   const handleConfirm = (date: Date): void => {
-//     console.warn("A date has been picked: ", date);
-//     hideDatePicker();
-//   };
-
-//   return (
-//     <View style={{marginTop:50}}>
-//       <Button title="Show Date Picker" onPress={showDatePicker} />
-//       <DateTimePickerModal
-//         isVisible={isDatePickerVisible}
-//         mode="date"
-//         onConfirm={handleConfirm}
-//         onCancel={hideDatePicker}
-//       />
-//     </View>
-//   );
-// };
-
-// export default Example;
-
-
-
-
-
-// import React, { useEffect, useState } from "react";
-// import { View, Text, TouchableOpacity, FlatList, Image, StyleSheet, ActivityIndicator } from "react-native";
-// import axios from "axios";
-
-// interface Article {
-//   _id: string;
-//   article_id: string;
-//   title: string;
-//   description: string;
-//   url: string;
-//   urlToImage: string;
-//   content: string;
-//   category: string;
-//   status: string;
-//   isActive: boolean;
-//   isTrending: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-// }
+// import React, { useEffect } from 'react';
+// import { Alert,Text,View } from 'react-native';
+// import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 // const App: React.FC = () => {
-//   const [category, setCategory] = useState<string>("Physical Health"); // Default category
-//   const [data, setData] = useState<Article[]>([]);
-//   const [loading, setLoading] = useState<boolean>(false);
-
-//   const categories: string[] = ["Physical Health", "Technology Health"]; // Add more categories as needed
-
-//   const fetchData = async (selectedCategory: string) => {
-//     try {
-//       setLoading(true);
-//       const response = await axios.get<{ data: { articles: Article[] } }>(
-//         "http://15.206.16.230:4000/api/v1/android/filterData/",
-//         {
-//           params: { category: selectedCategory },
-//         }
-//       );
-//       setData(response.data.data.articles || []);
-//     } catch (error) {
-//       console.error("Error fetching data:", error);
-//       setData([]);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   // Fetch data initially or when category changes
 //   useEffect(() => {
-//     fetchData(category);
-//   }, [category]);
+//     // Request permission for notifications
+//     const requestPermission = async () => {
+//       const authStatus = await messaging().requestPermission();
+//       const enabled =
+//         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+//         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-//   const renderArticle = ({ item }: { item: Article }) => (
-//     <View style={styles.articleCard}>
-//       <Image source={{ uri: item.urlToImage }} style={styles.articleImage} />
-//       <Text style={styles.articleTitle}>{item.title}</Text>
-//       <Text style={styles.articleDescription}>{item.description}</Text>
-//     </View>
-//   );
+//       if (enabled) {
+//         console.log('Notification permission granted.');
+//       } else {
+//         console.log('Notification permission denied.');
+//       }
+//     };
+
+//     requestPermission();
+
+//     // Listen for notifications when the app is in the foreground
+//     const unsubscribe = messaging().onMessage(
+//       async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
+//         console.log('Foreground notification:', remoteMessage);
+//         if (remoteMessage.notification) {
+//           Alert.alert(
+//             remoteMessage.notification.title ?? 'No Title',
+//             remoteMessage.notification.body ?? 'No Body'
+//           );
+//         }
+//       }
+//     );
+
+//     // Clean up the listener when the component unmounts
+//     return unsubscribe;
+//   }, []);
 
 //   return (
-//     <View style={styles.container}>
-//       {/* Category Buttons */}
-//       <View style={styles.buttonContainer}>
-//         {categories.map((cat) => (
-//           <TouchableOpacity
-//             key={cat}
-//             style={[
-//               styles.categoryButton,
-//               category === cat && styles.activeCategoryButton,
-//             ]}
-//             onPress={() => setCategory(cat)}
-//           >
-//             <Text
-//               style={[
-//                 styles.categoryButtonText,
-//                 category === cat && styles.activeCategoryButtonText,
-//               ]}
-//             >
-//               {cat}
-//             </Text>
-//           </TouchableOpacity>
-//         ))}
-//       </View>
-
-//       {/* Articles List */}
-//       {loading ? (
-//         <ActivityIndicator size="large" color="#007BFF" style={styles.loading} />
-//       ) : (
-//         <FlatList
-//           data={data}
-//           keyExtractor={(item) => item._id}
-//           renderItem={renderArticle}
-//           contentContainerStyle={styles.listContainer}
-//         />
-//       )}
+//     <View style={{flex:1}}>
+//       <Text>notiification</Text>
 //     </View>
-//   );
+//   ); // Replace with your app's UI components
 // };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     padding: 10,
-//   },
-//   buttonContainer: {
-//     flexDirection: "row",
-//     marginTop:40,
-//     justifyContent: "space-around",
-//     marginBottom: 10,
-//   },
-//   categoryButton: {
-//     padding: 10,
-//     borderRadius: 5,
-//     backgroundColor: "#ccc",
-//   },
-//   activeCategoryButton: {
-//     backgroundColor: "#007BFF",
-//   },
-//   categoryButtonText: {
-//     color: "#000",
-//     fontSize: 16,
-//   },
-//   activeCategoryButtonText: {
-//     color: "#fff",
-//   },
-//   articleCard: {
-//     borderWidth: 1,
-//     borderColor: "#ddd",
-//     borderRadius: 8,
-//     padding: 10,
-//     marginBottom: 10,
-//     backgroundColor: "#f9f9f9",
-//   },
-//   articleImage: {
-//     width: "100%",
-//     height: 150,
-//     borderRadius: 5,
-//     marginBottom: 10,
-//   },
-//   articleTitle: {
-//     fontSize: 18,
-//     fontWeight: "bold",
-//     marginBottom: 5,
-//   },
-//   articleDescription: {
-//     fontSize: 14,
-//     color: "#666",
-//   },
-//   loading: {
-//     marginTop: 20,
-//   },
-//   listContainer: {
-//     paddingBottom: 20,
-//   },
-// });
-
 // export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from 'react';
 // import {View, Text, Button, StyleSheet} from 'react-native';
@@ -307,7 +96,6 @@ export default App;
 //   console.log("->>>>",url);
 //   return <WebView source={{uri: 'https://www.npmjs.com/package/react-native-webview'}} style={{flex: 1}} />;
 // };
-
 
 // const App = () => {
 //   return (
