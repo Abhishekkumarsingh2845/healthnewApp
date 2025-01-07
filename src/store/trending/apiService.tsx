@@ -37,7 +37,7 @@ const fetchArticles = async () => {
       realm.close();
     }
   } catch (error) {
-    console.error('Error fetching articles:', error);
+    console.error('Error  tredning fetching articles:', error);
   }
 };
 

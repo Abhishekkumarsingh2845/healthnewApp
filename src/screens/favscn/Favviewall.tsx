@@ -30,7 +30,6 @@ const Favviewall = () => {
   // });
   // const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
 
-
   const combinedFavArticlesMap = new Map();
 
   trendingFavArticles.forEach(article => {
@@ -45,9 +44,6 @@ const Favviewall = () => {
 
   // Convert map to array
   const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
-
-
-
 
   const filteredfavArticles =
     activeCategory === 'All'
@@ -70,7 +66,7 @@ const Favviewall = () => {
       <Categories onCategoryChange={setActiveCategory} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {filteredfavArticles.map((item, index) => {
+        {/* {filteredfavArticles.map((item, index) => {
           return (
             <Card
               {...item}
@@ -89,7 +85,33 @@ const Favviewall = () => {
               // }}
             />
           );
+        })} */}
+        {filteredfavArticles.map((item, index) => {
+          const isTrending = item.source === 'trending'; // Check if the source is 'trending'
+          return (
+            <Card
+              {...item}
+              key={index}
+              onClick={() => {
+                const id = item._id.toHexString();
+                Nav.navigate(
+                  isTrending
+                    ? 'Detailedtrend' // Navigate to 'Detailedtrend' if trending
+                    : 'NewsDetail', // Otherwise navigate to 'NewsDetail'
+                  {
+                    ...(isTrending
+                      ? {articleId: id} // Pass articleId for trending articles
+                      : {_id: id}), // Pass _id for other articles
+                  } as NewsDetailsPropType,
+                );
+              }}
+              {...(trendingArticlesSource.length > 0 && {
+                onLike: () => toggleLike(item?._id as any),
+              })}
+            />
+          );
         })}
+
         <View style={{marginVertical: 60}}></View>
       </ScrollView>
     </AppSafeAreaView>

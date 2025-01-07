@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Endpoint.get('aboutget'); // Call the endpoint
+        const response = await Endpoint.get('privacypolicy'); // Call the endpoint
 
         if (response.data.status) {
           // Extracting details from the second item

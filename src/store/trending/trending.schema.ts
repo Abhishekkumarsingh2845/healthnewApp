@@ -35,7 +35,7 @@ class TrendingArticle extends Realm.Object {
   isActive!: boolean;
   isTrending!: boolean;
   isLiked!: boolean;
-
+  isNotified!:boolean;
   static schema = {
     name: 'TrendingArticle',
     primaryKey: '_id',

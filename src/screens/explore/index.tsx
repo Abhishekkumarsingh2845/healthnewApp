@@ -105,7 +105,7 @@ const Explore = () => {
   // console.log('schema data of treding', trendingArticlesFromRealm.toJSON());
   const art = useQuery('Article');
 
-  // console.log('schema data of latest', art.toJSON());
+  console.log('schema data of latest', art.toJSON());
 
   const startDate = new Date('2024-12-17T06:43:40.179Z');
   const endDate = new Date('2024-12-17T06:49:07.000Z');
@@ -141,6 +141,7 @@ const Explore = () => {
             let data = {
               ...article,
               _id: articleId,
+              category: article.category || 'defaultCategory', //his i have chnaged
             };
 
             const fav = realm
@@ -156,8 +157,7 @@ const Explore = () => {
             );
           });
 
-          // Loop through the current articles in the Realm DB
-          // Remove articles that are not present in the fetched list (deleted by admin)
+          
           currentArticles.forEach((currentArticle: any) => {
             if (!fetchedArticleIds.includes(currentArticle._id.toString())) {
               realm.delete(currentArticle); // Delete the article from Realm DB

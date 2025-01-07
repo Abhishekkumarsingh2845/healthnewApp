@@ -59,20 +59,20 @@ const FilterModal = props => {
     {title: 'Sort By'},
     {title: 'Date'},
   ]);
-  const [appliedDateRange, setAppliedDateRange] = useState<{
-    startDate: string;
-    endDate: string;
-  } | null>(null);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const realm = useRealm();
   const [dateFilter, setDateFilter] = useState(null);
-
+  const [selectedDate, setSelectedDate] = useState<string>(''); // Store selected 'from' date
+  const [todate, tosetdate] = useState<string>(''); // Store selected 'to' date
   const handleClearAll = () => {
     setSelectedCategory(null); // Reset the selected category
     setDateFilter(null); // Reset the date filter if needed
     setSelectedIndex(0); // Optionally, reset the selected tab
     // props.modalClose(false); // Close the modal
+    setSelectedDate(''); // Reset 'from' date
+    tosetdate(''); // Reset 'to' date
     realm.write(() => {
       realm.delete(realm.objects(FilterCategory));
     });
@@ -81,16 +81,14 @@ const FilterModal = props => {
       realm.delete(allDates);
     });
   };
+
   const handleApplyFilter = () => {
     try {
-      if (selectedIndex === 2 && appliedDateRange) {
-        // dateFilter();
-        // setAppliedDateRange({
-        //   startDate: selectedDate,
-        //   endDate: todate,
-        // }); // Save the applied date range
-      }
+      console.log('Date Filter:', dateFilter);
 
+      if (selectedIndex === 2 && dateFilter) {
+        dateFilter();
+      }
       if (selectedCategory) {
         realm.write(() => {
           // Clear existing categories
@@ -186,8 +184,7 @@ const FilterModal = props => {
                 )}
                 {selectedIndex === 1 && <SortBy />}
                 {/* {selectedIndex === 2 && <Datee />} */}
-                {selectedIndex === 2 && <Datee  onDateRangeChange={range => setAppliedDateRange(range)}
-                 onHandleDate={setDateFilter} />}
+                {selectedIndex === 2 && <Datee onHandleDate={setDateFilter} />}
               </View>
             </View>
           </View>
@@ -231,6 +228,7 @@ const Categories = ({
     'Occupational Health',
     'Environmental Health',
     'Medical Health',
+    'Wholesome Originals',
   ];
   const [data, setdata] = useState('');
   const [query, setquery] = useState('');
@@ -420,7 +418,6 @@ const SortBy = () => {
 export default SortBy;
 
 const Datee = ({
-  onDateRangeChange,
   onHandleDate,
 }: {
   onDateRangeChange: (range: {startDate: string; endDate: string}) => void;
@@ -432,6 +429,7 @@ const Datee = ({
   console.log('dd', check);
   const [todate, tosetdate] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+  
   const [currentField, setCurrentField] = useState<string>('');
 
   const showDatePicker = (field: 'from' | 'to'): void => {
@@ -475,12 +473,7 @@ const Datee = ({
       onHandleDate(() => handleDate);
     }
   }, [handleDate]);
-  useEffect(() => {
-    if (onDateRangeChange) {
-      onDateRangeChange({ startDate: selectedDate, endDate: todate });
-    }
-  }, [selectedDate, todate]);
-  
+
   const FilterData = (allArticles: any) => {
     const startDate = new Date(selectedDate);
     const endDate = new Date(todate);
@@ -496,11 +489,12 @@ const Datee = ({
   };
 
   const handleConfirm = (date: Date) => {
-    const formattedDate = date.toISOString().split('T')[0]; ;
+    const formattedDate = date.toISOString().split('T')[0];
 
     // Conditionally update based on currentField
     if (currentField === 'from') {
       setSelectedDate(formattedDate);
+      console.log('kk', setSelectedDate);
     } else if (currentField === 'to') {
       tosetdate(formattedDate);
     }
@@ -542,6 +536,7 @@ const Datee = ({
                 flexDirection: 'row',
                 alignItems: 'center',
                 width: '100%',
+                // backgroundColor: 'red',
               }}
               onPress={() => showDatePicker('from')}>
               <Text
@@ -558,13 +553,26 @@ const Datee = ({
                   {
                     paddingVertical: moderateScale(10),
                     flexWrap: 'nowrap',
-                   
+                    // backgroundColor: 'green',
                     justifyContent: 'space-between',
                   },
                 ]}>
-                <View style={[Style.flexRow, dateStyle.dateFeild]}>
+                <View
+                  style={{
+                    width: 130,
+                    height: 30,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: 'grey',
+                    marginLeft: 10,
+                    paddingHorizontal: 10,
+                    // paddingVertical:10,
+                  }}>
                   {selectedDate ? (
-                    <Text>{selectedDate}</Text>
+                    <Text style={{color: 'black', fontSize: 12}}>{selectedDate}</Text>
                   ) : (
                     <Text>dd/mm/yyyy</Text>
                   )}
@@ -602,8 +610,25 @@ const Datee = ({
                     marginLeft: 15,
                   },
                 ]}>
-                <View style={[Style.flexRow, dateStyle.dateFeild]}>
-                  {todate ? <Text>{todate}</Text> : <Text>dd/mm/yyyy</Text>}
+                <View
+                  style={{
+                    width: 130,
+                    height: 30,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: 'grey',
+                    marginLeft: 10,
+                    paddingHorizontal: 10,
+                    // paddingVertical:10,
+                  }}>
+                  {todate ? (
+                    <Text style={{color: 'black', fontSize: 12}}>{todate}</Text>
+                  ) : (
+                    <Text>dd/mm/yyyy</Text>
+                  )}
                   <Icons
                     name={'calendar'}
                     color={Colors.gray}

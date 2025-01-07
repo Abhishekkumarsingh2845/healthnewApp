@@ -118,6 +118,9 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
     } else if (category === 'Medical Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
     }
+    else if (category === 'Wholesome Originals') {
+      return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png');
+    }
     return null; // Return null if category doesn't match
   };
 

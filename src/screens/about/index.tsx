@@ -94,12 +94,12 @@ const About = () => {
 
         if (response.data.status) {
           // Extracting details from the second item
-          setDetails(response.data.data[0].details);
+          setDetails(response.data.data[1].details);
           const updatetime = new Date(
             response.data.data[0].createdAt,
           ).toLocaleDateString('en-GB');
           setupdate(updatetime);
-          console.log('->>>>>>', response);
+          console.log('seer->>>>>>', response);
         } else {
           setError('Failed to load data.');
         }

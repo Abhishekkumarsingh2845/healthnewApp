@@ -8,12 +8,12 @@ import TrendingArticle from '../trending/trending.schema';
 
 export const useGetArticles = () => {
   const articles = useQuery(Article).sorted('updatedAt', true);
-  // console.log("RUN GET>>>")
+  console.log('RUN GET>>>');
   return articles;
 };
 export const useGetFavArticles = () => {
   const ll = useQuery(Article);
-  // console.log("ccccc->>",ll);
+  console.log('ccccc->>', ll);
 
   const articles = useQuery(Article)
     .filtered(`isLiked==true`)
@@ -54,11 +54,11 @@ export const useToggleLikeArticle = () => {
           const favE = realm.objects(Favorite.schema.name);
           console.log('Delete latest data', favE.toJSON());
         }
-        if (article.isLiked 
-          
+        if (
+          article.isLiked
+
           // &&
-          
-          
+
           // treadingArticle.isLiked
         ) {
           console.log('Add');
@@ -77,6 +77,30 @@ export const useToggleLikeArticle = () => {
     [realm],
   );
 
+  // const saveSingleArticle = (newArticle: ArticleType) => {
+  //   try {
+  //     realm &&
+  //       realm.write(() => {
+  //         const articleId = new BSON.ObjectId(newArticle._id);
+  //         let data = {
+  //           ...newArticle,
+  //           _id: articleId,
+  //         };
+  //         const fav = realm
+  //           .objects(Favorite.schema.name)
+  //           .filtered(`articleId == $0`, articleId);
+  //         if (fav.length > 0) {
+  //           data['isLiked'] = true;
+  //         } else {
+  //           data['isLiked'] = false;
+  //         }
+  //         realm.create(Article.schema.name, data, Realm.UpdateMode.Modified);
+  //       });
+  //   } catch (error) {
+  //     console.log('error in latest articles', error);
+  //     throw error;
+  //   }
+  // };
   const saveSingleArticle = (newArticle: ArticleType) => {
     try {
       realm &&
@@ -85,7 +109,14 @@ export const useToggleLikeArticle = () => {
           let data = {
             ...newArticle,
             _id: articleId,
+            category: newArticle.category || 'defaultCategory',  // Set default if missing
           };
+  
+          // Check if 'category' is still missing, handle accordingly
+          if (!data.category) {
+            console.log('Warning: Missing category for article', newArticle);
+          }
+  
           const fav = realm
             .objects(Favorite.schema.name)
             .filtered(`articleId == $0`, articleId);
@@ -94,14 +125,15 @@ export const useToggleLikeArticle = () => {
           } else {
             data['isLiked'] = false;
           }
+  
           realm.create(Article.schema.name, data, Realm.UpdateMode.Modified);
         });
     } catch (error) {
-      console.log('->>>>', error);
+      console.log('error in latest articles', error);
       throw error;
     }
   };
-
+  
   const saveManyArticles = useCallback(
     (newArticles: Array<ArticleType>) => {
       try {
@@ -109,7 +141,7 @@ export const useToggleLikeArticle = () => {
           saveSingleArticle(item);
         });
       } catch (error) {
-        console.log('errorerror', error);
+        console.log('error in latest articles', error);
 
         throw error;
       }
@@ -136,9 +168,3 @@ export const useToggleLikeArticle = () => {
 //   .sorted('publishedAt', true) as any ;
 // // console.log("RUN GET>>>")
 // .concat(treading);
-
-
-
-
-
-

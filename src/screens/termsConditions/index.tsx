@@ -17,7 +17,7 @@ const TermsConditions = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Endpoint.get('aboutget');
+        const response = await Endpoint.get('termscondition');
 
         if (response.data.status) {
           setDetails(response.data.data[0].details);

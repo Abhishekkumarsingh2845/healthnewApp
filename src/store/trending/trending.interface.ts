@@ -14,4 +14,5 @@ export interface TrendingTypeArticle {
     updatedAt:Date;
     // status: ArticleStatus;
     isLiked?: boolean;
+    
 }

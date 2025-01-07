@@ -14,4 +14,10 @@ export interface ArticleType {
     updatedAt:Date;
     status: ArticleStatus;
     isLiked?: boolean;
+    // isNotified:boolean;
+    // isActive?:boolean;
+    // isTrending?:boolean;
+    // createdAt?:boolean;
+    // catImage?:string;
+
 }

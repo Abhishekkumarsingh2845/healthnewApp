@@ -14,6 +14,47 @@ function App(): React.JSX.Element {
 
 export default App;
 
+// import React, {useEffect} from 'react';
+// import {View, Text} from 'react-native';
+// import appsFlyer from 'react-native-appsflyer';
+
+// const App = () => {
+//   useEffect(() => {
+//     // Check if appsFlyer is available
+//     if (appsFlyer) {
+//       console.log('AppsFlyer is available');
+//     } else {
+//       console.error('AppsFlyer is not available');
+//     }
+
+//     // Initialize AppsFlyer SDK
+//     if (appsFlyer) {
+//       appsFlyer.initSdk(
+//         {
+//           devKey: 'jM5UQCpNnhNqvHx6LV9S6h',
+//           isDebug: true,
+//           onInstallConversionDataListener: true, // Optional
+//           onDeepLinkListener: true, // Optional
+//         },
+//         (result) => {
+//           console.log('AppsFlyer SDK initialized:', result);
+//         },
+//         (error) => {
+//           console.error('AppsFlyer initialization error:', error);
+//         },
+//       );
+//     }
+//   }, []);
+
+//   return (
+//     <View>
+//       <Text>Welcome to AppsFlyer Setup</Text>
+//     </View>
+//   );
+// };
+
+// export default App;
+
 // import React, { useEffect } from 'react';
 // import { Alert,Text,View } from 'react-native';
 // import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';

@@ -14,7 +14,10 @@ class Article extends Realm.Object {
   publishedAt!: Date;
   status!: ArticleStatus;
   isLiked!: boolean;
-
+  // isTrending!:boolean;
+  // createdAt!:boolean;
+  // catImage!:string;
+  // isNotified!:boolean;
   static schema: Realm.ObjectSchema = {
     name: 'Article',
     primaryKey: '_id',
@@ -29,13 +32,17 @@ class Article extends Realm.Object {
       content: {type: 'string'},
       category: {type: 'string'},
       status: {type: 'string'},
-      isActive: {type: 'bool', default: false},
+      isActive: {type: 'bool', default: true},
       isPublished: {type: 'string', optional: true},
       isLiked: {type: 'bool', default: false},
       updatedAt: {
         type: 'date',
         optional: true,
       },
+      // isNotified: {type: 'bool', optional: true, default: true},
+      // isTrending: {type: 'bool', optional: true},
+      // createdAt: {type: 'date', optional: true}, // Added based on API
+      // catImage: {type: 'string', optional: true}, // Added based on API
     },
   };
 }
