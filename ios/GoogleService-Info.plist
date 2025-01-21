@@ -11,7 +11,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.wholesome.app</string>
+	<string>com.wholesome.newsApp</string>
 	<key>PROJECT_ID</key>
 	<string>fire-51c01</string>
 	<key>STORAGE_BUCKET</key>
@@ -27,7 +27,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:362707370482:ios:9344b40348490a90d02b6b</string>
+	<string>1:362707370482:ios:5d30ac9679d3b1cbd02b6b</string>
 	<key>DATABASE_URL</key>
 	<string>https://fire-51c01-default-rtdb.firebaseio.com</string>
 </dict>

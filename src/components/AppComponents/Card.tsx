@@ -225,15 +225,16 @@
 
 // export default memo(Card);
 
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
+  Linking,
+  Text,
 } from 'react-native';
 import AppImage from '../AppImage';
 import {Icons} from '../../generated/image.assets';
@@ -247,10 +248,10 @@ import {Size} from '../../config/size.config';
 import {BSON} from 'realm';
 import moment from 'moment';
 import {useToggleLikeArticle} from '../../store/article/article.hooks';
-
+import appsFlyer from 'react-native-appsflyer';
+import {Share} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 // Define a function to get the category image URL
-
-
 
 const getCategoryImageUrl = category => {
   if (category === 'Technology Health') {
@@ -258,45 +259,130 @@ const getCategoryImageUrl = category => {
   } else if (category === 'Physical Health') {
     return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316938942-504121852.png';
   } else if (category === 'Financial Health') {
-    return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png');
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png';
   } else if (category === 'Community Health') {
-    return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png');
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
   } else if (category === 'Occupational Health') {
-    return ("https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png");
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
   } else if (category === 'Environmental Health') {
-    return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png');
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
   } else if (category === 'Medical Health') {
-    return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png');
-  }
-  else if (category === 'Wholesome Originals') {
-    return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png');
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
+  } else if (category === 'Wholesome Originals') {
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png';
   }
   return null; // Return null if category doesn't match
 };
 
 const Card = props => {
+  const navigation = useNavigation();
+  const [inviteLink, setInviteLink] = useState(null);
+
+  useEffect(() => {
+    appsFlyer.initSdk(
+      {
+        devKey: 'jM5UQCpNnhNqvHx6LV9S6h', // Replace with your AppsFlyer Dev Key
+        isDebug: true,
+        appId: '6740557794', // Replace with your App ID
+        onInstallConversionDataListener: true,
+        onDeepLinkListener: true,
+        timeToWaitForATTUserAuthorization: 10, // for iOS 14.5
+      },
+      result => {
+        // console.log('AppsFlyer SDK initialized:', result);
+
+        // Set the OneLink template ID
+        appsFlyer.setAppInviteOneLinkID(
+          'PUci', // Replace with your OneLink template ID
+          result => {
+            console.log('OneLink template ID set successfully:', result);
+          },
+          error => {
+            console.error('Error setting OneLink template ID:', error);
+          },
+        );
+      },
+      error => {
+        console.error('Error initializing AppsFlyer SDK:', error);
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    // Handle deep links
+    const handleDeepLink = response => {
+      const deepLinkValue = response?.deepLinkValue; // Get the `deepLinkValue`
+      console.log('Deep link value:', deepLinkValue);
+      if (deepLinkValue === 'Intro') {
+        navigation.navigate('SplashScreen' as never); // Navigate to your MainNavigation screen
+      }
+    };
+
+    appsFlyer.onDeepLink(handleDeepLink);
+
+    // Clean up listener
+    return () => appsFlyer.onDeepLink(null);
+  }, []);
+
+  const generateInviteLink = () => {
+    // Generate the invite link
+    appsFlyer.generateInviteLink(
+      {
+        channel: 'wholesomebywh', // Specify the channel, e.g., email, social media
+        campaign: 'wholesomebywh', // Specify your campaign name
+        customerID: 'user123', // Optional: User ID for tracking
+        userParams: {
+          deep_link_value: 'Intro',
+          af_force_deeplink: true,
+        },
+      },
+      link => {
+        console.log('Generated Invite Link:', link);
+        setInviteLink(link); // Save the link to state
+        Share.share({
+          message: `Check out this app: ${link}`,
+        })
+          .then(res => {
+            console.log('Share successful:', res);
+          })
+          .catch(err => {
+            console.error('Error sharing link:', err);
+          });
+      },
+
+      error => {
+        console.error('Error generating invite link:', error);
+      },
+    );
+  };
+
+  const handleShareInviteLink = () => {
+    if (inviteLink) {
+      Linking.openURL(
+        `mailto:?subject=Check out this app&body=${inviteLink}`,
+      ).catch(err => console.error('Error opening email client:', err));
+    } else {
+      console.log('Invite link is not generated yet.');
+    }
+  };
   const {toggleLike} = useToggleLikeArticle();
 
   const onLike = useCallback(() => {
-
-    console.log("likedkkkkkkkkkkkkk")
+    console.log('likedkkkkkkkkkkkkk');
     const id = new BSON.ObjectId(props._id);
     if (props.onLike) {
       props.onLike();
       return;
     }
     toggleLike(id);
-    
-    console.log("li")
+
+    console.log('li');
   }, [props._id]);
 
-
-
-  const [state,setstate]=useState(false);
-  const chg=()=>
-  {
+  const [state, setstate] = useState(false);
+  const chg = () => {
     setstate(!state);
-  }
+  };
   return (
     <Pressable
       style={[style.box, props.containerStyle]}
@@ -321,6 +407,7 @@ const Card = props => {
             </View>
             <View style={[Style.flexRow, {gap: moderateScale(7)}]}>
               <Pressable
+                onPress={generateInviteLink}
                 style={[style.iconContainer, style.otherIconsContainer]}>
                 <Image
                   source={Icons.ic_share}
@@ -336,7 +423,7 @@ const Card = props => {
                   source={props.isLiked ? Icons.ic_active_love : Icons.ic_love}
                   style={style.iconn}
                   resizeMode={'contain'}
-                  tintColor={props.isLiked?Colors.primary:Colors.white}
+                  tintColor={props.isLiked ? Colors.primary : Colors.white}
                 />
               </Pressable>
             </View>
@@ -355,8 +442,6 @@ const Card = props => {
                 ]}>
                 {moment(props.updatedAt).fromNow()}
               </Text>
-            
-              
             </View>
           </View>
         </View>
@@ -441,7 +526,7 @@ const style = StyleSheet.create({
   image: {
     width: '100%',
     height: moderateScale(170),
-   },
+  },
   overlay: {
     padding: moderateScale(12),
     position: 'absolute',

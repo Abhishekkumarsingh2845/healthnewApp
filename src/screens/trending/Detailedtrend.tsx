@@ -27,7 +27,8 @@ import {Icons, Images, Lottie} from '../../generated/image.assets';
 import Banner from '../newDetail/components/banner';
 import Article from '../../store/article/article.schema';
 import TrendingArticle from '../../store/trending/trending.schema';
-
+import appsFlyer from 'react-native-appsflyer';
+import {Share} from 'react-native';
 import Header from '../newDetail/components/header';
 import BackButton from '../../components/BackButton';
 import {useToggleTrendingLike} from '../../store/trending/trendinghook';
@@ -49,7 +50,8 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   console.log('dd', articleId);
   const [article, setArticle] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const navigation = useNavigation();
+  const [inviteLink, setInviteLink] = useState(null);
   const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
   console.log('trendingschema', trendingArticles);
   const articlevar = trendingArticles.map(item => item.article_id);
@@ -69,7 +71,93 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   const lllg = singleArticle.isLiked;
 
   const mm = singleArticle._id;
+  useEffect(() => {
+    appsFlyer.initSdk(
+      {
+        devKey: 'jM5UQCpNnhNqvHx6LV9S6h', // Replace with your AppsFlyer Dev Key
+        isDebug: true,
+        appId: '6740557794', // Replace with your App ID
+        onInstallConversionDataListener: true,
+        onDeepLinkListener: true,
+        timeToWaitForATTUserAuthorization: 10, // for iOS 14.5
+      },
+      result => {
+        // console.log('AppsFlyer SDK initialized:', result);
 
+        // Set the OneLink template ID
+        appsFlyer.setAppInviteOneLinkID(
+          'PUci', // Replace with your OneLink template ID
+          result => {
+            console.log('OneLink template ID set successfully:', result);
+          },
+          error => {
+            console.error('Error setting OneLink template ID:', error);
+          },
+        );
+      },
+      error => {
+        console.error('Error initializing AppsFlyer SDK:', error);
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    // Handle deep links
+    const handleDeepLink = response => {
+      const deepLinkValue = response?.deepLinkValue; // Get the `deepLinkValue`
+      console.log('Deep link value:', deepLinkValue);
+      if (deepLinkValue === 'Intro') {
+        navigation.navigate('SplashScreen' as never); // Navigate to your MainNavigation screen
+      }
+    };
+
+    appsFlyer.onDeepLink(handleDeepLink);
+
+    // Clean up listener
+    return () => appsFlyer.onDeepLink(null);
+  }, []);
+
+  const generateInviteLink = () => {
+    // Generate the invite link
+    appsFlyer.generateInviteLink(
+      {
+        channel: 'wholesomebywh', // Specify the channel, e.g., email, social media
+        campaign: 'wholesomebywh', // Specify your campaign name
+        customerID: 'user123', // Optional: User ID for tracking
+        userParams: {
+          deep_link_value: 'Intro',
+          af_force_deeplink: true,
+        },
+      },
+      link => {
+        console.log('Generated Invite Link:', link);
+        setInviteLink(link); // Save the link to state
+        Share.share({
+          message: `Check out this app: ${link}`,
+        })
+          .then(res => {
+            console.log('Share successful:', res);
+          })
+          .catch(err => {
+            console.error('Error sharing link:', err);
+          });
+      },
+
+      error => {
+        console.error('Error generating invite link:', error);
+      },
+    );
+  };
+
+  const handleShareInviteLink = () => {
+    if (inviteLink) {
+      Linking.openURL(
+        `mailto:?subject=Check out this app&body=${inviteLink}`,
+      ).catch(err => console.error('Error opening email client:', err));
+    } else {
+      console.log('Invite link is not generated yet.');
+    }
+  };
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
   // const ff=singleArticle.map(item=>item.isLiked);
   // console.log("lgg",ff);
@@ -117,9 +205,8 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
     } else if (category === 'Medical Health') {
       return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
-    }
-    else if (category === 'Wholesome Originals') {
-      return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png');
+    } else if (category === 'Wholesome Originals') {
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png';
     }
     return null; // Return null if category doesn't match
   };
@@ -177,15 +264,18 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
               tintColor={lllg ? Colors.primary : Colors.black}
             />
           </TouchableOpacity>
+          <Pressable
+            onPress={generateInviteLink}
+            >
+            <Image
+              resizeMode={'contain'}
+              source={Icons.ic_move}
+              // style={style.icon}
 
-          <Image
-            resizeMode={'contain'}
-            source={Icons.ic_move}
-            // style={style.icon}
-
-            style={{width: 30, height: 30}}
-            tintColor={Colors.black}
-          />
+              style={{width: 30, height: 30}}
+              tintColor={Colors.black}
+            />
+          </Pressable>
         </View>
       </View>
       <View style={styles.container}>
@@ -295,6 +385,11 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
 };
 
 const styles = StyleSheet.create({
+  icon: {
+    width: moderateScale(24),
+    height: moderateScale(24),
+  },
+
   container: {
     // paddingHorizontal: moderateScale(16),
   },

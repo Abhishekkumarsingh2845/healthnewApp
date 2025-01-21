@@ -60,7 +60,7 @@ const Favviewall = () => {
   const {toggleLike} = useToggleTrendingLike();
   return (
     <AppSafeAreaView>
-      <SafeAreaView />
+      {/* <SafeAreaView /> */}
       <Header />
 
       <Categories onCategoryChange={setActiveCategory} />

@@ -105,7 +105,7 @@ const Explore = () => {
   // console.log('schema data of treding', trendingArticlesFromRealm.toJSON());
   const art = useQuery('Article');
 
-  console.log('schema data of latest', art.toJSON());
+  // console.log('schema data of latest', art.toJSON());
 
   const startDate = new Date('2024-12-17T06:43:40.179Z');
   const endDate = new Date('2024-12-17T06:49:07.000Z');

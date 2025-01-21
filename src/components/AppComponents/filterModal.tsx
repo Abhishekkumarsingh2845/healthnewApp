@@ -241,92 +241,95 @@ const Categories = ({
   );
 
   return (
-    <View style={categorStyle.container}>
-      <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
-      <Text style={[FontStyle.regular, {color: Colors.black}]}>
-        Select the category which you want to see.
-      </Text>
+    <KeyboardAvoidingView
+       style={{height:600}}>
+      <View style={categorStyle.container}>
+        <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
+        <Text style={[FontStyle.regular, {color: Colors.black}]}>
+          Select the category which you want to see.
+        </Text>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: '100%',
-          borderWidth: 1.5,
-          borderColor: '#EDF1F3',
-          borderRadius: 10,
-          // paddingVertical: 1,
-        }}>
-        <Image
-          source={require('../../../assets/images/ss.png')}
-          style={{width: 18, height: 18, marginLeft: 10}}
-        />
-
-        <TextInput
-          value={query}
-          onChangeText={setquery}
-          placeholder="Search By Interest"
-          placeholderTextColor={'black'}
+        <View
           style={{
-            // borderWidth: 1.5,
-            // borderRadius: 8,
-            paddingVertical: 10,
-            fontSize: 15,
-            fontFamily: Fonts.medium,
-            fontWeight: '400',
-            marginLeft: 10,
-            // borderColor: '#EDF1F3',
-            // paddingLeft: 20,
-            // width:"100%"
-            // backgroundColor:"red",
-            flex: 1,
-          }}
-        />
-      </View>
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            borderWidth: 1.5,
+            borderColor: '#EDF1F3',
+            borderRadius: 10,
+            // paddingVertical: 1,
+          }}>
+          <Image
+            source={require('../../../assets/images/ss.png')}
+            style={{width: 18, height: 18, marginLeft: 10}}
+          />
 
-      <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
-        {searchdata.map((category, index) => (
-          <TouchableOpacity
-            key={index}
+          <TextInput
+            value={query}
+            onChangeText={setquery}
+            placeholder="Search By Interest"
+            placeholderTextColor={'black'}
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingHorizontal: 8,
-              paddingVertical: 6,
-              backgroundColor:
-                selected === category ? 'transparent' : 'transparent',
-              borderRadius: 5,
+              // borderWidth: 1.5,
+              // borderRadius: 8,
+              paddingVertical: 10,
+              fontSize: 15,
+              fontFamily: Fonts.medium,
+              fontWeight: '400',
+              marginLeft: 10,
+              // borderColor: '#EDF1F3',
+              // paddingLeft: 20,
+              // width:"100%"
+              // backgroundColor:"red",
+              flex: 1,
             }}
-            onPress={() => handleSelectCategory(category)}>
-            <View
+          />
+        </View>
+
+        <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
+          {searchdata.map((category, index) => (
+            <TouchableOpacity
+              key={index}
               style={{
-                width: 20,
-                height: 20,
+                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 1,
-                borderColor: '#000',
+                paddingHorizontal: 8,
+                paddingVertical: 6,
                 backgroundColor:
                   selected === category ? 'transparent' : 'transparent',
-                marginRight: 10,
                 borderRadius: 5,
-              }}>
-              {selected === category && (
-                <Image
-                  source={require('./../../../assets/images/check.png')}
-                  style={{
-                    width: 16,
-                    height: 16,
-                    resizeMode: 'contain',
-                  }}
-                />
-              )}
-            </View>
-            <Text style={{color: 'black'}}>{category}</Text>
-          </TouchableOpacity>
-        ))}
+              }}
+              onPress={() => handleSelectCategory(category)}>
+              <View
+                style={{
+                  width: 20,
+                  height: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 1,
+                  borderColor: '#000',
+                  backgroundColor:
+                    selected === category ? 'transparent' : 'transparent',
+                  marginRight: 10,
+                  borderRadius: 5,
+                }}>
+                {selected === category && (
+                  <Image
+                    source={require('./../../../assets/images/check.png')}
+                    style={{
+                      width: 16,
+                      height: 16,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                )}
+              </View>
+              <Text style={{color: 'black'}}>{category}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -426,10 +429,10 @@ const Datee = ({
   const [isDatePickerVisible, setDatePickerVisibility] =
     useState<boolean>(false);
   const check = useQuery(Article);
-  console.log('dd', check);
+  // console.log('dd', check);
   const [todate, tosetdate] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
-  
+
   const [currentField, setCurrentField] = useState<string>('');
 
   const showDatePicker = (field: 'from' | 'to'): void => {
@@ -494,7 +497,7 @@ const Datee = ({
     // Conditionally update based on currentField
     if (currentField === 'from') {
       setSelectedDate(formattedDate);
-      console.log('kk', setSelectedDate);
+      // console.log('kk', setSelectedDate);
     } else if (currentField === 'to') {
       tosetdate(formattedDate);
     }
@@ -572,7 +575,9 @@ const Datee = ({
                     // paddingVertical:10,
                   }}>
                   {selectedDate ? (
-                    <Text style={{color: 'black', fontSize: 12}}>{selectedDate}</Text>
+                    <Text style={{color: 'black', fontSize: 12}}>
+                      {selectedDate}
+                    </Text>
                   ) : (
                     <Text>dd/mm/yyyy</Text>
                   )}
