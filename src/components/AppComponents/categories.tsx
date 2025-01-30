@@ -141,6 +141,7 @@ import {FontStyle} from '../../config/style.config';
 import {Colors} from '../../config/colors.config';
 import {Fonts} from '../../config/font.config';
 import {useCategory} from '../../store/category/category.hooks';
+import { SvgUri } from 'react-native-svg';
 
 const Categories = ({onCategoryChange}: {onCategoryChange: (category: string) => void}) => {
   const {categories} = useCategory();
@@ -183,7 +184,6 @@ const Category = (props: CategoryPropType) => {
   const name = useMemo(() => props.catName.replace('-', ' '), [props.catName]);
   const img = useMemo(() => props.catImageblack, [props.catImageblack]);
   const isAll = props.catName === 'All';
-
   return (
     <View
       style={[
@@ -197,10 +197,13 @@ const Category = (props: CategoryPropType) => {
         },
       ]}>
       {!isAll && (
-        <Image
-          source={typeof img === 'string' ? {uri: img} : img}
-          style={{width: 25, height: 25, resizeMode: 'contain'}}
-        />
+        <View style ={{height : 25, width: 25}}>
+          <SvgUri
+          uri={img}  
+          onError={() => console.log('error svg')}
+          width="100%" 
+          height="100%" />
+        </View>
       )}
       <Text style={props.isActive ? style.activeTitle : style.inactiveTtitle}>
         {name}

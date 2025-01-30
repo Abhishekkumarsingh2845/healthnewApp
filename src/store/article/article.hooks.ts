@@ -13,7 +13,7 @@ export const useGetArticles = () => {
 };
 export const useGetFavArticles = () => {
   const ll = useQuery(Article);
-  console.log('ccccc->>', ll);
+  // console.log('ccccc->>', ll);
 
   const articles = useQuery(Article)
     .filtered(`isLiked==true`)

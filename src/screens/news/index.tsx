@@ -279,27 +279,412 @@
 // export default TrendingArticlesScreen;
 
 // / his is the manaual api hittin code
+                                         
 
 
 
+// import React, {useState, useEffect} from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   Image,
+//   StyleSheet,
+//   ActivityIndicator,
+//   Linking,
+//   SafeAreaView,
+//   ImageBackground,
+//   ScrollView,
+// } from 'react-native';
 
+// import {moderateScale} from 'react-native-size-matters';
+// import Header from './components/header';
+// import {Fonts} from '../../config/font.config';
+// import {Colors} from '../../config/colors.config';
+// import {TouchableOpacity} from 'react-native';
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import moment from 'moment';
+// import {useGetArticles} from '../../store/article/article.hooks';
+// import Card from '../../components/AppComponents/card';
+// import {NavigationProp, useNavigation} from '@react-navigation/native';
+// import {RootStackParamList} from '../../navigations/MainNavigation/models';
+// import AppSafeAreaView from '../../components/AppSafeAreaView';
+// type Article = {
+//   _id: string;
+//   article_id: string;
+//   title: string;
+//   description: string;
+//   url: string;
+//   urlToImage: string;
+//   publishedAt: string;
+//   updatedAt: Date;
+//   content: string;
+//   category: string;
+//   status: string;
+//   isActive: boolean;
+//   isTrending: boolean;
+// };
 
+// const index = (props: NewsPropType) => {
+//   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
+//   const [articles, setArticles] = useState<Article[]>([]);
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const params = props.route.params;
+//   const [openedArticles, setOpenedArticles] = useState<Set<string>>(new Set()); // Store opened article IDs
+//   const allArticles = useGetArticles();
+//   const handleShowOriginal = (url: string, id: string) => {
+//     if (openedArticles.has(id)) {
+//       // If article has been opened before, open URL directly
+//       Linking.openURL(url);
+//     } else {
+//       // Add article ID to the set and navigate to WebView
+//       setOpenedArticles(prev => new Set(prev).add(id));
+//       props.navigation.navigate('WebViewScreen', {url});
+//     }
+//   };
 
+//   useEffect(() => {
+//     const fetchArticles = async () => {
+//       try {
+//         const response = await fetch(
+//           'http://15.206.16.230:4000/api/v1/android/published-articles?search=&limit=1000',
+//         );
+//         const data = await response.json();
+//         if (data.status && data.data?.articles) {
+//           setArticles(data.data.articles);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching data:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
+//     fetchArticles();
+//   }, []);
 
+//   return (
+//     <AppSafeAreaView>
+//       <SafeAreaView />
+//       <Header {...params} />
+//       {/* <View style={{marginTop: 25}}></View> */}
+//       <ScrollView showsVerticalScrollIndicator={false}>
+//         {allArticles.map((item, index) => {
+//           return (
+//             <Card
+//               key={index}
+//               onClick={() => {
+//                 const id = item._id.toHexString();
+//                 Nav.navigate('NewsDetail', {
+//                   _id: id,
+//                 } as NewsDetailsPropType);
+//               }}
+//               {...item}
+//             />
+//           );
+//         })}
+//       </ScrollView>
+//     </AppSafeAreaView>
+//   );
+// };
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 20,
+//   },
+//   listContent: {
+//     paddingBottom: 20,
+//   },
+//   articleContainer: {
+//     marginBottom: 20,
+//     borderBottomColor: '#ddd',
+//     paddingBottom: 10,
+//   },
+//   articleImage: {
+//     width: '100%',
+//     height: moderateScale(200),
+//     marginBottom: moderateScale(10),
+//     resizeMode: 'contain',
+//     alignItems: 'flex-start',
+//     justifyContent: 'flex-end',
+//   },
+//   articleContent: {
+//     flex: 1,
+//   },
+//   title: {
+//     fontSize: 22,
+//     fontWeight: '700',
+//     marginBottom: 5,
+//     fontFamily: Fonts.medium,
+//     lineHeight: 28.13,
+//     color: '#000000',
+//   },
+//   description: {
+//     fontSize: 15,
+//     color: '#1D1D1D',
+//     lineHeight: 23.53,
+//     fontFamily: Fonts.medium,
+//     marginBottom: 5,
+//   },
+//   tme: {
+//     // marginBottom: 20,
+//     // marginHorizontal: 20,
+//   },
+//   category: {
+//     fontSize: 12,
+//     color: '#888',
+//     marginBottom: 5,
+//   },
+//   publishedAt: {
+//     fontSize: 12,
+//     color: '#888',
+//     marginBottom: 10,
+//   },
 
+//   roundedImage: {
+//     borderRadius: moderateScale(20), // Adjust the radius as needed
+//     overflow: 'hidden',
+//   },
+// });
 
+// export default index;
 
+// import React, { useState, useEffect } from 'react';
+// import {
+//   View,
+//   ScrollView,
+//   SafeAreaView,
+//   StyleSheet,
+//   ActivityIndicator,
+// } from 'react-native';
+// import { useNavigation, NavigationProp } from '@react-navigation/native';
+// import { moderateScale } from 'react-native-size-matters';
+// import Header from './components/header';
+// import Card from '../../components/AppComponents/card';
+// import AppSafeAreaView from '../../components/AppSafeAreaView';
+// import { RootStackParamList } from '../../navigations/MainNavigation/models';
 
+// type Article = {
+//   _id: string;
+//   article_id: string;
+//   title: string;
+//   description: string;
+//   url: string;
+//   urlToImage: string;
+//   publishedAt: string;
+//   updatedAt: Date;
+//   content: string;
+//   category: string;
+//   status: string;
+//   isActive: boolean;
+//   isTrending: boolean;
+// };
 
+// const Index = (props: any) => {
+//   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+//   const [articles, setArticles] = useState<Article[]>([]);
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const params = props.route.params;
 
+//   useEffect(() => {
+//     const fetchArticles = async () => {
+//       try {
+//         const response = await fetch(
+//           'http://15.206.16.230:4000/api/v1/android/published-articles?search=&'
+//         );
+//         const data = await response.json();
+//         if (data.status && data.data?.articles) {
+//           setArticles(data.data.articles);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching articles:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
+//     fetchArticles();
+//   }, []);
 
+//   if (loading) {
+//     return (
+//       <View style={styles.loadingContainer}>
+//         <ActivityIndicator size="large" color="#007BFF" />
+//       </View>
+//     );
+//   }
 
+//   return (
+//     <AppSafeAreaView>
+//       <SafeAreaView />
+//       <Header {...params} />
+//       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollView}>
+//         {articles.map((item, index) => (
+//           <Card
+//             key={item._id}
+//             onClick={() =>
+//               navigation.navigate('NewsDetail', {
+//                 _id: item._id,
+//               })
+//             }
+//             {...item}
+//           />
+//         ))}
+//       </ScrollView>
+//     </AppSafeAreaView>
+//   );
+// };
 
+// const styles = StyleSheet.create({
+//   loadingContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   scrollView: {
+//     padding: moderateScale(10),
+//   },
+// });
 
+// export default Index;
 
+// import React, {useState, useEffect, useCallback} from 'react';
+// import {
+//   View,
+//   ScrollView,
+//   SafeAreaView,
+//   StyleSheet,
+//   ActivityIndicator,
+//   RefreshControl,
+// } from 'react-native';
+// import {useNavigation, NavigationProp} from '@react-navigation/native';
+// import {moderateScale} from 'react-native-size-matters';
+// import Header from './components/header';
+// import Card from '../../components/AppComponents/card';
+// import AppSafeAreaView from '../../components/AppSafeAreaView';
+// import {RootStackParamList} from '../../navigations/MainNavigation/models';
+
+// type Article = {
+//   _id: string;
+//   article_id: string;
+//   title: string;
+//   description: string;
+//   url: string;
+//   urlToImage: string;
+//   publishedAt: string;
+//   updatedAt: Date;
+//   content: string;
+//   category: string;
+//   status: string;
+//   isActive: boolean;
+//   isTrending: boolean;
+// };
+
+// const Index = (props: any) => {
+//   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+//   const [articles, setArticles] = useState<Article[]>([]);
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const [refreshing, setRefreshing] = useState<boolean>(false);
+//   const [page, setPage] = useState<number>(1); // Start with page 1
+//   const [hasMore, setHasMore] = useState<boolean>(true); // Tracks if more articles can be fetched
+//   const params = props.route.params;
+
+//   const fetchArticles = useCallback(
+//     async (currentPage: number) => {
+//       try {
+//         if (!hasMore) return; // Stop fetching if there's no more data
+//         const response = await fetch(
+//           `http://15.206.16.230:4000/api/v1/android/published-articles?search=&limit=10&page=${currentPage}`,
+//         );
+//         const data = await response.json();
+//         if (data.status && data.data?.articles) {
+//           // Append new articles to the existing list
+//           setArticles(prev =>
+//             currentPage === 1
+//               ? data.data.articles
+//               : [...prev, ...data.data.articles],
+//           );
+//           // Check if more articles are available
+//           if (data.data.articles.length < 10) setHasMore(false);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching articles:', error);
+//       } finally {
+//         setLoading(false);
+//         setRefreshing(false);
+//       }
+//     },
+//     [hasMore],
+//   );
+
+//   const handleRefresh = async () => {
+//     setRefreshing(true);
+//     setPage(1); // Reset to page 1
+//     setHasMore(true); // Reset pagination state
+//     await fetchArticles(1);
+//   };
+
+//   const handleLoadMore = async () => {
+//     if (!refreshing && hasMore) {
+//       const nextPage = page + 1;
+//       setPage(nextPage);
+//       await fetchArticles(nextPage);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchArticles(1); // Fetch the initial articles
+//   }, []);
+
+//   if (loading && articles.length === 0) {
+//     return (
+//       <View style={styles.loadingContainer}>
+//         <ActivityIndicator size="large" color="#007BFF" />
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <AppSafeAreaView>
+//       <SafeAreaView />
+//       <Header {...params} />
+//       <ScrollView
+//         showsVerticalScrollIndicator={false}
+//         style={styles.scrollView}
+//         refreshControl={
+//           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+//         }
+//         onMomentumScrollEnd={handleLoadMore} 
+//       >
+//         {articles.map((item, index) => (
+//           <Card
+//             key={item._id}
+//             onClick={() =>
+//               navigation.navigate('NewsDetail', {
+//                 _id: item._id,
+//               })
+//             }
+//             {...item}
+//           />
+//         ))}
+//       </ScrollView>
+//     </AppSafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   loadingContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   scrollView: {
+//     padding: moderateScale(10),
+//   },
+// });
+
+// export default Index;
 
 import React, {useState, useEffect} from 'react';
 import {

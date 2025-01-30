@@ -88,7 +88,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
     }
     signingConfigs {
         debug {
@@ -97,15 +97,26 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        // release {
+        //     if (project.hasProperty('my-upload-key.keystore')) 
+        //         storeFile file("my-upload-key.keystore")
+        //         storePassword 'cst@123'
+        //         keyAlias "my-key-alias"
+        //         keyPassword "cst@123"
+        // }     
+
     }
+    
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            //  signingConfig signingConfigs.release
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.debug
+            //  signingConfig signingConfigs.release
             // minifyEnabled enableProguardInReleaseBuilds
             shrinkResources true
             minifyEnabled true

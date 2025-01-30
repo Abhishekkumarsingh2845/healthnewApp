@@ -4,7 +4,9 @@ import {RealmProvider, useRealm} from '@realm/react';
 // import { realmConfig } from './src/store';
 import {realmConfig} from './src/store';
 import {SafeAreaView} from 'react-native';
+import { LogBox } from 'react-native';
 function App(): React.JSX.Element {
+  // LogBox.ignoreAllLogs();
   return (
     <RealmProvider schema={realmConfig} deleteRealmIfMigrationNeeded={true}>
       <IntailizeApp />

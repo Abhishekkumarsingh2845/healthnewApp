@@ -22,7 +22,7 @@ target 'wholesome' do
   pod 'react-native-appsflyer',
   :path => '../node_modules/react-native-appsflyer'
 
- pod 'FirebaseCore'
+ pod 'FirebaseCore' 
   pod 'FirebaseAnalytics'
   use_react_native!(
     :path => config[:reactNativePath],
@@ -34,6 +34,11 @@ target 'wholesome' do
     inherit! :complete
     # Pods for testing
   end
+  
+  # target 'ImageNotification' do
+  #   use_frameworks! :linkage => :static
+  #   pod 'Firebase/Messaging'
+  # end
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202

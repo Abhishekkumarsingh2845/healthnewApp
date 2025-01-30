@@ -13,7 +13,7 @@ export const useCategory = () => {
     data as unknown as Array<CategoryType>;
   const getCatories = useCallback(async () => {
     const res = await fetchCategories();
-    console.log('->>>>>>>>>>>sv>>', res);
+    // console.log('->>>>>>>>>>>sv>>', res);
     if (res.status) {
       deleteCategories();
       const currentDate = new Date();

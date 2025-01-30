@@ -11,7 +11,7 @@ import {Colors} from '../../../config/colors.config';
 import {Size} from '../../../config/size.config';
 import {ArticleType} from '../../../store/article/article.interface';
 import moment from 'moment';
-import { Fonts } from '../../../config/font.config';
+import {Fonts} from '../../../config/font.config';
 
 interface CardPropType extends ArticleType {
   containerStyle?: ViewStyle;

@@ -225,7 +225,7 @@
 
 // export default memo(Card);
 
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import {
   Image,
   Pressable,
@@ -237,46 +237,52 @@ import {
   Text,
 } from 'react-native';
 import AppImage from '../AppImage';
-import {Icons} from '../../generated/image.assets';
-import {moderateScale} from 'react-native-size-matters';
-import {Colors} from '../../config/colors.config';
-import {FontStyle, Style} from '../../config/style.config';
+import { Icons } from '../../generated/image.assets';
+import { moderateScale } from 'react-native-size-matters';
+import { Colors } from '../../config/colors.config';
+import { FontStyle, Style } from '../../config/style.config';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
-import {Size} from '../../config/size.config';
-import {BSON} from 'realm';
+import { Size } from '../../config/size.config';
+import { BSON } from 'realm';
 import moment from 'moment';
-import {useToggleLikeArticle} from '../../store/article/article.hooks';
+import { useToggleLikeArticle } from '../../store/article/article.hooks';
 import appsFlyer from 'react-native-appsflyer';
-import {Share} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { Share } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { SvgUri } from 'react-native-svg';
 // Define a function to get the category image URL
 
 const getCategoryImageUrl = category => {
   if (category === 'Technology Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316870222-900829952.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064797756-670133860.svg';
   } else if (category === 'Physical Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316938942-504121852.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064965405-364083487.svg';
   } else if (category === 'Financial Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064860342-573612613.svg';
   } else if (category === 'Community Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064797756-670133860.svg';
   } else if (category === 'Occupational Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064937602-511736322.svg';
   } else if (category === 'Environmental Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064837345-385825304.svg';
   } else if (category === 'Medical Health') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064912322-473747556.svg';
   } else if (category === 'Wholesome Originals') {
-    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png';
+    return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738142554199-252424239.svg';
   }
-  return null; // Return null if category doesn't match
+  return null;
 };
+
+
 
 const Card = props => {
   const navigation = useNavigation();
   const [inviteLink, setInviteLink] = useState(null);
+
+  // console.log("props======>>>", props);
+
 
   useEffect(() => {
     appsFlyer.initSdk(
@@ -295,7 +301,7 @@ const Card = props => {
         appsFlyer.setAppInviteOneLinkID(
           'PUci', // Replace with your OneLink template ID
           result => {
-            console.log('OneLink template ID set successfully:', result);
+            // console.log('OneLink template ID set successfully:', result);
           },
           error => {
             console.error('Error setting OneLink template ID:', error);
@@ -365,7 +371,7 @@ const Card = props => {
       console.log('Invite link is not generated yet.');
     }
   };
-  const {toggleLike} = useToggleLikeArticle();
+  const { toggleLike } = useToggleLikeArticle();
 
   const onLike = useCallback(() => {
     console.log('likedkkkkkkkkkkkkk');
@@ -389,23 +395,31 @@ const Card = props => {
       onPress={props.onClick}>
       <View style={style.container}>
         <AppImage
-          source={{uri: props.urlToImage}}
+          source={{ uri: props.urlToImage }}
           style={style.image}
           resizeMode={'stretch'}
         />
         <View style={style.overlay}>
-          <View style={[Style.flexRow, {justifyContent: 'space-between'}]}>
+          <View style={[Style.flexRow, { justifyContent: 'space-between' }]}>
             <View style={[Style.flexRow]}>
-              <Image
+              <View style={style.icon}>
+
+              <SvgUri
+                uri={ getCategoryImageUrl(props.category)}
+                onError={() => console.log('error svg')}
+                width="100%"
+                height="100%" />
+                </View>
+              {/* <Image
                 source={{uri: getCategoryImageUrl(props.category)}} // Use the logic to set the category image
                 style={style.icon}
                 resizeMode={'contain'}
-              />
+              /> */}
               <Text style={[FontStyle.titleSemibold, style.label]}>
                 {props.category}
               </Text>
             </View>
-            <View style={[Style.flexRow, {gap: moderateScale(7)}]}>
+            <View style={[Style.flexRow, { gap: moderateScale(7) }]}>
               <Pressable
                 onPress={generateInviteLink}
                 style={[style.iconContainer, style.otherIconsContainer]}>
@@ -429,7 +443,7 @@ const Card = props => {
             </View>
           </View>
           <View>
-            <View style={[Style.flexRow, {gap: moderateScale(3)}]}>
+            <View style={[Style.flexRow, { gap: moderateScale(3) }]}>
               <Ionicons
                 name={'time-outline'}
                 size={moderateScale(20)}
@@ -438,7 +452,7 @@ const Card = props => {
               <Text
                 style={[
                   FontStyle.regular,
-                  {color: Colors.white, fontSize: moderateScale(12)},
+                  { color: Colors.white, fontSize: moderateScale(12) },
                 ]}>
                 {moment(props.updatedAt).fromNow()}
               </Text>
@@ -486,7 +500,7 @@ const Card = props => {
           <Text
             style={[
               FontStyle.bold,
-              {color: Colors.primary, fontSize: moderateScale(14)},
+              { color: Colors.primary, fontSize: moderateScale(14) },
             ]}>
             Read more
           </Text>

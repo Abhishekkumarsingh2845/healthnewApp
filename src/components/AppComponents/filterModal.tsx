@@ -1,3 +1,4 @@
+import React from 'react';
 import BottomSheet, {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -59,20 +60,17 @@ const FilterModal = props => {
     {title: 'Sort By'},
     {title: 'Date'},
   ]);
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const realm = useRealm();
   const [dateFilter, setDateFilter] = useState(null);
-  const [selectedDate, setSelectedDate] = useState<string>(''); // Store selected 'from' date
-  const [todate, tosetdate] = useState<string>(''); // Store selected 'to' date
   const handleClearAll = () => {
     setSelectedCategory(null); // Reset the selected category
     setDateFilter(null); // Reset the date filter if needed
     setSelectedIndex(0); // Optionally, reset the selected tab
     // props.modalClose(false); // Close the modal
-    setSelectedDate(''); // Reset 'from' date
-    tosetdate(''); // Reset 'to' date
+    props.setSelectedDate(''); // Reset 'from' date
+    props.tosetdate(''); // Reset 'to' date
     realm.write(() => {
       realm.delete(realm.objects(FilterCategory));
     });
@@ -109,6 +107,8 @@ const FilterModal = props => {
     }
   };
 
+  console.log('props.selectedDate', props.selectedDate);
+
   return (
     <>
       <AppBottomSheet
@@ -136,7 +136,14 @@ const FilterModal = props => {
                 //     props.modalClose(false)
                 //     }}
               >
-                <Text style={{color: Colors.black}}>Clear All</Text>
+                <Text
+                  style={{
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: 'bold',
+                  }}>
+                  Clear All
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -163,6 +170,8 @@ const FilterModal = props => {
                       style={{
                         color:
                           index === selectedIndex ? Colors.white : Colors.black,
+                        fontSize: 16,
+                        fontFamily: Fonts.medium,
                       }}>
                       {item.title}
                     </Text>
@@ -184,7 +193,15 @@ const FilterModal = props => {
                 )}
                 {selectedIndex === 1 && <SortBy />}
                 {/* {selectedIndex === 2 && <Datee />} */}
-                {selectedIndex === 2 && <Datee onHandleDate={setDateFilter} />}
+                {selectedIndex === 2 && (
+                  <Datee
+                    todate={props.todate}
+                    selectedDate={props.selectedDate}
+                    tosetdate={props.tosetdate}
+                    setSelectedDate={props.setSelectedDate}
+                    onHandleDate={setDateFilter}
+                  />
+                )}
               </View>
             </View>
           </View>
@@ -241,11 +258,10 @@ const Categories = ({
   );
 
   return (
-    <KeyboardAvoidingView
-       style={{height:600}}>
+    <KeyboardAvoidingView style={{height: 600}}>
       <View style={categorStyle.container}>
         <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
-        <Text style={[FontStyle.regular, {color: Colors.black}]}>
+        <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 17}]}>
           Select the category which you want to see.
         </Text>
 
@@ -324,7 +340,9 @@ const Categories = ({
                   />
                 )}
               </View>
-              <Text style={{color: 'black'}}>{category}</Text>
+              <Text style={[FontStyle.regular, {color: Colors.black}]}>
+                {category}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -367,7 +385,7 @@ const SortBy = () => {
       <View style={categorStyle.container}>
         <Text style={[FontStyle.bold, {color: Colors.black}]}>Sort By</Text>
 
-        <Text style={[FontStyle.regular, {color: Colors.black}]}>
+        <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 18}]}>
           Select the sorting which you want to see.
         </Text>
 
@@ -422,21 +440,30 @@ export default SortBy;
 
 const Datee = ({
   onHandleDate,
+  setSelectedDate,
+  tosetdate,
+  todate,
+  selectedDate,
 }: {
   onDateRangeChange: (range: {startDate: string; endDate: string}) => void;
   onHandleDate: (handleDate: () => void) => void;
 }) => {
+  useEffect(() => {
+    console.log('kevin', selectedDate, todate);
+  }, [setSelectedDate, tosetdate]);
   const [isDatePickerVisible, setDatePickerVisibility] =
     useState<boolean>(false);
   const check = useQuery(Article);
   // console.log('dd', check);
-  const [todate, tosetdate] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  // const [todate, tosetdate] = useState<string>('');
+  // const [selectedDate, setSelectedDate] = useState<string>('');
 
   const [currentField, setCurrentField] = useState<string>('');
 
   const showDatePicker = (field: 'from' | 'to'): void => {
-    setCurrentField(field); // Set which field is being updated
+    console.log('field', field);
+
+    setCurrentField(field);
     setDatePickerVisibility(true);
   };
 
@@ -493,13 +520,17 @@ const Datee = ({
 
   const handleConfirm = (date: Date) => {
     const formattedDate = date.toISOString().split('T')[0];
+    console.log('cf date', date);
 
     // Conditionally update based on currentField
     if (currentField === 'from') {
       setSelectedDate(formattedDate);
+      console.log('selected', selectedDate);
+
       // console.log('kk', setSelectedDate);
     } else if (currentField === 'to') {
       tosetdate(formattedDate);
+      console.log('selected', todate);
     }
 
     hideDatePicker();
@@ -512,7 +543,7 @@ const Datee = ({
       <View style={categorStyle.container}>
         <Text style={[FontStyle.bold, {color: Colors.black}]}>Date wise</Text>
 
-        <Text style={[FontStyle.regular, {color: Colors.black}]}>
+        <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 17}]}>
           Select the date which you want to see.
         </Text>
 

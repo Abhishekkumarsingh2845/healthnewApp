@@ -99,7 +99,10 @@
 //   },
 // });
 // export default TermsConditions;
-import {Image, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
+
+
+
+import {Image, ScrollView, StyleSheet, Text, View, useWindowDimensions} from 'react-native';
 import RenderHTML from 'react-native-render-html'; // Import RenderHTML
 import AppSafeAreaView from '../../components/AppSafeAreaView';
 import {Images} from '../../generated/image.assets';
@@ -120,7 +123,6 @@ const TermsConditions = () => {
     const fetchData = async () => {
       try {
         const response = await Endpoint.get('termscondition');
-
         if (response.data.status) {
           setDetails(response.data.data[0].details);
           const updatetime = new Date(
@@ -136,13 +138,13 @@ const TermsConditions = () => {
         setLoading(false); // Stop loading
       }
     };
-
     fetchData();
   }, []);
 
   return (
     <>
       <AppSafeAreaView title="Terms & Conditions">
+        <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={Images.appLogo}
           resizeMode={'contain'}
@@ -178,6 +180,7 @@ const TermsConditions = () => {
             />
           )}
         </View>
+        </ScrollView>
       </AppSafeAreaView>
     </>
   );

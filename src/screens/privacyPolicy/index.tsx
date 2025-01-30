@@ -108,6 +108,17 @@
 // });
 // export default PrivacyPolicy;
 
+
+
+
+
+
+
+
+
+
+
+
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import RenderHTML from 'react-native-render-html';
 import AppSafeAreaView from '../../components/AppSafeAreaView';
@@ -225,6 +236,15 @@ const styles = StyleSheet.create({
   },
 });
 export default PrivacyPolicy;
+
+
+
+
+
+
+
+
+
 
 // import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 // import RenderHTML from 'react-native-render-html';

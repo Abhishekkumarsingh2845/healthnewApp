@@ -57,7 +57,7 @@ const IntailizeApp = () => {
         appsFlyer.setAppInviteOneLinkID(
           'PUci', // Replace with your OneLink template ID
           result => {
-            console.log('OneLink template ID set successfully:', result);
+            // console.log('OneLink template ID set successfully:', result);
           },
           error => {
             console.error('Error setting OneLink template ID:', error);

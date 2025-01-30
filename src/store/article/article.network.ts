@@ -2,7 +2,7 @@ import { Endpoint } from "../../config/network.config";
 import { catchHandling } from "../../utils/errorHandling";
 import { ServiceResponse } from "../../utils/interfaces";
 
-export const fetchLatestArticles = async (params:{page:number, search:string}): Promise<ServiceResponse> => {
+export const fetchLatestArticles = async (params:{page:number, search:string,limit:number}): Promise<ServiceResponse> => {
     try {
         
         const response = await Endpoint.get(`published-articles`,{params});
@@ -12,7 +12,7 @@ export const fetchLatestArticles = async (params:{page:number, search:string}): 
             response: response.data.data
         }
     }
-    catch (error) {
+    catch (error) { 
         return catchHandling(error);
     }
 }

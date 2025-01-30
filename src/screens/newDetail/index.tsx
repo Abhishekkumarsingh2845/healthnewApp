@@ -27,6 +27,7 @@ import LottieView from 'lottie-react-native';
 import {Lottie} from '../../generated/image.assets';
 import {Image} from 'react-native';
 import {useToggleTrendingLike} from '../../store/trending/trendinghook';
+import { SvgUri } from 'react-native-svg';
 
 export interface NewsDetailsPropType
   extends StackScreenProps<RootStackParamList, 'NewsDetail'> {
@@ -36,23 +37,23 @@ export interface NewsDetailsPropType
 const NewsDetail = (props: NewsDetailsPropType) => {
   const getCategoryImageUrl = category => {
     if (category === 'Technology Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316870222-900829952.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064797756-670133860.svg';
     } else if (category === 'Physical Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316938942-504121852.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064965405-364083487.svg';
     } else if (category === 'Financial Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733316982814-491751420.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064860342-573612613.svg';
     } else if (category === 'Community Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317023432-801459774.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064797756-670133860.svg';
     } else if (category === 'Occupational Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317061988-588473540.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064937602-511736322.svg';
     } else if (category === 'Environmental Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317102960-139581729.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064837345-385825304.svg';
     } else if (category === 'Medical Health') {
-      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1733317179977-229729963.png';
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738064912322-473747556.svg';
     } else if (category === 'Wholesome Originals') {
-      return ('https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1736140999693-381228934.png');
+      return 'https://mobileapplications.s3.ap-south-1.amazonaws.com/uploads/catImageblack-1738142554199-252424239.svg';
     }
-    return null; // Return null if category doesn't match
+    return null;
   };
 
 
@@ -63,7 +64,7 @@ const NewsDetail = (props: NewsDetailsPropType) => {
  
   const articles = useQuery(Article); // Fetch all articles
   const objId = params._id; // Assuming _id is passed directly as a string
-  // console.log('lllllllllllll', articles);
+  console.log('artilces stored in the lastest', articles);
   // Optional: Fetch individual article details
   const details = articles.find(article => article._id.toString() === objId);
 
@@ -97,14 +98,13 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                 // marginVertical: moderateScale(10),
                 flexDirection: 'row',
               }}>
-              <Image
-                source={{uri: getCategoryImageUrl(details.category)}}
-                style={{
-                  width: 30,
-                  height: 30,
-                  resizeMode: 'contain',
-                }}
-              />
+             
+              <SvgUri
+                              uri={getCategoryImageUrl(details.category)}
+                              onError={() => console.log('error svg')}
+                              width="35"
+                              height="35"
+                            />
               <Text
                 style={[
                   FontStyle.bold,
@@ -176,6 +176,29 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             <TouchableOpacity style={style.showdoccontainer}></TouchableOpacity>
           </>
         )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         <View
           style={{
