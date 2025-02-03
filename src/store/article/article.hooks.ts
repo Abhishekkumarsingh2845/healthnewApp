@@ -1,14 +1,14 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import Article from './article.schema';
 import {useQuery, useRealm} from '@realm/react';
-import {BSON} from 'realm';
+import {BSON, flags} from 'realm';
 import {ArticleType} from './article.interface';
 import Favorite from '../favorite/favorite.schema';
 import TrendingArticle from '../trending/trending.schema';
 
 export const useGetArticles = () => {
   const articles = useQuery(Article).sorted('updatedAt', true);
-  console.log('RUN GET>>>');
+  // console.log('RUN GET>>>');
   return articles;
 };
 export const useGetFavArticles = () => {
@@ -109,23 +109,24 @@ export const useToggleLikeArticle = () => {
           let data = {
             ...newArticle,
             _id: articleId,
-            category: newArticle.category || 'defaultCategory',  // Set default if missing
+            isLiked: false,
+            category: newArticle.category || 'defaultCategory', // Set default if missing
           };
-  
+
           // Check if 'category' is still missing, handle accordingly
           if (!data.category) {
             console.log('Warning: Missing category for article', newArticle);
           }
-  
-          const fav = realm
-            .objects(Favorite.schema.name)
-            .filtered(`articleId == $0`, articleId);
-          if (fav.length > 0) {
-            data['isLiked'] = true;
-          } else {
-            data['isLiked'] = false;
-          }
-  
+
+          // const fav = realm
+          //   .objects(Favorite.schema.name)
+          //   .filtered(`articleId == $0`, articleId);
+          // if (fav.length > 0) {
+          //   data['isLiked'] = true;
+          // } else {
+          //   data['isLiked'] = false;
+          // }
+
           realm.create(Article.schema.name, data, Realm.UpdateMode.Modified);
         });
     } catch (error) {
@@ -133,12 +134,13 @@ export const useToggleLikeArticle = () => {
       throw error;
     }
   };
-  
+
   const saveManyArticles = useCallback(
     (newArticles: Array<ArticleType>) => {
       try {
-        newArticles.forEach(item => {
+        newArticles.forEach((item, index) => {
           saveSingleArticle(item);
+          // console.log(index, 'index...');
         });
       } catch (error) {
         console.log('error in latest articles', error);

@@ -38,6 +38,7 @@ import Article from '../../store/article/article.schema';
 import {useGetArticles} from '../../store/article/article.hooks';
 import Datesch from '../../store/trending/datee/date.schema';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 interface FilterModalPropType extends AppBlurModalPropType {}
 const intailFilterOptions = [
   {
@@ -55,22 +56,34 @@ const intailFilterOptions = [
 ];
 
 const FilterModal = props => {
+  const navigation = useNavigation();
   const [filterOptions, setFilterOptions] = useState([
     {title: 'Categories'},
     {title: 'Sort By'},
     {title: 'Date'},
   ]);
+  const [sortIndex, setSortIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const realm = useRealm();
   const [dateFilter, setDateFilter] = useState(null);
-  const handleClearAll = () => {
+
+  const clearAllData = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log('AsyncStorage cleared');
+    } catch (error) {
+      console.error('Failed to clear AsyncStorage:', error);
+    }
+  };
+  const handleClearAll = async () => {
     setSelectedCategory(null); // Reset the selected category
     setDateFilter(null); // Reset the date filter if needed
     setSelectedIndex(0); // Optionally, reset the selected tab
     // props.modalClose(false); // Close the modal
     props.setSelectedDate(''); // Reset 'from' date
     props.tosetdate(''); // Reset 'to' date
+    await clearAllData();
     realm.write(() => {
       realm.delete(realm.objects(FilterCategory));
     });
@@ -80,10 +93,26 @@ const FilterModal = props => {
     });
   };
 
-  const handleApplyFilter = () => {
+  const handleApplyFilter = async () => {
     try {
       console.log('Date Filter:', dateFilter);
-
+      if (selectedIndex === 1) {
+        if (sortIndex !== null) {
+          if (sortIndex === 0) {
+            navigation.navigate('Favviewall');
+          } else if (sortIndex === 1) {
+            navigation.navigate('News');
+          }
+        }
+      }
+      if (selectedCategory) {
+        props.onApplyfilter(selectedCategory);
+        await AsyncStorage.setItem('reveersefilter', selectedCategory);
+        // console.log('reversefilter', selectedCategory);
+      } else {
+        await AsyncStorage.removeItem('reveersefilter'); // Clear the filter if no category is selected
+      }
+      props.modalClose(false);
       if (selectedIndex === 2 && dateFilter) {
         dateFilter();
       }
@@ -106,8 +135,6 @@ const FilterModal = props => {
       console.error('Realm error:', error);
     }
   };
-
-  console.log('props.selectedDate', props.selectedDate);
 
   return (
     <>
@@ -191,7 +218,10 @@ const FilterModal = props => {
                     setSelected={setSelectedCategory}
                   />
                 )}
-                {selectedIndex === 1 && <SortBy />}
+                {selectedIndex === 1 && (
+                  <SortBy modalClose={() => {}} setSortIndex={setSortIndex} />
+                )}
+                {/* {selectedIndex === 1 && <SortBy />} */}
                 {/* {selectedIndex === 2 && <Datee />} */}
                 {selectedIndex === 2 && (
                   <Datee
@@ -247,15 +277,42 @@ const Categories = ({
     'Medical Health',
     'Wholesome Originals',
   ];
-  const [data, setdata] = useState('');
+
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [query, setquery] = useState('');
+
   const handleSelectCategory = (category: string): void => {
+    // if (selectedCategory !== 'All') {
+    //   return;
+    // }
+
     setSelected(selected === category ? null : category);
   };
 
   const searchdata = categories.filter(item =>
     item.toLowerCase().includes(query.toLowerCase()),
   );
+
+  useEffect(() => {
+    const fetchSelectedCategory = async () => {
+      try {
+        const category = await AsyncStorage.getItem('selectedCategory');
+        if (category !== null) {
+          setSelectedCategory(category);
+          console.log('Category retrieved from AsyncStorage:', category);
+
+          if (category !== 'All') {
+            // Pre-select the category retrieved from AsyncStorage
+            setSelected(category);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch category from AsyncStorage:', error);
+      }
+    };
+
+    fetchSelectedCategory();
+  }, []);
 
   return (
     <KeyboardAvoidingView style={{height: 600}}>
@@ -273,7 +330,6 @@ const Categories = ({
             borderWidth: 1.5,
             borderColor: '#EDF1F3',
             borderRadius: 10,
-            // paddingVertical: 1,
           }}>
           <Image
             source={require('../../../assets/images/ss.png')}
@@ -286,17 +342,12 @@ const Categories = ({
             placeholder="Search By Interest"
             placeholderTextColor={'black'}
             style={{
-              // borderWidth: 1.5,
-              // borderRadius: 8,
               paddingVertical: 10,
               fontSize: 15,
               fontFamily: Fonts.medium,
               fontWeight: '400',
               marginLeft: 10,
-              // borderColor: '#EDF1F3',
-              // paddingLeft: 20,
-              // width:"100%"
-              // backgroundColor:"red",
+              color: 'black',
               flex: 1,
             }}
           />
@@ -315,7 +366,9 @@ const Categories = ({
                   selected === category ? 'transparent' : 'transparent',
                 borderRadius: 5,
               }}
-              onPress={() => handleSelectCategory(category)}>
+              onPress={() => handleSelectCategory(category)}
+              // disabled={selectedCategory !== 'All'} // Disable interaction if selectedCategory is not 'All'
+            >
               <View
                 style={{
                   width: 20,
@@ -351,16 +404,180 @@ const Categories = ({
   );
 };
 
-const SortBy = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+// const Categories = ({
+//   selected,
+//   setSelected,
+// }: {
+//   selected: string | null;
+//   setSelected: (category: string | null) => void;
+// }) => {
+//   const categories = [
+//     'Technology Health',
+//     'Physical Health',
+//     'Financial Health',
+//     'Community Health',
+//     'Occupational Health',
+//     'Environmental Health',
+//     'Medical Health',
+//     'Wholesome Originals',
+//   ];
+//   const [data, setdata] = useState('');
+//   const [query, setquery] = useState('');
+
+//   const handleSelectCategory = (category: string): void => {
+//     if (selectedCategory !== 'All') {
+//               return;
+//             }
+//     setSelected(selected === category ? null : category);
+//   };
+
+//   const searchdata = categories.filter(item =>
+//     item.toLowerCase().includes(query.toLowerCase()),
+//   );
+
+//   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+//   // const handleSelectCategory = (category: string): void => {
+//   //       if (selectedCategory !== 'All') {
+//   //         return;
+//   //       }
+
+//   //       setSelected(selected === category ? null : category);
+//   //     };
+
+//   useEffect(() => {
+//     const fetchSelectedCategory = async () => {
+//       try {
+//         const category = await AsyncStorage.getItem('selectedCategory');
+//         if (category !== null) {
+//           setSelectedCategory(category);
+//           console.log(
+//             'Category retrieved from Home screen AsyncStorage:',
+//             category,
+//           );
+
+//           if (category !== 'All') {
+//             // Pre-select the category retrieved from AsyncStorage
+//             setSelected(category);
+//           }
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch category from AsyncStorage:', error);
+//       }
+//     };
+
+//     fetchSelectedCategory();
+//   }, []);
+//   return (
+//     <KeyboardAvoidingView style={{height: 600}}>
+//       <View style={categorStyle.container}>
+//         <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
+//         <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 17}]}>
+//           Select the category which you want to see.
+//         </Text>
+
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             alignItems: 'center',
+//             width: '100%',
+//             borderWidth: 1.5,
+//             borderColor: '#EDF1F3',
+//             borderRadius: 10,
+//             // paddingVertical: 1,
+//           }}>
+//           <Image
+//             source={require('../../../assets/images/ss.png')}
+//             style={{width: 18, height: 18, marginLeft: 10}}
+//           />
+
+//           <TextInput
+//             value={query}
+//             onChangeText={setquery}
+//             placeholder="Search By Interest"
+//             placeholderTextColor={'black'}
+//             style={{
+//               // borderWidth: 1.5,
+//               // borderRadius: 8,
+//               paddingVertical: 10,
+//               fontSize: 15,
+//               fontFamily: Fonts.medium,
+//               fontWeight: '400',
+//               marginLeft: 10,
+//               // borderColor: '#EDF1F3',
+//               // paddingLeft: 20,
+//               // width:"100%"
+//               // backgroundColor:"red",
+//               flex: 1,
+//             }}
+//           />
+//         </View>
+
+//         <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
+//           {searchdata.map((category, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={{
+//                 flexDirection: 'row',
+//                 alignItems: 'center',
+//                 paddingHorizontal: 8,
+//                 paddingVertical: 6,
+//                 backgroundColor:
+//                   selected === category ? 'transparent' : 'transparent',
+//                 borderRadius: 5,
+//               }}
+//               onPress={() => handleSelectCategory(category)}>
+//               <View
+//                 style={{
+//                   width: 20,
+//                   height: 20,
+//                   alignItems: 'center',
+//                   justifyContent: 'center',
+//                   borderWidth: 1,
+//                   borderColor: '#000',
+//                   backgroundColor:
+//                     selected === category ? 'transparent' : 'transparent',
+//                   marginRight: 10,
+//                   borderRadius: 5,
+//                 }}>
+//                 {selected === category && (
+//                   <Image
+//                     source={require('./../../../assets/images/check.png')}
+//                     style={{
+//                       width: 16,
+//                       height: 16,
+//                       resizeMode: 'contain',
+//                     }}
+//                   />
+//                 )}
+//               </View>
+//               <Text style={[FontStyle.regular, {color: Colors.black}]}>
+//                 {category}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+//     </KeyboardAvoidingView>
+//   );
+// };
+
+const SortBy = ({
+  modalClose,
+  setSortIndex,
+}: {
+  modalClose: (flag: boolean) => void;
+  setSortIndex: (index: number) => void;
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1); // No default selection
+  const navigation = useNavigation();
 
   // Load the selected index from AsyncStorage when the component mounts
   useEffect(() => {
     const loadSelectedIndex = async () => {
       try {
         const storedIndex = await AsyncStorage.getItem('selectedIndex');
-        if (storedIndex !== null) {
-          setSelectedIndex(parseInt(storedIndex, 10)); // Parse the value as a number
+        if (storedIndex !== null && storedIndex !== '0') {
+          setSelectedIndex(parseInt(storedIndex, 10)); // Parse and set the value only if not "0"
         }
       } catch (error) {
         console.error('Error loading selected index:', error);
@@ -375,6 +592,7 @@ const SortBy = () => {
     try {
       await AsyncStorage.setItem('selectedIndex', index.toString());
       setSelectedIndex(index);
+      setSortIndex(index);
     } catch (error) {
       console.error('Error saving selected index:', error);
     }
@@ -449,7 +667,7 @@ const Datee = ({
   onHandleDate: (handleDate: () => void) => void;
 }) => {
   useEffect(() => {
-    console.log('kevin', selectedDate, todate);
+    // console.log('kevin', selectedDate, todate);
   }, [setSelectedDate, tosetdate]);
   const [isDatePickerVisible, setDatePickerVisibility] =
     useState<boolean>(false);
@@ -770,3 +988,282 @@ const styles = StyleSheet.create({
 });
 
 export default FilterModal;
+
+// const Categories = ({
+//   selected,
+//   setSelected,
+// }: {
+//   selected: string | null;
+//   setSelected: (category: string | null) => void;
+// }) => {
+//   const categories = [
+//     'Technology Health',
+//     'Physical Health',
+//     'Financial Health',
+//     'Community Health',
+//     'Occupational Health',
+//     'Environmental Health',
+//     'Medical Health',
+//     'Wholesome Originals',
+//   ];
+//    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+//   const [data, setdata] = useState('');
+//   const [query, setquery] = useState('');
+//   const handleSelectCategory = (category: string): void => {
+//     setSelected(selected === category ? null : category);
+//   };
+
+//   const searchdata = categories.filter(item =>
+//     item.toLowerCase().includes(query.toLowerCase()),
+//   );
+//   useEffect(() => {
+//     const fetchSelectedCategory = async () => {
+//       try {
+//         const category = await AsyncStorage.getItem('selectedCategory');
+//         if (category !== null) {
+//           setSelectedCategory(category);
+//           console.log('Category retrieved from AsyncStorage:', category);
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch category from AsyncStorage:', error);
+//       }
+//     };
+
+//     fetchSelectedCategory();
+//   }, []);
+
+//   return (
+//     <KeyboardAvoidingView style={{height: 600}}>
+//       <View style={categorStyle.container}>
+//         <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
+//         <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 17}]}>
+//           Select the category which you want to see.
+//         </Text>
+
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             alignItems: 'center',
+//             width: '100%',
+//             borderWidth: 1.5,
+//             borderColor: '#EDF1F3',
+//             borderRadius: 10,
+//             // paddingVertical: 1,
+//           }}>
+//           <Image
+//             source={require('../../../assets/images/ss.png')}
+//             style={{width: 18, height: 18, marginLeft: 10}}
+//           />
+
+//           <TextInput
+//             value={query}
+//             onChangeText={setquery}
+//             placeholder="Search By Interest"
+//             placeholderTextColor={'black'}
+//             style={{
+//               // borderWidth: 1.5,
+//               // borderRadius: 8,
+//               paddingVertical: 10,
+//               fontSize: 15,
+//               fontFamily: Fonts.medium,
+//               fontWeight: '400',
+//               marginLeft: 10,
+//               color: 'black',
+//               // borderColor: '#EDF1F3',
+//               // paddingLeft: 20,
+//               // width:"100%"
+//               // backgroundColor:"red",
+//               flex: 1,
+//             }}
+//           />
+//         </View>
+
+//         <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
+//           {searchdata.map((category, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={{
+//                 flexDirection: 'row',
+//                 alignItems: 'center',
+//                 paddingHorizontal: 8,
+//                 paddingVertical: 6,
+//                 backgroundColor:
+//                   selected === category ? 'transparent' : 'transparent',
+//                 borderRadius: 5,
+//               }}
+//               onPress={() => handleSelectCategory(category)}>
+//               <View
+//                 style={{
+//                   width: 20,
+//                   height: 20,
+//                   alignItems: 'center',
+//                   justifyContent: 'center',
+//                   borderWidth: 1,
+//                   borderColor: '#000',
+//                   backgroundColor:
+//                     selected === category ? 'transparent' : 'transparent',
+//                   marginRight: 10,
+//                   borderRadius: 5,
+//                 }}>
+//                 {selected === category && (
+//                   <Image
+//                     source={require('./../../../assets/images/check.png')}
+//                     style={{
+//                       width: 16,
+//                       height: 16,
+//                       resizeMode: 'contain',
+//                     }}
+//                   />
+//                 )}
+//               </View>
+//               <Text style={[FontStyle.regular, {color: Colors.black}]}>
+//                 {category}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+//     </KeyboardAvoidingView>
+//   );
+// };
+// const Categories = ({
+//   selected,
+//   setSelected,
+// }: {
+//   selected: string | null;
+//   setSelected: (category: string | null) => void;
+// }) => {
+//   const categories = [
+//     'Technology Health',
+//     'Physical Health',
+//     'Financial Health',
+//     'Community Health',
+//     'Occupational Health',
+//     'Environmental Health',
+//     'Medical Health',
+//     'Wholesome Originals',
+//   ];
+
+//   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+//   const [data, setdata] = useState('');
+//   const [query, setquery] = useState('');
+
+//   const handleSelectCategory = (category: string): void => {
+//     // Check if selectedCategory is 'All', if not, prevent category selection
+//     if (selectedCategory !== 'All') {
+//       return; // Do not allow selection or deselection
+//     }
+
+//     // Allow category selection/deselection only if 'All' is selected
+//     setSelected(selected === category ? null : category);
+//   };
+
+//   const searchdata = categories.filter(item =>
+//     item.toLowerCase().includes(query.toLowerCase()),
+//   );
+
+//   useEffect(() => {
+//     const fetchSelectedCategory = async () => {
+//       try {
+//         const category = await AsyncStorage.getItem('selectedCategory');
+//         if (category !== null) {
+//           setSelectedCategory(category);
+//           console.log('Category retrieved from AsyncStorage:', category);
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch category from AsyncStorage:', error);
+//       }
+//     };
+
+//     fetchSelectedCategory();
+//   }, []);
+
+//   return (
+//     <KeyboardAvoidingView style={{height: 600}}>
+//       <View style={categorStyle.container}>
+//         <Text style={[FontStyle.bold, {color: Colors.black}]}>Categories</Text>
+//         <Text style={[FontStyle.regular, {color: Colors.black, fontSize: 17}]}>
+//           Select the category which you want to see.
+//         </Text>
+
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             alignItems: 'center',
+//             width: '100%',
+//             borderWidth: 1.5,
+//             borderColor: '#EDF1F3',
+//             borderRadius: 10,
+//           }}>
+//           <Image
+//             source={require('../../../assets/images/ss.png')}
+//             style={{width: 18, height: 18, marginLeft: 10}}
+//           />
+
+//           <TextInput
+//             value={query}
+//             onChangeText={setquery}
+//             placeholder="Search By Interest"
+//             placeholderTextColor={'black'}
+//             style={{
+//               paddingVertical: 10,
+//               fontSize: 15,
+//               fontFamily: Fonts.medium,
+//               fontWeight: '400',
+//               marginLeft: 10,
+//               color: 'black',
+//               flex: 1,
+//             }}
+//           />
+//         </View>
+
+//         <View style={{paddingVertical: 0, paddingHorizontal: 10}}>
+//           {searchdata.map((category, index) => (
+//             <TouchableOpacity
+//               key={index}
+//               style={{
+//                 flexDirection: 'row',
+//                 alignItems: 'center',
+//                 paddingHorizontal: 8,
+//                 paddingVertical: 6,
+//                 backgroundColor:
+//                   selected === category ? 'transparent' : 'transparent',
+//                 borderRadius: 5,
+//               }}
+//               onPress={() => handleSelectCategory(category)}
+//               disabled={selectedCategory !== 'All'} // Disable interaction if the category is not 'All'
+//             >
+//               <View
+//                 style={{
+//                   width: 20,
+//                   height: 20,
+//                   alignItems: 'center',
+//                   justifyContent: 'center',
+//                   borderWidth: 1,
+//                   borderColor: '#000',
+//                   backgroundColor:
+//                     selected === category ? 'transparent' : 'transparent',
+//                   marginRight: 10,
+//                   borderRadius: 5,
+//                 }}>
+//                 {selected === category && (
+//                   <Image
+//                     source={require('./../../../assets/images/check.png')}
+//                     style={{
+//                       width: 16,
+//                       height: 16,
+//                       resizeMode: 'contain',
+//                     }}
+//                   />
+//                 )}
+//               </View>
+//               <Text style={[FontStyle.regular, {color: Colors.black}]}>
+//                 {category}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
+//       </View>
+//     </KeyboardAvoidingView>
+//   );
+// };

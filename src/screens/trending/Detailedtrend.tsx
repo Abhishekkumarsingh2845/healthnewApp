@@ -55,9 +55,9 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   const navigation = useNavigation();
   const [inviteLink, setInviteLink] = useState(null);
   const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
-  console.log('trendingschema', trendingArticles);
+  // console.log('trendingschema', trendingArticles);
   const articlevar = trendingArticles.map(item => item.article_id);
-  console.log('articlesid', articlevar);
+  // console.log('articlesid', articlevar);
   // const params = props.route.params;
   const articles = useQuery(Article);
   const details = articles.find(
@@ -168,10 +168,10 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
       );
       if (response.data.status) {
         setArticle(response.data.data);
-        console.log(
-          'response of the treding detailed articles',
-          response.data.data,
-        );
+        // console.log(
+        //   'response of the treding detailed articles',
+        //   response.data.data,
+        // );
       }
     } catch (error) {
       console.error('Error fetching article:', error);

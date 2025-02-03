@@ -123,11 +123,124 @@
 // const MemomizedCategories = Category;
 // export default memo(Categories);
 
+// import React, {useState, useMemo, memo} from 'react';
+// import {
+//   Image,
+//   Pressable,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   View,
+// } from 'react-native';
+// import {moderateScale} from 'react-native-size-matters';
+// import {FontStyle} from '../../config/style.config';
+// import {Colors} from '../../config/colors.config';
+// import {Fonts} from '../../config/font.config';
+// import {useCategory} from '../../store/category/category.hooks';
+// import { SvgUri } from 'react-native-svg';
 
+// const Categories = ({onCategoryChange}: {onCategoryChange: (category: string) => void;}) => {
+//   const {categories} = useCategory();
+//   const [activeCategory, setActiveCategory] = useState('All');
 
+//   return (
+//     <View style={style.container}>
+//       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+//         {categories.map((item, index) => {
+//           const isActive = activeCategory === item.catName;
 
+//           return (
+//             <Pressable
+//               key={index}
+//               onPress={() => {
+//                 setActiveCategory(item.catName);
+//                 onCategoryChange(item.catName); // Notify parent about category change
+//               }}>
+//               <MemomizedCategories
+//                 inActiveIcColor=""
+//                 {...item}
+//                 isActive={isActive}
+//               />
+//             </Pressable>
+//           );
+//         })}
+//       </ScrollView>
+//     </View>
+//   );
+// };
 
-import React, {useState, useMemo, memo} from 'react';
+// interface CategoryPropType {
+//   isActive?: boolean;
+//   inActiveIcColor: string;
+//   catName: string;
+//   catImageblack: string | ImageSourcePropType;
+// }
+
+// const Category = (props: CategoryPropType) => {
+//   const name = useMemo(() => props.catName.replace('-', ' '), [props.catName]);
+//   const img = useMemo(() => props.catImageblack, [props.catImageblack]);
+//   const isAll = props.catName === 'All';
+//   return (
+//     <View
+//       style={[
+//         style.catgoryContainer,
+//         {
+//           backgroundColor: props.isActive ? Colors.primary : Colors.white,
+//           borderColor: props.isActive ? Colors.primary : Colors.black,
+//           alignItems:"center",
+//           paddingHorizontal: isAll ? moderateScale(20) : moderateScale(14),
+//           paddingVertical: isAll ? moderateScale(10) : moderateScale(8),
+//         },
+//       ]}>
+//       {!isAll && (
+//         <View style ={{height : 25, width: 25}}>
+//           <SvgUri
+//           uri={img}
+//           onError={() => console.log('error svg')}
+//           width="100%"
+//           height="100%" />
+//         </View>
+//       )}
+//       <Text style={props.isActive ? style.activeTitle : style.inactiveTtitle}>
+//         {name}
+//       </Text>
+//     </View>
+//   );
+// };
+
+// const MemomizedCategories = memo(Category);
+
+// const style = StyleSheet.create({
+//   container: {
+//     marginTop: moderateScale(20),
+//     marginBottom: moderateScale(10),
+//   },
+//   catgoryContainer: {
+//     marginHorizontal: moderateScale(2),
+//     paddingHorizontal: moderateScale(14),
+//     backgroundColor: '#F2F4F7',
+//     borderRadius: moderateScale(20),
+//     flexDirection: 'row',
+//     gap: moderateScale(3),
+//     marginRight: moderateScale(8),
+//     paddingVertical: moderateScale(8),
+//     borderWidth: 1,
+//   },
+//   activeTitle: {
+//     fontFamily: Fonts.semibold,
+//     fontSize: moderateScale(14),
+//     color: Colors.white,
+//   },
+//   inactiveTtitle: {
+//     fontFamily: Fonts.regular,
+//     color: Colors.black,
+//     fontSize: moderateScale(14),
+//   },
+// });
+
+// export default memo(Categories);
+
+import React, {useState, useMemo, memo, useEffect} from 'react';
 import {
   Image,
   Pressable,
@@ -141,11 +254,22 @@ import {FontStyle} from '../../config/style.config';
 import {Colors} from '../../config/colors.config';
 import {Fonts} from '../../config/font.config';
 import {useCategory} from '../../store/category/category.hooks';
-import { SvgUri } from 'react-native-svg';
+import {SvgUri} from 'react-native-svg';
 
-const Categories = ({onCategoryChange}: {onCategoryChange: (category: string) => void}) => {
+const Categories = ({
+  activecat,
+  onCategoryChange,
+}: {
+  activecat:string
+  onCategoryChange: (category: string) => void;
+}) => {
   const {categories} = useCategory();
   const [activeCategory, setActiveCategory] = useState('All');
+  useEffect(() => {
+    if (activecat) {
+      setActiveCategory(activecat);
+    }
+  }, [activecat]);
 
   return (
     <View style={style.container}>
@@ -191,18 +315,19 @@ const Category = (props: CategoryPropType) => {
         {
           backgroundColor: props.isActive ? Colors.primary : Colors.white,
           borderColor: props.isActive ? Colors.primary : Colors.black,
-          alignItems:"center",
+          alignItems: 'center',
           paddingHorizontal: isAll ? moderateScale(20) : moderateScale(14),
           paddingVertical: isAll ? moderateScale(10) : moderateScale(8),
         },
       ]}>
       {!isAll && (
-        <View style ={{height : 25, width: 25}}>
+        <View style={{height: 25, width: 25}}>
           <SvgUri
-          uri={img}  
-          onError={() => console.log('error svg')}
-          width="100%" 
-          height="100%" />
+            uri={img}
+            onError={() => console.log('error svg')}
+            width="100%"
+            height="100%"
+          />
         </View>
       )}
       <Text style={props.isActive ? style.activeTitle : style.inactiveTtitle}>
@@ -243,27 +368,6 @@ const style = StyleSheet.create({
 });
 
 export default memo(Categories);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, {memo, useEffect, useState} from 'react';
 // import {

@@ -38,7 +38,7 @@ const Header = (props: ArticleType) => {
     Article.schema.name,
     objId,
   ) as ArticleType;
-  console.log('yyyyyyy', details);
+  // console.log('yyyyyyy', details);
   // const details = useGetArticlesById(new BSON.ObjectId(props._id)) as ArticleType;
   const {toggleLike} = useToggleLikeArticle();
   const dd = realm.objectForPrimaryKey(

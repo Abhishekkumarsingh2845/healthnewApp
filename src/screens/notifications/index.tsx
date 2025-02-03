@@ -526,94 +526,6 @@
 
 // export default Notifications;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
@@ -798,7 +710,13 @@ const Notifications = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => (
-          <TouchableOpacity style={styles.notificationContainer}>
+          <TouchableOpacity
+            style={styles.notificationContainer}
+            onPress={() =>
+              navigation.navigate('Detailedtrend', {
+                articleId: item.articleId,
+              })
+            }>
             {item.imageUrl ? (
               <Image
                 source={{uri: item.imageUrl}}
@@ -880,6 +798,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    marginLeft: 5,
   },
 });
 

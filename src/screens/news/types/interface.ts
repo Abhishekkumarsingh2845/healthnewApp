@@ -7,9 +7,11 @@ export interface NewsPropType extends StackScreenProps<RootStackParamList, 'News
     title: string,
     icon: ReactNode,
     type: NewListType
+    activeCategory?: string;
 }
 
 export interface HeaderPropType{
         icon:ReactNode,
         title: string,
+        activeCategory?: string;
 } 

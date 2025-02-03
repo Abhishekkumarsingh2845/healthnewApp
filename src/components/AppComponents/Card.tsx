@@ -284,51 +284,51 @@ const Card = props => {
   // console.log("props======>>>", props);
 
 
-  useEffect(() => {
-    appsFlyer.initSdk(
-      {
-        devKey: 'jM5UQCpNnhNqvHx6LV9S6h', // Replace with your AppsFlyer Dev Key
-        isDebug: true,
-        appId: '6740557794', // Replace with your App ID
-        onInstallConversionDataListener: true,
-        onDeepLinkListener: true,
-        timeToWaitForATTUserAuthorization: 10, // for iOS 14.5
-      },
-      result => {
-        // console.log('AppsFlyer SDK initialized:', result);
+  // useEffect(() => {
+  //   appsFlyer.initSdk(
+  //     {
+  //       devKey: 'jM5UQCpNnhNqvHx6LV9S6h', // Replace with your AppsFlyer Dev Key
+  //       isDebug: true,
+  //       appId: '6740557794', // Replace with your App ID
+  //       onInstallConversionDataListener: true,
+  //       onDeepLinkListener: true,
+  //       timeToWaitForATTUserAuthorization: 10, // for iOS 14.5
+  //     },
+  //     result => {
+  //       // console.log('AppsFlyer SDK initialized:', result);
 
-        // Set the OneLink template ID
-        appsFlyer.setAppInviteOneLinkID(
-          'PUci', // Replace with your OneLink template ID
-          result => {
-            // console.log('OneLink template ID set successfully:', result);
-          },
-          error => {
-            console.error('Error setting OneLink template ID:', error);
-          },
-        );
-      },
-      error => {
-        console.error('Error initializing AppsFlyer SDK:', error);
-      },
-    );
-  }, []);
+  //       // Set the OneLink template ID
+  //       appsFlyer.setAppInviteOneLinkID(
+  //         'PUci', // Replace with your OneLink template ID
+  //         result => {
+  //           // console.log('OneLink template ID set successfully:', result);
+  //         },
+  //         error => {
+  //           console.error('Error setting OneLink template ID:', error);
+  //         },
+  //       );
+  //     },
+  //     error => {
+  //       console.error('Error initializing AppsFlyer SDK:', error);
+  //     },
+  //   );
+  // }, []);
 
-  useEffect(() => {
-    // Handle deep links
-    const handleDeepLink = response => {
-      const deepLinkValue = response?.deepLinkValue; // Get the `deepLinkValue`
-      console.log('Deep link value:', deepLinkValue);
-      if (deepLinkValue === 'Intro') {
-        navigation.navigate('SplashScreen' as never); // Navigate to your MainNavigation screen
-      }
-    };
+  // useEffect(() => {
+  //   // Handle deep links
+  //   const handleDeepLink = response => {
+  //     const deepLinkValue = response?.deepLinkValue; // Get the `deepLinkValue`
+  //     console.log('Deep link value:', deepLinkValue);
+  //     if (deepLinkValue === 'Intro') {
+  //       navigation.navigate('SplashScreen' as never); // Navigate to your MainNavigation screen
+  //     }
+  //   };
 
-    appsFlyer.onDeepLink(handleDeepLink);
+  //   appsFlyer.onDeepLink(handleDeepLink);
 
-    // Clean up listener
-    return () => appsFlyer.onDeepLink(null);
-  }, []);
+  //   // Clean up listener
+  //   return () => appsFlyer.onDeepLink(null);
+  // }, []);
 
   const generateInviteLink = () => {
     // Generate the invite link

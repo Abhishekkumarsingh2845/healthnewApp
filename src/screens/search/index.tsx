@@ -1,435 +1,4 @@
 
-// import {
-//   FlatList,
-//   Text,
-//   View,
-//   Image,
-//   StyleSheet,
-//   TouchableOpacity,
-//   SafeAreaView,
-//   ActivityIndicator,
-// } from 'react-native';
-// import SearchBar from '../../components/SearchBar';
-// import {useEffect, useState} from 'react';
-// import {moderateScale} from 'react-native-size-matters';
-// import {Colors} from '../../config/colors.config';
-// import {Spacing} from '../../config/size.config';
-// import AppImage from '../../components/AppImage';
-// import {Icons} from '../../generated/image.assets';
-// import BackButton from '../../components/BackButton';
-// import {useNavigation} from '@react-navigation/native';
-// import {Fonts} from '../../config/font.config';
-// import React from 'react';
-
-// interface Article {
-//   _id: string;
-//   title: string;
-//   description: string;
-//   urlToImage: string;
-//   category: string;
-// }
-
-// const Search = () => {
-//   const [articles, setArticles] = useState<Article[]>([]);
-//   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [searchQuery, setSearchQuery] = useState('');
-//   const navigation = useNavigation(); // Navigation hook
-//   useEffect(() => {
-//     fetchArticles();
-//   }, []);
-
-//   const fetchArticles = (query: string = '') => {
-//     setLoading(true);
-//     const url = `http://15.206.16.230:4000/api/v1/android/published-articles?search=${query}`;
-//     fetch(url)
-//       .then(response => response.json())
-//       .then(data => {
-//         if (data.status) {
-//           setArticles(data.data.articles);
-//           setFilteredArticles(data.data.articles);
-//         }
-//       })
-//       .catch(error => {
-//         console.error('Error fetching data: ', error);
-//       })
-//       .finally(() => setLoading(false));
-//   };
-
-//   // Debounce function
-//   const debounce = (func: Function, delay: number) => {
-//     let timeoutId: NodeJS.Timeout;
-//     return (...args: any[]) => {
-//       clearTimeout(timeoutId);
-//       timeoutId = setTimeout(() => {
-//         func(...args);
-//       }, delay);
-//     };
-//   };
-
-//   const debouncedFetchArticles = debounce((query: string) => {
-//     fetchArticles(query);
-//   }, 1000); // Adjust the delay as needed
-
-//   const handleSearch = (query: string) => {
-//     setSearchQuery(query);
-//     debouncedFetchArticles(query);
-//   };
-
-//   const clearSearchQuery = () => {
-//     setSearchQuery('');
-//     setFilteredArticles([]);
-//   };
-
-//   if (loading) {
-//     return (
-//       <View style={{alignSelf:"center",justifyContent:"center",flex:1}}>
-//         <ActivityIndicator color={'black'} />
-//       </View>
-//     );
-//   }
-
-//   const handleArticlePress = (articleId: string) => {
-//     navigation.navigate('NewsDetail', {_id: articleId});
-//   };
-
-//   return (
-//     <View style={{paddingHorizontal: 12}}>
-//       <SafeAreaView />
-//       <View
-//         style={{
-//           flexDirection: 'row',
-//           alignItems: 'center',
-//           justifyContent: 'space-between',
-//           marginTop: 20,
-//         }}>
-//         <BackButton
-//           style={{marginLeft: moderateScale(12), position: 'relative'}}
-//           color={Colors.black}
-//           size={moderateScale(20)}
-//         />
-//         <SearchBar
-//       value={searchQuery}
-//           placeholder="Search"
-//           label="Search"
-//           type="input"
-//           labelStyle={{color: Colors.gray}}
-//           right={null}
-//           left={<AppImage source={Icons.ic_search} style={styles.searchIcon} />}
-//           containerStyle={styles.search}
-//           // onSubmit={handleSearch}
-//           onChange={handleSearch}
-//         />
-//       </View>
-
-//       <View
-//         style={{
-//           borderRadius: moderateScale(10),
-//           padding: moderateScale(4),
-//         }}>
-//         <Text
-//           style={[
-//             {
-//               color: Colors.black,
-//               paddingTop: moderateScale(10),
-//               fontSize: moderateScale(18),
-//               fontFamily: Fonts.medium,
-//               fontWeight: '700',
-//             },
-//           ]}>
-//           Recent Search
-//         </Text>
-//         <FlatList
-//           data={filteredArticles}
-//           keyExtractor={item => item._id}
-//           renderItem={({item}) => (
-//             <TouchableOpacity
-//               style={{width: '100%', flexDirection: 'row', marginTop: 10}}
-//               onPress={() => handleArticlePress(item._id)}
-//             >
-//               <Image
-//                 source={{uri: item.urlToImage}}
-//                 style={{width: 30, height: 30, resizeMode: 'contain'}}
-//               />
-//               <Text style={styles.articleTitle}>{item.title}</Text>
-//             </TouchableOpacity>
-//           )}
-//         />
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   search: {
-//     backgroundColor: '#9EA0A733',
-//     width: '90%',
-//     padding: moderateScale(5),
-//     justifyContent: 'flex-start',
-//   },
-//   searchIcon: {
-//     width: moderateScale(20),
-//     height: moderateScale(20),
-//     marginRight: moderateScale(4),
-//   },
-//   articleContainer: {
-//     marginBottom: 20,
-//   },
-//   articleImage: {
-//     width: '100%',
-//     height: 100,
-//     borderRadius: 8,
-//   },
-//   articleTitle: {
-//     fontSize: 15,
-//     fontFamily: Fonts.light,
-//     fontWeight: '700',
-//     // fontWeight:"400",
-//     marginTop: 8,
-//     marginLeft: 10,
-//     color: 'black',
-//   },
-//   articleDescription: {
-//     fontSize: 14,
-//     marginTop: 4,
-//   },
-//   articleCategory: {
-//     fontSize: 12,
-//     color: 'gray',
-//     marginTop: 4,
-//   },
-// });
-
-// export default Search;
-
-
-
-
-import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  ActivityIndicator,
-} from 'react-native';
-import SearchBar from '../../components/SearchBar';
-import {moderateScale} from 'react-native-size-matters';
-import {Colors} from '../../config/colors.config';
-import {Spacing} from '../../config/size.config';
-import AppImage from '../../components/AppImage';
-import {Icons} from '../../generated/image.assets';
-import BackButton from '../../components/BackButton';
-import {useNavigation} from '@react-navigation/native';
-import {Fonts} from '../../config/font.config';
-
-interface Article {
-  _id: string;
-  title: string;
-  description: string;
-  urlToImage: string;
-  category: string;
-}
-
-const Search = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigation = useNavigation(); // Navigation hook
-
-  useEffect(() => {
-    fetchArticles();
-  }, []);
-
-  const fetchArticles = (query: string = '') => {
-    setLoading(true);
-    const url = `http://15.206.16.230:4000/api/v1/android/published-articles?limit=10&search=${query}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.status) {
-          setArticles(data.data.articles);
-          setFilteredArticles(data.data.articles);
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching data: ', error);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  // Debounce function
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: any[]) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
-
-  const debouncedFetchArticles = debounce((query: string) => {
-    fetchArticles(query);
-  }, 2000); // Adjust the delay as needed
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    debouncedFetchArticles(query);
-  };
-
-  const handleArticlePress = (articleId: string) => {
-    navigation.navigate('NewsDetail', {_id: articleId});
-  };
-
-  const renderUniqueArticles = () => {
-    // Remove duplicates by titles using a Set
-    const uniqueTitles = new Set<string>();
-    const uniqueArticles = filteredArticles.filter(article => {
-      if (!uniqueTitles.has(article.title)) {
-        uniqueTitles.add(article.title);
-        return true;
-      }
-      return false;
-    });
-    return uniqueArticles;
-  };
-
-  if (loading) {
-    return (
-      <View style={{alignSelf: 'center', justifyContent: 'center', flex: 1}}>
-        <ActivityIndicator color={'black'} />
-      </View>
-    );
-  }
-
-  return (
-    <View style={{paddingHorizontal: 12}}>
-      <SafeAreaView />
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginTop: 20,
-        }}>
-        <BackButton
-          style={{marginLeft: moderateScale(12), position: 'relative'}}
-          color={Colors.black}
-          size={moderateScale(20)}
-        />
-        <SearchBar
-          value={searchQuery}
-          placeholder="Search"
-          label="Search"
-          type="input"
-          labelStyle={{color: Colors.gray}}
-          right={null}
-          left={<AppImage source={Icons.ic_search} style={styles.searchIcon} />}
-          containerStyle={styles.search}
-          onChange={handleSearch}
-        />
-      </View>
-
-      <View
-        style={{
-          borderRadius: moderateScale(10),
-          padding: moderateScale(4),
-        }}>
-        {/* <Text
-          style={[
-            {
-              color: Colors.black,
-              paddingTop: moderateScale(10),
-              fontSize: moderateScale(18),
-              fontFamily: Fonts.medium,
-              fontWeight: '700',
-            },
-          ]}>
-          Recent Search
-        </Text> */}
-
-        {/* Render the FlatList only if the user has searched */}
-        {searchQuery ? (
-          <FlatList
-            data={renderUniqueArticles()}
-            keyExtractor={item => item._id}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={{width: '100%', flexDirection: 'row', marginTop: 10}}
-                onPress={() => handleArticlePress(item._id)}>
-                <Image
-                  source={{uri: item.urlToImage}}
-                  style={{width: 30, height: 30, resizeMode: 'contain'}}
-                />
-                <Text style={styles.articleTitle}>{item.title}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        ) : (
-          <Text style={{textAlign: 'center', color: Colors.gray, marginTop: 20}}>
-            {/* No articles to display. Start searching! */}
-          </Text>
-        )}
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  search: {
-    backgroundColor: '#9EA0A733',
-    width: '90%',
-    padding: moderateScale(5),
-    justifyContent: 'flex-start',
-  },
-  searchIcon: {
-    width: moderateScale(20),
-    height: moderateScale(20),
-    marginRight: moderateScale(4),
-  },
-  articleTitle: {
-    fontSize: 15,
-    fontFamily: Fonts.light,
-    fontWeight: '700',
-    marginTop: 8,
-    marginLeft: 10,
-    color: 'black',
-  },
-});
-
-export default Search;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -466,6 +35,7 @@ export default Search;
 // import BackButton from '../../components/BackButton';
 // import {useNavigation} from '@react-navigation/native';
 // import {Fonts} from '../../config/font.config';
+// import { useGetArticles } from '../../store/article/article.hooks';
 
 // interface Article {
 //   _id: string;
@@ -474,18 +44,22 @@ export default Search;
 //   urlToImage: string;
 //   category: string;
 // }
-
 // const Search = () => {
 //   const [articles, setArticles] = useState<Article[]>([]);
 //   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
-//   const [loading, setLoading] = useState(false);
+//   const [loading, setLoading] = useState(true);
 //   const [searchQuery, setSearchQuery] = useState('');
-//   const navigation = useNavigation();
+//   const navigation = useNavigation(); // Navigation hook
+//   const allArticles = useGetArticles();
+//   console.log('allArticles==>> in the search baaar', allArticles);
 
-//   // Function to fetch articles from the API
+//   useEffect(() => {
+//     fetchArticles();
+//   }, []);
+
 //   const fetchArticles = (query: string = '') => {
 //     setLoading(true);
-//     const url = `http://15.206.16.230:4000/api/v1/android/published-articles?search=${query}`;
+//     const url = `http://15.206.16.230:4000/api/v1/android/published-articles?limit=10&search=${query}`;
 //     fetch(url)
 //       .then(response => response.json())
 //       .then(data => {
@@ -500,7 +74,7 @@ export default Search;
 //       .finally(() => setLoading(false));
 //   };
 
-//   // Debounce function to delay API calls during search
+//   // Debounce function
 //   const debounce = (func: Function, delay: number) => {
 //     let timeoutId: NodeJS.Timeout;
 //     return (...args: any[]) => {
@@ -513,7 +87,7 @@ export default Search;
 
 //   const debouncedFetchArticles = debounce((query: string) => {
 //     fetchArticles(query);
-//   }, 1000);
+//   }, 3000); // Adjust the delay as needed
 
 //   const handleSearch = (query: string) => {
 //     setSearchQuery(query);
@@ -524,20 +98,39 @@ export default Search;
 //     navigation.navigate('NewsDetail', {_id: articleId});
 //   };
 
+//   const renderUniqueArticles = () => {
+//     // Remove duplicates by titles using a Set
+//     const uniqueTitles = new Set<string>();
+//     const uniqueArticles = filteredArticles.filter(article => {
+//       if (!uniqueTitles.has(article.title)) {
+//         uniqueTitles.add(article.title);
+//         return true;
+//       }
+//       return false;
+//     });
+//     return uniqueArticles;
+//   };
+
 //   if (loading) {
 //     return (
-//       <View style={styles.loadingContainer}>
-//         <ActivityIndicator size="large" color="red" />
+//       <View style={{alignSelf: 'center', justifyContent: 'center', flex: 1}}>
+//         <ActivityIndicator color={'black'} />
 //       </View>
 //     );
 //   }
 
 //   return (
-//     <View style={styles.container}>
+//     <View style={{paddingHorizontal: 12}}>
 //       <SafeAreaView />
-//       <View style={styles.header}>
+//       <View
+//         style={{
+//           flexDirection: 'row',
+//           alignItems: 'center',
+//           justifyContent: 'space-between',
+//           marginTop: 20,
+//         }}>
 //         <BackButton
-//           style={styles.backButton}
+//           style={{marginLeft: moderateScale(12), position: 'relative'}}
 //           color={Colors.black}
 //           size={moderateScale(20)}
 //         />
@@ -549,31 +142,51 @@ export default Search;
 //           labelStyle={{color: Colors.gray}}
 //           right={null}
 //           left={<AppImage source={Icons.ic_search} style={styles.searchIcon} />}
-//           containerStyle={styles.searchBar}
+//           containerStyle={styles.search}
 //           onChange={handleSearch}
 //         />
 //       </View>
 
-//       <View style={styles.content}>
-//         <Text style={styles.title}>Recent Search</Text>
-//         {filteredArticles.length > 0 ? (
+//       <View
+//         style={{
+//           borderRadius: moderateScale(10),
+//           padding: moderateScale(4),
+//         }}>
+//         {/* <Text
+//           style={[
+//             {
+//               color: Colors.black,
+//               paddingTop: moderateScale(10),
+//               fontSize: moderateScale(18),
+//               fontFamily: Fonts.medium,
+//               fontWeight: '700',
+//             },
+//           ]}>
+//           Recent Search
+//         </Text> */}
+
+//         {/* Render the FlatList only if the user has searched */}
+//         {searchQuery ? (
 //           <FlatList
-//             data={filteredArticles}
+//             data={renderUniqueArticles()}
 //             keyExtractor={item => item._id}
 //             renderItem={({item}) => (
 //               <TouchableOpacity
-//                 style={styles.articleItem}
+//                 style={{width: '100%', flexDirection: 'row', marginTop: 10}}
 //                 onPress={() => handleArticlePress(item._id)}>
 //                 <Image
 //                   source={{uri: item.urlToImage}}
-//                   style={styles.articleImage}
+//                   style={{width: 30, height: 30, resizeMode: 'contain'}}
 //                 />
 //                 <Text style={styles.articleTitle}>{item.title}</Text>
 //               </TouchableOpacity>
 //             )}
 //           />
 //         ) : (
-//           <Text style={styles.noResultsText}></Text>
+//           <Text
+//             style={{textAlign: 'center', color: Colors.gray, marginTop: 20}}>
+//             {/* No articles to display. Start searching! */}
+//           </Text>
 //         )}
 //       </View>
 //     </View>
@@ -581,27 +194,7 @@ export default Search;
 // };
 
 // const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingHorizontal: 12,
-//     backgroundColor: Colors.white,
-//   },
-//   loadingContainer: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   header: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     justifyContent: 'space-between',
-//     marginTop: 20,
-//   },
-//   backButton: {
-//     marginLeft: moderateScale(12),
-//     position: 'relative',
-//   },
-//   searchBar: {
+//   search: {
 //     backgroundColor: '#9EA0A733',
 //     width: '90%',
 //     padding: moderateScale(5),
@@ -612,27 +205,6 @@ export default Search;
 //     height: moderateScale(20),
 //     marginRight: moderateScale(4),
 //   },
-//   content: {
-//     borderRadius: moderateScale(10),
-//     padding: moderateScale(4),
-//   },
-//   title: {
-//     color: Colors.black,
-//     paddingTop: moderateScale(10),
-//     fontSize: moderateScale(18),
-//     fontFamily: Fonts.medium,
-//     fontWeight: '700',
-//   },
-//   articleItem: {
-//     width: '100%',
-//     flexDirection: 'row',
-//     marginTop: 10,
-//   },
-//   articleImage: {
-//     width: 30,
-//     height: 30,
-//     resizeMode: 'contain',
-//   },
 //   articleTitle: {
 //     fontSize: 15,
 //     fontFamily: Fonts.light,
@@ -641,11 +213,386 @@ export default Search;
 //     marginLeft: 10,
 //     color: 'black',
 //   },
-//   noResultsText: {
-//     color: Colors.gray,
-//     marginTop: 10,
-//     textAlign: 'center',
-//   },
 // });
 
 // export default Search;
+
+
+// import React, { useEffect, useState } from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   Image,
+//   ActivityIndicator,
+//   SafeAreaView,
+// } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+// import { moderateScale } from 'react-native-size-matters';
+// import SearchBar from '../../components/SearchBar';
+
+// import {Colors} from '../../config/colors.config';
+// import {Spacing} from '../../config/size.config';
+// import AppImage from '../../components/AppImage';
+// import {Icons} from '../../generated/image.assets';
+// import BackButton from '../../components/BackButton';
+
+// import {Fonts} from '../../config/font.config';
+// import { useGetArticles } from '../../store/article/article.hooks';// Hook to fetch all articles
+
+// const Search = () => {
+//   const [articles, setArticles] = useState([]);
+//   const [filteredArticles, setFilteredArticles] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [searchQuery, setSearchQuery] = useState('');
+//   const navigation = useNavigation(); // Navigation hook
+//   const allArticles = useGetArticles(); // All articles from the hook
+//   console.log('allArticles==>> in the search bar', allArticles);
+
+//   useEffect(() => {
+//     fetchArticles();
+//   }, []);
+
+//   const fetchArticles = (query = '') => {
+//     setLoading(true);
+//     const url = `http://15.206.16.230:4000/api/v1/android/published-articles?limit=10&search=${query}`;
+//     fetch(url)
+//       .then(response => response.json())
+//       .then(data => {
+//         if (data.status) {
+//           const fetchedArticles = data.data.articles;
+
+//           // Filter articles based on matching titles with allArticles
+//           const matchedArticles = fetchedArticles.filter(fetchedArticle =>
+//             allArticles.some(
+//               existingArticle => existingArticle.title === fetchedArticle.title
+//             )
+//           );
+
+//           setArticles(matchedArticles);
+//           setFilteredArticles(matchedArticles);
+//         }
+//       })
+//       .catch(error => {
+//         console.error('Error fetching data: ', error);
+//       })
+//       .finally(() => setLoading(false));
+//   };
+
+//   // Debounce function
+//   const debounce = (func, delay) => {
+//     let timeoutId;
+//     return (...args) => {
+//       clearTimeout(timeoutId);
+//       timeoutId = setTimeout(() => {
+//         func(...args);
+//       }, delay);
+//     };
+//   };
+
+//   const debouncedFetchArticles = debounce((query) => {
+//     fetchArticles(query);
+//   }, 5000); // Adjust the delay as needed
+
+//   const handleSearch = (query) => {
+//     setSearchQuery(query);
+//     debouncedFetchArticles(query);
+//   };
+
+//   const handleArticlePress = (articleId) => {
+//     navigation.navigate('NewsDetail', { _id: articleId });
+//   };
+
+//   const renderUniqueArticles = () => {
+//     // Remove duplicates by titles using a Set
+//     const uniqueTitles = new Set();
+//     const uniqueArticles = filteredArticles.filter(article => {
+//       if (!uniqueTitles.has(article.title)) {
+//         uniqueTitles.add(article.title);
+//         return true;
+//       }
+//       return false;
+//     });
+//     return uniqueArticles;
+//   };
+
+//   if (loading) {
+//     return (
+//       <View style={{ alignSelf: 'center', justifyContent: 'center', flex: 1 }}>
+//         <ActivityIndicator color={'black'} />
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <View style={{ paddingHorizontal: 12 }}>
+//       <SafeAreaView />
+//       <View
+//         style={{
+//           flexDirection: 'row',
+//           alignItems: 'center',
+//           justifyContent: 'space-between',
+//           marginTop: 20,
+//         }}>
+//         <BackButton
+//           style={{ marginLeft: moderateScale(12), position: 'relative' }}
+//           color={Colors.black}
+//           size={moderateScale(20)}
+//         />
+//         <SearchBar
+//           value={searchQuery}
+//           placeholder="Search"
+//           label="Search"
+//           type="input"
+//           labelStyle={{ color: Colors.gray }}
+//           right={null}
+//           left={<AppImage source={Icons.ic_search} style={styles.searchIcon} />}
+//           containerStyle={styles.search}
+//           onChange={handleSearch}
+//         />
+//       </View>
+
+//       <View
+//         style={{
+//           borderRadius: moderateScale(10),
+//           padding: moderateScale(4),
+//         }}>
+//         {searchQuery ? (
+//           <FlatList
+//             data={renderUniqueArticles()}
+//             keyExtractor={item => item._id}
+//             renderItem={({ item }) => (
+//               <TouchableOpacity
+//                 style={{ width: '100%', flexDirection: 'row', marginTop: 10 }}
+//                 onPress={() => handleArticlePress(item._id)}>
+//                 <Image
+//                   source={{ uri: item.urlToImage }}
+//                   style={{ width: 30, height: 30, resizeMode: 'contain' }}
+//                 />
+//                 <Text style={styles.articleTitle}>{item.title}</Text>
+//               </TouchableOpacity>
+//             )}
+//           />
+//         ) : (
+//           <Text
+//             style={{ textAlign: 'center', color: Colors.gray, marginTop: 20 }}>
+  
+//           </Text>
+//         )}
+//       </View>
+//     </View>
+//   );
+// };
+
+// const styles = {
+//   searchIcon: {
+//     width: moderateScale(16),
+//     height: moderateScale(16),
+//     resizeMode: 'contain',
+//   },
+//   search: {
+//     flex: 1,
+//     marginHorizontal: moderateScale(8),
+//   },
+//   articleTitle: {
+//     marginLeft: moderateScale(10),
+//     fontSize: moderateScale(14),
+//     color: Colors.black,
+//   },
+// };
+
+// export default Search;
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  SafeAreaView,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { moderateScale } from 'react-native-size-matters';
+import SearchBar from '../../components/SearchBar';
+
+import { Colors } from '../../config/colors.config';
+import { Spacing } from '../../config/size.config';
+import AppImage from '../../components/AppImage';
+import { Icons } from '../../generated/image.assets';
+import BackButton from '../../components/BackButton';
+
+import { Fonts } from '../../config/font.config';
+import { useGetArticles } from '../../store/article/article.hooks'; // Hook to fetch all articles
+
+const Search = () => {
+  const [articles, setArticles] = useState([]);
+  const [filteredArticles, setFilteredArticles] = useState([]);
+  console.log("filteredArticles==>>",filteredArticles);
+  
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigation = useNavigation(); // Navigation hook
+  const allArticles = useGetArticles(); // All articles from the hook
+  let debounceTimeout; // Timeout reference for debounce
+
+  // useEffect(() => {
+  //   fetchArticles(); // Fetch initial articles
+  // }, []);
+
+  const fetchArticles = (query = '') => {
+    console.log("herer")
+    setLoading(true);
+    const url = `http://15.206.16.230:4000/api/v1/android/published-articles?limit=10&search=${query}`;
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status) {
+          const fetchedArticles = data.data.articles;
+
+          // Filter articles based on matching titles with allArticles
+          const matchedArticles = fetchedArticles.filter(fetchedArticle =>
+            allArticles.some(
+              existingArticle => existingArticle.title === fetchedArticle.title
+            )
+          );
+
+          // setArticles(matchedArticles);
+          setFilteredArticles(matchedArticles);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error);
+      })
+      .finally(() => setLoading(false));
+  };
+
+ const debounce = (fn, delay) => {
+  let timeOutId = null;
+  return (query) => {
+    if(timeOutId){
+      clearTimeout(timeOutId);
+    }
+
+    timeOutId = setTimeout(() => {
+      console.log("query",query)
+      fn(query)
+    },delay)
+
+  }
+ }
+
+ const debouncedSearch = debounce((query) =>{
+   if(query.length == 0 ) {
+     return setFilteredArticles([])
+   }
+    fetchArticles(query); 
+} , 1000)
+
+  
+
+  const handleArticlePress = (articleId) => {
+    navigation.navigate('NewsDetail', { _id: articleId });
+  };
+
+  const renderUniqueArticles = () => {
+    // Remove duplicates by titles using a Set
+    if(filteredArticles.length === 0) return 
+    const uniqueTitles = new Set();
+    const uniqueArticles = filteredArticles.filter(article => {
+      if (!uniqueTitles.has(article.title)) {
+        uniqueTitles.add(article.title);
+        return true;
+      }
+      return false;
+    });
+    return uniqueArticles;
+  };
+
+  // if (loading) {
+  //   return (
+  //     <View style={{ alignSelf: 'center', justifyContent: 'center', flex: 1 }}>
+  //       <ActivityIndicator color={'black'} />
+  //     </View>
+  //   );
+  // }
+
+  return (
+    <View style={{ paddingHorizontal: 12 }}>
+      <SafeAreaView />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 20,
+        }}>
+        <BackButton
+          style={{ marginLeft: moderateScale(12), position: 'relative' }}
+          color={Colors.black}
+          size={moderateScale(20)}
+        />
+        <SearchBar
+          value={searchQuery}
+          placeholder="Search"
+          label="Search"
+          type="input"
+          labelStyle={{ color: Colors.gray }}
+          right={null}
+          left={<AppImage source={Icons.ic_search} style={styles.searchIcon} />}
+          containerStyle={styles.search}
+          onChange={(text) => debouncedSearch(text)}
+        />
+      </View>
+
+      <View
+        style={{
+          borderRadius: moderateScale(10),
+          padding: moderateScale(4),
+        }}>
+        {filteredArticles.length > 0 ? (
+          <FlatList
+            data={renderUniqueArticles()}
+            keyExtractor={item => item._id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={{ width: '100%', flexDirection: 'row', marginTop: 10 }}
+                onPress={() => handleArticlePress(item._id)}>
+                <Image
+                  source={{ uri: item.urlToImage }}
+                  style={{ width: 30, height: 30, resizeMode: 'contain' }}
+                />
+                <Text style={styles.articleTitle}>{item.title}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <Text
+            style={{ textAlign: 'center', color: Colors.gray, marginTop: 20 }}>
+         
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+};
+
+const styles = {
+  searchIcon: {
+    width: moderateScale(16),
+    height: moderateScale(16),
+    resizeMode: 'contain',
+  },
+  search: {
+    flex: 1,
+    marginHorizontal: moderateScale(8),
+  },
+  articleTitle: {
+    marginLeft: moderateScale(10),
+    fontSize: moderateScale(14),
+    color: Colors.black,
+  },
+};
+
+export default Search;

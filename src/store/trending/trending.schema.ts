@@ -18,7 +18,7 @@
 
 // trending.schema.ts]
 
-import Realm from 'realm';
+import { Realm } from '@realm/react';
 
 class TrendingArticle extends Realm.Object {
   _id!: Realm.BSON.ObjectId;

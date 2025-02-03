@@ -23,7 +23,7 @@ export const useCategory = () => {
         updatedAt: currentDate,
       });
       if (res.response.length > 0) {
-        console.log('->->', res);
+        // console.log('->->', res);
         const list: Array<CategoryType> = res.response;
         list.forEach((item, index) => {
             // console.log('------------------------->', list.length);

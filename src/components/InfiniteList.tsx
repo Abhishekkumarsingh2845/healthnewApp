@@ -1,4 +1,5 @@
 import axios from "axios";
+import React from "react";
 import { memo, useEffect, useState } from "react"
 import { ActivityIndicator, FlatList, FlatListProps, RefreshControlProps, Text, View } from "react-native"
 type DataType = { data: Array<any>, totalPages: number } | null;
