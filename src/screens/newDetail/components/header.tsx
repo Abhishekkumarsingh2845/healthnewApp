@@ -180,27 +180,6 @@ const Header = (props: ArticleType) => {
             tintColor={details.isLiked ? Colors.primary : Colors.black}
           />
         </Pressable>
-
-        {/* <Pressable
-  onPress={() => {
-    toggleLike(props._id); // Trigger your like toggle function
-  }}
->
-  <Image
-    resizeMode={'contain'}
-    source={
-      (dd?.isLiked || details?.isLiked) // Check if either `dd` or `details` has `isLiked`
-        ? Icons.ic_active_love
-        : Icons.ic_heart
-    }
-    style={style.icon}
-    tintColor={
-      (dd?.isLiked || details?.isLiked) // Change the tint color based on `isLiked` status
-        ? Colors.primary
-        : Colors.black
-    }
-  /> */}
-        {/* </Pressable> */}
         <Pressable
           onPress={generateInviteLink}
           style={[style.iconContainer, style.otherIconsContainer]}>
@@ -223,28 +202,3 @@ const style = StyleSheet.create({
 });
 export default Header;
 
-// import { StyleSheet, Text, TextInput, View } from 'react-native'
-// import React, { useState } from 'react'
-
-// const header = () => {
-//   const data=["sncns","diosvisdhv"];
-//   const [query,setquery] = useState("");
-//   const search = data.filter(item=>item.includes(data));
-//   return (
-
-//     <View>
-//       <TextInput value={query}
-//       onChange={setquery}/>
-//      {search.map((item,index)=>(
-//      <View key={index}>
-//      <Text>header</Text>
-// <Text>ldnsvjnb</Text>
-// </View>
-//     ))}
-//     </View>
-//   )
-// }
-
-// export default header
-
-// const styles = StyleSheet.create({})

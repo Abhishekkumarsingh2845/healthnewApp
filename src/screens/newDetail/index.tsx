@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Platform,
   ScrollView,
@@ -27,7 +27,7 @@ import LottieView from 'lottie-react-native';
 import {Lottie} from '../../generated/image.assets';
 import {Image} from 'react-native';
 import {useToggleTrendingLike} from '../../store/trending/trendinghook';
-import { SvgUri } from 'react-native-svg';
+import {SvgUri} from 'react-native-svg';
 
 export interface NewsDetailsPropType
   extends StackScreenProps<RootStackParamList, 'NewsDetail'> {
@@ -56,12 +56,10 @@ const NewsDetail = (props: NewsDetailsPropType) => {
     return null;
   };
 
-
   const {toggleLike} = useToggleTrendingLike();
   const params = props.route.params || {}; // Safely handle missing params
   const Nav = useNavigation<NavigationProp<RootStackParamList>>();
 
- 
   const articles = useQuery(Article); // Fetch all articles
   const objId = params._id; // Assuming _id is passed directly as a string
   console.log('artilces stored in the lastest', articles);
@@ -98,13 +96,12 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                 // marginVertical: moderateScale(10),
                 flexDirection: 'row',
               }}>
-             
               <SvgUri
-                              uri={getCategoryImageUrl(details.category)}
-                              onError={() => console.log('error svg')}
-                              width="35"
-                              height="35"
-                            />
+                uri={getCategoryImageUrl(details.category)}
+                onError={() => console.log('error svg')}
+                width="35"
+                height="35"
+              />
               <Text
                 style={[
                   FontStyle.bold,
@@ -177,29 +174,6 @@ const NewsDetail = (props: NewsDetailsPropType) => {
           </>
         )}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <View
           style={{
             flexDirection: 'row',
@@ -234,8 +208,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
             {articles
               .filter(article => article._id.toString() !== objId) // Exclude the current article by its _id
               .map((item, index) => (
-                   <Card
-                   onClick={() => {
+                <Card
+                  onClick={() => {
                     const id = item._id.toHexString();
                     Nav.navigate('NewsDetail', {
                       _id: id,
@@ -253,11 +227,8 @@ const NewsDetail = (props: NewsDetailsPropType) => {
                   style={{marginRight: moderateScale(10)}}
                   onLike={() => {
                     toggleLike(item?._id as any);
-                    
                   }}
-                 
                 />
-
               ))}
           </ScrollView>
         ) : (

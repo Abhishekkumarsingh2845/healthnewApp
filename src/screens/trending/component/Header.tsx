@@ -96,29 +96,3 @@ const style = StyleSheet.create({
   },
 });
 export default Header;
-
-// import { StyleSheet, Text, TextInput, View } from 'react-native'
-// import React, { useState } from 'react'
-
-// const header = () => {
-//   const data=["sncns","diosvisdhv"];
-//   const [query,setquery] = useState("");
-//   const search = data.filter(item=>item.includes(data));
-//   return (
-
-//     <View>
-//       <TextInput value={query}
-//       onChange={setquery}/>
-//      {search.map((item,index)=>(
-//      <View key={index}>
-//      <Text>header</Text>
-// <Text>ldnsvjnb</Text>
-// </View>
-//     ))}
-//     </View>
-//   )
-// }
-
-// export default header
-
-// const styles = StyleSheet.create({})
