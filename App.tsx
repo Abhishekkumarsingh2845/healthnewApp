@@ -1,11 +1,136 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import IntailizeApp from './src/components/IntializeApp';
 import {RealmProvider, useRealm} from '@realm/react';
 // import { realmConfig } from './src/store';
 import {realmConfig} from './src/store';
-import {SafeAreaView} from 'react-native';
+import {Alert, Platform, SafeAreaView} from 'react-native';
 import { LogBox } from 'react-native';
+import axios from 'axios';
+
+import {useNavigation} from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
+import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function App(): React.JSX.Element {
+
+
+
+  const [notifications, setNotifications] = useState([]);
+
+  // Save token to your API
+  const saveTokenToApi = async (deviceId, fcmToken) => {
+    try {
+      const response = await axios.post(
+        'http://15.206.16.230:4000/api/v1/android/savingtokendata',
+        { deviceId, fcmToken },
+      );
+      console.log('Success saving the FCM token and Device ID:', response.data);
+    } catch (error) {
+      console.error('Error saving token to API:', error);
+      Alert.alert('Error', 'Failed to save token to API');
+    }
+  };
+
+  // Retrieve and send the FCM token
+  const getFCMToken = async () => {
+    try {
+      await messaging().registerDeviceForRemoteMessages();
+      const fcmToken = await messaging().getToken();
+      console.log('FCM Token:', fcmToken);
+      const deviceId = await DeviceInfo.getUniqueId();
+      console.log('Device ID:', deviceId);
+      saveTokenToApi(deviceId, fcmToken);
+    } catch (error) {
+      console.error('Error initializing FCM:', error);
+    }
+  };
+
+  // Request permission and initialize token retrieval
+  const initializeFCM = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      console.log('Notification permission granted.');
+      await getFCMToken();
+    } else {
+      console.log('Notification permission denied.');
+    }
+  };
+
+  // Save notifications to storage (optional)
+  const saveNotificationsToStorage = async (newNotifications) => {
+    try {
+      await AsyncStorage.setItem(
+        'notifications',
+        JSON.stringify(newNotifications),
+      );
+    } catch (error) {
+      console.error('Error saving notifications to storage:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Initialize FCM token and permission
+    initializeFCM();
+
+    // Load any previously stored notifications if needed
+    (async () => {
+      const storedNotifications = await AsyncStorage.getItem('notifications');
+      if (storedNotifications) {
+        setNotifications(JSON.parse(storedNotifications));
+      }
+    })();
+
+    // Global foreground notification listener
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('Foreground notification:', remoteMessage);
+      const {
+        notification: { title, body } = {},
+        data,
+      } = remoteMessage;
+      
+      const imageUrl = data?.['fcm_options']?.['image'] || null;
+
+      setNotifications(prev => {
+        const updatedNotifications = [
+          {
+            title: title || 'No Title',
+            body: body || 'No Body',
+            imageUrl: imageUrl,
+            articleId: data?.articleId || 'No Article ID',
+            category: data?.category || 'No Category',
+            updatedAt: data?.updatedAt || new Date().toISOString(),
+          },
+          ...prev,
+        ];
+        saveNotificationsToStorage(updatedNotifications);
+        return updatedNotifications.sort(
+          (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
+        );
+      });
+    });
+
+    // Handle notifications when the app is opened from the background
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('Notification opened from background:', remoteMessage);
+      // Here you might want to navigate using a global navigation ref or other logic
+    });
+
+    // Handle notifications when the app is opened from a quit state
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log('App opened from terminated state:', remoteMessage);
+          // Handle navigation or other logic
+        }
+      });
+
+    // Cleanup listener on unmount
+    return unsubscribe;
+  }, []);
   // LogBox.ignoreAllLogs();
   return (
     <RealmProvider schema={realmConfig} deleteRealmIfMigrationNeeded={true}>
@@ -15,6 +140,9 @@ function App(): React.JSX.Element {
 }
 
 export default App;
+
+
+
 
 // import React, {useEffect} from 'react';
 // import {View, Text} from 'react-native';
@@ -57,110 +185,5 @@ export default App;
 
 // export default App;
 
-// import React, { useEffect } from 'react';
-// import { Alert,Text,View } from 'react-native';
-// import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
-// const App: React.FC = () => {
-//   useEffect(() => {
-//     // Request permission for notifications
-//     const requestPermission = async () => {
-//       const authStatus = await messaging().requestPermission();
-//       const enabled =
-//         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-//         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-//       if (enabled) {
-//         console.log('Notification permission granted.');
-//       } else {
-//         console.log('Notification permission denied.');
-//       }
-//     };
-
-//     requestPermission();
-
-//     // Listen for notifications when the app is in the foreground
-//     const unsubscribe = messaging().onMessage(
-//       async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
-//         console.log('Foreground notification:', remoteMessage);
-//         if (remoteMessage.notification) {
-//           Alert.alert(
-//             remoteMessage.notification.title ?? 'No Title',
-//             remoteMessage.notification.body ?? 'No Body'
-//           );
-//         }
-//       }
-//     );
-
-//     // Clean up the listener when the component unmounts
-//     return unsubscribe;
-//   }, []);
-
-//   return (
-//     <View style={{flex:1}}>
-//       <Text>notiification</Text>
-//     </View>
-//   ); // Replace with your app's UI components
-// };
-
-// export default App;
-
-// import React from 'react';
-// import {View, Text, Button, StyleSheet} from 'react-native';
-// import {NavigationContainer} from '@react-navigation/native';
-// import {createStackNavigator} from '@react-navigation/stack';
-// import {WebView} from 'react-native-webview';
-
-// type RootStackParamList = {
-//   Home: undefined;
-//   WebViewScreen: {url: string};
-// };
-
-// const Stack = createStackNavigator<RootStackParamList>();
-
-// const HomeScreen = ({navigation}: any) => {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.text}>Welcome to the Home Screen!</Text>
-//       <Button
-//         title="Go to WebView"
-//         onPress={() =>
-//           navigation.navigate('WebViewScreen', {
-//             url: 'https://www.npmjs.com/package/react-native-webview',
-//           })
-//         }
-//       />
-//     </View>
-//   );
-// };
-
-// const WebViewScreen = ({route}: any) => {
-//   const {url} = route.params;
-//   console.log("->>>>",url);
-//   return <WebView source={{uri: 'https://www.npmjs.com/package/react-native-webview'}} style={{flex: 1}} />;
-// };
-
-// const App = () => {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="Home">
-//         <Stack.Screen name="Home" component={HomeScreen} />
-//         <Stack.Screen name="WebViewScreen" component={WebViewScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   text: {
-//     fontSize: 20,
-//     marginBottom: 20,
-//   },
-// });
-
-// export default App;

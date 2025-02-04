@@ -301,7 +301,9 @@ const Categories = ({
           setSelectedCategory(category);
           console.log('Category retrieved from AsyncStorage:', category);
 
-          if (category !== 'All') {
+          if (category == 'All'){
+            setSelected('')
+          }else {
             // Pre-select the category retrieved from AsyncStorage
             setSelected(category);
           }
@@ -576,7 +578,7 @@ const SortBy = ({
     const loadSelectedIndex = async () => {
       try {
         const storedIndex = await AsyncStorage.getItem('selectedIndex');
-        if (storedIndex !== null && storedIndex !== '0') {
+        if (storedIndex !== null ) {
           setSelectedIndex(parseInt(storedIndex, 10)); // Parse and set the value only if not "0"
         }
       } catch (error) {

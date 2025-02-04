@@ -255,6 +255,8 @@ import {Colors} from '../../config/colors.config';
 import {Fonts} from '../../config/font.config';
 import {useCategory} from '../../store/category/category.hooks';
 import {SvgUri} from 'react-native-svg';
+import { useRealm } from '@realm/react';
+import FilterCategory from '../../store/filtercategory/filtercatergory.schema';
 
 const Categories = ({
   activecat,
@@ -264,6 +266,7 @@ const Categories = ({
   onCategoryChange: (category: string) => void;
 }) => {
   const {categories} = useCategory();
+  const realm = useRealm();
   const [activeCategory, setActiveCategory] = useState('All');
   useEffect(() => {
     if (activecat) {
@@ -281,6 +284,11 @@ const Categories = ({
             <Pressable
               key={index}
               onPress={() => {
+                if(item.catName === 'All'){
+                  realm.write(() => {
+                    realm.delete(realm.objects(FilterCategory));
+                  });
+                }
                 setActiveCategory(item.catName);
                 onCategoryChange(item.catName); // Notify parent about category change
               }}>

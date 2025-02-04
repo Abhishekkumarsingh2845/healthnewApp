@@ -714,7 +714,7 @@ const Notifications = () => {
             style={styles.notificationContainer}
             onPress={() =>
               navigation.navigate('Detailedtrend', {
-                articleId: item.articleId,
+                articleId: item.articleId||"no available",
               })
             }>
             {item.imageUrl ? (

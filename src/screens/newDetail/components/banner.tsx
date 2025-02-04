@@ -74,31 +74,7 @@ const Banner = (props: CardPropType) => {
               paddingHorizontal: moderateScale(4),
             },
           ]}>
-          {/* <View style={[Style.flexRow]}>
-            <View style={style.iconContainer}>
-              <Image
-                source={Icons.ic_fitness}
-                style={style.icon}
-                resizeMode={'contain'}
-                tintColor={Colors.white}
-              />
-            </View>
-            <Text
-              style={[
-                FontStyle.titleSemibold,
-                style.label,
-                {color: Colors.black},
-              ]}>
-              Fitness
-            </Text>
-          </View> */}
-          {/* <View style={[Style.flexRow, { gap: moderateScale(4) }]}>
-                        
-                        <View style={{ borderWidth: 1, borderColor: Colors.borderColor, padding: moderateScale(6), borderRadius: moderateScale(20) }}>
-                            <Image source={Icons.ic_like} resizeMode={'contain'} style={{ width: moderateScale(20), height: moderateScale(20) }} />
-                        </View>
-                        <Text style={[FontStyle.title, { color: Colors.gray, fontSize:moderateScale(23) }]} >2</Text>
-                    </View> */}
+         
         </View>
       </View>
     </>
