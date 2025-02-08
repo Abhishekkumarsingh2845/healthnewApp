@@ -543,7 +543,6 @@ import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Notifications = () => {
   const navigation = useNavigation();
   const [notifications, setNotifications] = useState([]);
@@ -638,12 +637,19 @@ const Notifications = () => {
 
     checkFCM();
     loadNotificationsFromStorage();
-
+    // const unsubscribe = messaging().onMessage(async remoteMessage => {
+    //   console.log('Foreground notification:', JSON.stringify(remoteMessage, null, 2));
+    // });
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log('Foreground notification:', remoteMessage);
-      const {notification: {title, body} = {}, data} = remoteMessage;
-
-      const imageUrl = data?.['fcm_options']?.['image'] || null;
+      console.log(
+        'Foreground notification:',
+        JSON.stringify(remoteMessage, null, 2),
+      );
+      // const {notification: {title, body} = {}, data} = remoteMessage;
+      const {notification: {title, body, android} = {}, data} = remoteMessage;
+      // const imageUrl = data?.['fcm_options']?.['image'] || null;
+      const imageUrl =
+        android?.imageUrl || data?.['fcm_options']?.['image'] || null;
 
       setNotifications(prev => {
         const updatedNotifications = [
@@ -657,6 +663,7 @@ const Notifications = () => {
           },
           ...prev,
         ];
+        console.log('->>>>awndajskbdfb', updatedNotifications);
         saveNotificationsToStorage(updatedNotifications);
         return updatedNotifications.sort(
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
@@ -670,12 +677,15 @@ const Notifications = () => {
         articleId: remoteMessage.data?.articleId || 'No Article ID',
       });
     });
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
         if (remoteMessage) {
-          console.log('App opened from terminated state:', remoteMessage);
+          console.log('App opened from terminated state index notification:', remoteMessage);
           navigation.navigate('Detailedtrend', {
             articleId: remoteMessage.data?.articleId || 'No Article ID',
           });
@@ -714,10 +724,10 @@ const Notifications = () => {
             style={styles.notificationContainer}
             onPress={() =>
               navigation.navigate('Detailedtrend', {
-                articleId: item.articleId||"no available",
+                articleId: item.articleId || 'no available',
               })
             }>
-            {item.imageUrl ? (
+            {item?.imageUrl ? (
               <Image
                 source={{uri: item.imageUrl}}
                 style={styles.notificationImage}
@@ -726,8 +736,8 @@ const Notifications = () => {
               <View style={styles.placeholderImage} />
             )}
             <View style={styles.textContainer}>
-              <Text style={styles.notificationTitle}>{item.title}</Text>
-              <Text style={styles.notificationField}>{item.category}</Text>
+              <Text style={styles.notificationTitle}>{item?.title}</Text>
+              <Text style={styles.notificationField}>{item?.category}</Text>
             </View>
           </TouchableOpacity>
         )}

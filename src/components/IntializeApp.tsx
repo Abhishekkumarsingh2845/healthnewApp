@@ -1,3 +1,4 @@
+import React from 'react';
 import MainNavigation from '../navigations/MainNavigation';
 import {useEffect, useRef, useState} from 'react';
 import {

@@ -1404,7 +1404,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.14.1):
     - React-Core
-  - react-native-webview (13.12.5):
+  - react-native-webview (13.13.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2169,7 +2169,7 @@ SPEC CHECKSUMS:
   react-native-blur: 0a96a365a933508e8ee20b9b26ee3cf508d618be
   react-native-render-html: 984dfe2294163d04bf5fe25d7c9f122e60e05ebe
   react-native-safe-area-context: 141eca0fd4e4191288dfc8b96a7c7e1c2983447a
-  react-native-webview: d7b677e60f512f2e1f3ad07cb2b3d784373df686
+  react-native-webview: 97c3018f2e0ceef4725cc9571fe0e5c37f6cf274
   React-nativeconfig: cd572c97f64676dcc2a1c88fc644b693b98408bf
   React-NativeModulesApple: 249c7a23d8ad82f13778f4f525a8d19ccf4deb86
   React-perflogger: 3bbb82f18e9ac29a1a6931568e99d6305ef4403b
@@ -2212,6 +2212,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 33604ac44957ebe3f30f15b4cd0a3f96634e624a
 
-PODFILE CHECKSUM: 56c5a210b87d5445558bd50dbd5daf621b98e5a6
+PODFILE CHECKSUM: 38408f1cb0f9ad0198c196cbf4e331972bb25026
 
 COCOAPODS: 1.15.2

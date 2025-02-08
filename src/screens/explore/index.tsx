@@ -1,5 +1,14 @@
 import React, {useMemo} from 'react';
-import {StyleSheet, Image, Text, View, StatusBar} from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  Text,
+  View,
+  StatusBar,
+  FlatList,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import {RefreshControl, ScrollView} from 'react-native';
 import AppSafeAreaView from '../../components/AppSafeAreaView';
 import Header from './components/header';
@@ -10,7 +19,7 @@ import {Icons, Images, Lottie} from '../../generated/image.assets';
 import {moderateScale} from 'react-native-size-matters';
 import {Colors} from '../../config/colors.config';
 import {FontStyle} from '../../config/style.config';
-import Card from '../../components/AppComponents/card';
+import Card from '../../components/AppComponents/Card';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   NavigationProp,
@@ -32,6 +41,7 @@ import {
 import {NewsDetailsPropType} from '../newDetail';
 import {NewsListType} from '../news/types/enum';
 import {NewsPropType} from '../news/types/interface';
+
 import {useCategory} from '../../store/category/category.hooks';
 
 // import {useRealm, useQuery} from '@realm/react';
@@ -68,7 +78,12 @@ const Explore = () => {
   const [fetchedCategory, setFetchedCategory] = useState<string | null>(null);
   const allArticles = useGetArticles();
   const isFocus = useIsFocused();
+
+  const [latestLoading, setLatestLoading] = useState(true); // Loader for Latest News
+  const [trendingLoading, setTrendingLoading] = useState(true); // Loader for Trending News
+  const [favoritesLoading, setFavoritesLoading] = useState(true);
   // console.log('allArticles==>>', allArticles);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -84,8 +99,16 @@ const Explore = () => {
 
     fetchCategory();
   }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false); // Disable the loader after 15 seconds
+    }, 12000); // 15 seconds
+
+    return () => clearTimeout(timer); // Cleanup the timer on unmount
+  }, []);
   // console.log('->>>>> top 10', allArticles);
   // console.log('allart', allArticles);
+
   const {toggleLike} = useToggleTrendingLike();
 
   const [favArticless, setFavArticles] = useState([]);
@@ -145,11 +168,11 @@ const Explore = () => {
 
   const combinedFavArticles = Array.from(combinedFavArticlesMap.values());
 
-  combinedFavArticles.forEach(article => {
-    console.log(
-      `Article ID: ${article._id || article.id}, Source: ${article.source}`,
-    );
-  });
+  // combinedFavArticles.forEach(article => {
+  //   console.log(
+  //     `Article ID: ${article._id || article.id}, Source: ${article.source}`,
+  //   );
+  // });
 
   const trendingArticlesSource = combinedFavArticles
     .filter(article => article.source === 'trending')
@@ -238,6 +261,17 @@ const Explore = () => {
       console.error('Error fetching trending articles:', error);
     }
   };
+
+  useEffect(() => {
+    // Fetch trending articles immediately when the component mounts
+    fetchTrendingArticles();
+
+    // Set up an interval to fetch trending articles every 5 seconds
+    const intervalId = setInterval(fetchTrendingArticles, 20000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, []);
 
   const getLatestArticle = async (page: number) => {
     const res = await fetchLatestArticles({page, search: ''});
@@ -447,6 +481,7 @@ const Explore = () => {
       return isWithinDateRange && isCategoryMatch;
     });
   }, [trendingArticlesFromRealm, startDa, endDa, activeCategory, nameret]);
+  // console.log('activeCategory::', activeCategory, nameret);
 
   // const ffv = combinedFavArticles.filter(article => {
   //   const updatedAtDate = normalizeDate(article.updatedAt);
@@ -511,17 +546,19 @@ const Explore = () => {
     }
   };
 
-  // console.log("->>state name",activeCategory);
+  console.log('->>state name', activeCategory);
   const setActiveCategoryAndStore = async (category: string) => {
     console.log('->>>>', category);
     setActiveCategory(category); // Update the state
     try {
+      await AsyncStorage.clear();
       await AsyncStorage.setItem('selectedCategory', category); // Save to AsyncStorage
       console.log('Category saved to AsyncStorage:', category);
     } catch (error) {
       console.error('Failed to save category to AsyncStorage:', error);
     }
   };
+
   useEffect(() => {
     if (isFocus) {
       getstoredfilter();
@@ -535,41 +572,31 @@ const Explore = () => {
             setShowFilter(true);
           }}
         />
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              colors={[Colors.primary]}
-              refreshing={refreshing}
-              onRefresh={init}
-            />
-          }
-          showsVerticalScrollIndicator={false}>
-          <Categories
-            activecat={activeCategory}
-            onCategoryChange={setActiveCategoryAndStore}
-          />
 
-          {filteredArticles.length > 0 && (
-            <CategorySection
-              prefixAtTitle={
-                <LottieView
-                  source={Lottie.latest}
-                  autoPlay
-                  loop
-                  style={{width: moderateScale(30), height: moderateScale(30)}}
-                />
-              }
-              title={'Latest News'}
-              titleStyle={style.title}
-              headerContainerStyle={style.header}
-              left={'View All'}
-              moreStyle={style.moreStyle}
-              onViewAllPress={() => {
-                Nav.navigate('News', {
-                  title: 'Latest News',
-                  activeCategory: activeCategory,
-                  type: NewsListType.Latest,
-                  icon: (
+        {isLoading ? (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+          </View>
+        ) : (
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                colors={[Colors.primary]}
+                refreshing={refreshing}
+                onRefresh={init}
+              />
+            }
+            showsVerticalScrollIndicator={false}>
+            <>
+              <Categories
+                activecat={activeCategory}
+                onCategoryChange={setActiveCategoryAndStore}
+              />
+
+              {filteredArticles.length > 0 && (
+                <CategorySection
+                  prefixAtTitle={
                     <LottieView
                       source={Lottie.latest}
                       autoPlay
@@ -579,10 +606,32 @@ const Explore = () => {
                         height: moderateScale(30),
                       }}
                     />
-                  ),
-                } as NewsPropType);
-              }}>
-              <ScrollView
+                  }
+                  title={'Latest News'}
+                  titleStyle={style.title}
+                  headerContainerStyle={style.header}
+                  left={'View All'}
+                  moreStyle={style.moreStyle}
+                  onViewAllPress={() => {
+                    Nav.navigate('News', {
+                      title: 'Latest News',
+                      activeCategory: activeCategory,
+                      type: NewsListType.Latest,
+                      icon: (
+                        <LottieView
+                          source={Lottie.latest}
+                          autoPlay
+                          loop
+                          style={{
+                            width: moderateScale(30),
+                            height: moderateScale(30),
+                          }}
+                        />
+                      ),
+                    } as NewsPropType);
+                  }}>
+                  {/* //scrollview content  */}
+                  {/* <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {fi.map((item, index) => {
@@ -599,79 +648,111 @@ const Explore = () => {
                     />
                   );
                 })}
-              </ScrollView>
-            </CategorySection>
-          )}
-
-          {filteredTrendingArticles.length > 0 && (
-            <CategorySection
-              prefixAtTitle={
-                <LottieView
-                  source={Lottie.trending}
-                  autoPlay
-                  loop
-                  style={{width: moderateScale(30), height: moderateScale(30)}}
-                />
-              }
-              title="Trending News"
-              titleStyle={style.title}
-              headerContainerStyle={style.header}
-              left="View All"
-              moreStyle={style.moreStyle}
-              onViewAllPress={() => Nav.navigate('ViewAll')}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {fl.map((item, index) => (
-                  <Card
-                    key={index}
-                    {...item}
-                    onClick={() => {
-                      let id;
-                      if (item._id) {
-                        id =
-                          typeof item._id.toHexString === 'function'
-                            ? item._id.toHexString()
-                            : item._id;
-                      } else {
-                        id = item.id;
-                      }
-
-                      Nav.navigate('Detailedtrend', {
-                        articleId: id,
-                      });
-                    }}
-                    onLike={() => {
-                      toggleLike(item?._id as any);
-                    }}
+              </ScrollView> */}
+                  <FlatList
+                    horizontal
+                    pagingEnabled={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={fi}
+                    keyExtractor={(item, index) => item._id.toHexString()} // Use unique id from your data as key
+                    renderItem={({item}) => (
+                      <Card
+                        onClick={() => {
+                          const id = item._id.toHexString();
+                          Nav.navigate('NewsDetail', {
+                            _id: id,
+                          } as NewsDetailsPropType);
+                        }}
+                        {...item}
+                      />
+                    )}
                   />
-                ))}
-              </ScrollView>
-            </CategorySection>
-          )}
+                </CategorySection>
+              )}
 
-          {/* //favourite section */}
-          {ffv.length > 0 && (
-            <CategorySection
-              prefixAtTitle={
-                <Image
-                  tintColor={Colors.error}
-                  source={Icons.ic_love}
-                  style={{
-                    width: moderateScale(20),
-                    height: moderateScale(20),
-                    marginHorizontal: moderateScale(4),
-                  }}
-                />
-              }
-              title={'Favorites News'}
-              titleStyle={style.title}
-              headerContainerStyle={style.header}
-              left={'View All'}
-              moreStyle={style.moreStyle}
-              onViewAllPress={() => {
-                Nav.navigate('Favviewall', {
-                  title: 'Favorites News',
-                  type: NewsListType.Favourite,
-                  icon: (
+              {filteredTrendingArticles.length > 0 && (
+                <CategorySection
+                  prefixAtTitle={
+                    <LottieView
+                      source={Lottie.trending}
+                      autoPlay
+                      loop
+                      style={{
+                        width: moderateScale(30),
+                        height: moderateScale(30),
+                      }}
+                    />
+                  }
+                  title="Trending News"
+                  titleStyle={style.title}
+                  headerContainerStyle={style.header}
+                  left="View All"
+                  moreStyle={style.moreStyle}
+                  onViewAllPress={() => Nav.navigate('ViewAll')}>
+                  {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      {fl.map((item, index) => (
+        <Card
+          key={index}
+          {...item}
+          onClick={() => {
+            let id;
+            if (item._id) {
+              id =
+                typeof item._id.toHexString === 'function'
+                  ? item._id.toHexString()
+                  : item._id;
+            } else {
+              id = item.id;
+            }
+
+            Nav.navigate('Detailedtrend', {
+              articleId: id,
+            });
+          }}
+          onLike={() => {
+            toggleLike(item?._id as any);
+          }}
+        />
+      ))}
+    </ScrollView> */}
+
+                  <FlatList
+                    horizontal
+                    pagingEnabled={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={fl}
+                    keyExtractor={(item, index) =>
+                      item._id ? item._id.toHexString() : item.id.toString()
+                    } // Use a unique key for each item
+                    renderItem={({item}) => (
+                      <Card
+                        {...item}
+                        onClick={() => {
+                          let id;
+                          if (item._id) {
+                            id =
+                              typeof item._id.toHexString === 'function'
+                                ? item._id.toHexString()
+                                : item._id;
+                          } else {
+                            id = item.id;
+                          }
+
+                          Nav.navigate('Detailedtrend', {
+                            articleId: id,
+                          });
+                        }}
+                        onLike={() => {
+                          toggleLike(item?._id as any);
+                        }}
+                      />
+                    )}
+                  />
+                </CategorySection>
+              )}
+              {ffv.length > 0 && (
+                <CategorySection
+                  prefixAtTitle={
                     <Image
                       tintColor={Colors.error}
                       source={Icons.ic_love}
@@ -681,65 +762,111 @@ const Explore = () => {
                         marginHorizontal: moderateScale(4),
                       }}
                     />
-                  ),
-                } as NewsPropType);
-              }}>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {ffv.map((item, index) => {
-                  return (
-                    // <Card
-                    //   {...item}
-                    //   key={index}
-                    //   onClick={() => {
-                    //     const id = item._id.toHexString();
-                    //     Nav.navigate('NewsDetail', {
-                    //       _id: id,
-                    //     } as NewsDetailsPropType);
-                    //   }}
-                    //   {...(trendingArticlesSource.length > 0 && {
-                    //     onLike: () => toggleLike(item?._id as any),
-                    //   })}
-                    // />
-                    <Card
-                      {...item}
-                      key={index}
-                      onClick={() => {
-                        let id;
-                        if (item._id) {
-                          id =
-                            typeof item._id.toHexString === 'function'
-                              ? item._id.toHexString()
-                              : item._id;
-                        } else {
-                          id = item.id;
-                        }
+                  }
+                  title={'Favorites News'}
+                  titleStyle={style.title}
+                  headerContainerStyle={style.header}
+                  left={'View All'}
+                  moreStyle={style.moreStyle}
+                  onViewAllPress={() => {
+                    Nav.navigate('Favviewall', {
+                      title: 'Favorites News',
+                      type: NewsListType.Favourite,
+                      icon: (
+                        <Image
+                          tintColor={Colors.error}
+                          source={Icons.ic_love}
+                          style={{
+                            width: moderateScale(20),
+                            height: moderateScale(20),
+                            marginHorizontal: moderateScale(4),
+                          }}
+                        />
+                      ),
+                    } as NewsPropType);
+                  }}>
+                  {/* <ScrollView
+      horizontal={true}
+      showsHorizontalScrollIndicator={false}>
+      {ffv.map((item, index) => {
+        return (
+          <Card
+            {...item}
+            key={index}
+            onClick={() => {
+              let id;
+              if (item._id) {
+                id =
+                  typeof item._id.toHexString === 'function'
+                    ? item._id.toHexString()
+                    : item._id;
+              } else {
+                id = item.id;
+              }
 
-                        // Navigate based on whether the article is from a "trending" source
-                        if (trendingArticlesSource.includes(item.source)) {
-                          Nav.navigate('Detailedtrend', {
-                            articleId: id,
-                          });
-                        } else {
-                          Nav.navigate('NewsDetail', {
-                            _id: id,
-                          } as NewsDetailsPropType);
-                        }
-                      }}
-                      {...(trendingArticlesSource.length > 0 && {
-                        onLike: () => toggleLike(item?._id as any),
-                      })}
-                    />
-                  );
-                })}
-              </ScrollView>
-            </CategorySection>
-          )}
+              // Navigate based on whether the article is from a "trending" source
+              if (trendingArticlesSource.includes(item.source)) {
+                Nav.navigate('Detailedtrend', {
+                  articleId: id,
+                });
+              } else {
+                Nav.navigate('NewsDetail', {
+                  _id: id,
+                } as NewsDetailsPropType);
+              }
+            }}
+            {...(trendingArticlesSource.length > 0 && {
+              onLike: () => toggleLike(item?._id as any),
+            })}
+          />
+        );
+      })}
+    </ScrollView> */}
+                  <FlatList
+                    horizontal
+                    pagingEnabled={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={ffv}
+                    keyExtractor={(item, index) =>
+                      item._id ? item._id.toHexString() : item.id.toString()
+                    }
+                    renderItem={({item}) => (
+                      <Card
+                        {...item}
+                        onClick={() => {
+                          let id;
+                          if (item._id) {
+                            id =
+                              typeof item._id.toHexString === 'function'
+                                ? item._id.toHexString()
+                                : item._id;
+                          } else {
+                            id = item.id;
+                          }
 
-          <View style={{padding: moderateScale(55)}} />
-        </ScrollView>
-
+                          // Navigate based on whether the article is from a "trending" source
+                          if (trendingArticlesSource.includes(item.source)) {
+                            Nav.navigate('Detailedtrend', {
+                              articleId: id,
+                            });
+                          } else {
+                            Nav.navigate('NewsDetail', {
+                              _id: id,
+                            } as NewsDetailsPropType);
+                          }
+                        }}
+                        {...(trendingArticlesSource.length > 0 && {
+                          onLike: () => toggleLike(item?._id as any),
+                        })}
+                      />
+                    )}
+                  />
+                </CategorySection>
+              )}
+              <View style={{padding: moderateScale(55)}} />
+            </>
+          </ScrollView>
+        )}
         <FilterModal
           selectedDate={selectedStartDate}
           todate={selectedEndDate}
@@ -768,6 +895,202 @@ const style = StyleSheet.create({
     color: Colors.primary,
     ...FontStyle.titleSemibold,
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default Explore;
+
+// {filteredTrendingArticles.length > 0 && (
+//   <CategorySection
+//     prefixAtTitle={
+//       <LottieView
+//         source={Lottie.trending}
+//         autoPlay
+//         loop
+//         style={{width: moderateScale(30), height: moderateScale(30)}}
+//       />
+//     }
+//     title="Trending News"
+//     titleStyle={style.title}
+//     headerContainerStyle={style.header}
+//     left="View All"
+//     moreStyle={style.moreStyle}
+//     onViewAllPress={() => Nav.navigate('ViewAll')}>
+//     {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+//       {fl.map((item, index) => (
+//         <Card
+//           key={index}
+//           {...item}
+//           onClick={() => {
+//             let id;
+//             if (item._id) {
+//               id =
+//                 typeof item._id.toHexString === 'function'
+//                   ? item._id.toHexString()
+//                   : item._id;
+//             } else {
+//               id = item.id;
+//             }
+
+//             Nav.navigate('Detailedtrend', {
+//               articleId: id,
+//             });
+//           }}
+//           onLike={() => {
+//             toggleLike(item?._id as any);
+//           }}
+//         />
+//       ))}
+//     </ScrollView> */}
+
+//     <FlatList
+//       horizontal
+//       showsHorizontalScrollIndicator={false}
+//       data={fl}
+//       keyExtractor={(item, index) =>
+//         item._id ? item._id.toHexString() : item.id.toString()
+//       } // Use a unique key for each item
+//       renderItem={({item}) => (
+//         <Card
+//           {...item}
+//           onClick={() => {
+//             let id;
+//             if (item._id) {
+//               id =
+//                 typeof item._id.toHexString === 'function'
+//                   ? item._id.toHexString()
+//                   : item._id;
+//             } else {
+//               id = item.id;
+//             }
+
+//             Nav.navigate('Detailedtrend', {
+//               articleId: id,
+//             });
+//           }}
+//           onLike={() => {
+//             toggleLike(item?._id as any);
+//           }}
+//         />
+//       )}
+//     />
+//   </CategorySection>
+// )}
+
+// {ffv.length > 0 && (
+//   <CategorySection
+//     prefixAtTitle={
+//       <Image
+//         tintColor={Colors.error}
+//         source={Icons.ic_love}
+//         style={{
+//           width: moderateScale(20),
+//           height: moderateScale(20),
+//           marginHorizontal: moderateScale(4),
+//         }}
+//       />
+//     }
+//     title={'Favorites News'}
+//     titleStyle={style.title}
+//     headerContainerStyle={style.header}
+//     left={'View All'}
+//     moreStyle={style.moreStyle}
+//     onViewAllPress={() => {
+//       Nav.navigate('Favviewall', {
+//         title: 'Favorites News',
+//         type: NewsListType.Favourite,
+//         icon: (
+//           <Image
+//             tintColor={Colors.error}
+//             source={Icons.ic_love}
+//             style={{
+//               width: moderateScale(20),
+//               height: moderateScale(20),
+//               marginHorizontal: moderateScale(4),
+//             }}
+//           />
+//         ),
+//       } as NewsPropType);
+//     }}>
+//     {/* <ScrollView
+//       horizontal={true}
+//       showsHorizontalScrollIndicator={false}>
+//       {ffv.map((item, index) => {
+//         return (
+//           <Card
+//             {...item}
+//             key={index}
+//             onClick={() => {
+//               let id;
+//               if (item._id) {
+//                 id =
+//                   typeof item._id.toHexString === 'function'
+//                     ? item._id.toHexString()
+//                     : item._id;
+//               } else {
+//                 id = item.id;
+//               }
+
+//               // Navigate based on whether the article is from a "trending" source
+//               if (trendingArticlesSource.includes(item.source)) {
+//                 Nav.navigate('Detailedtrend', {
+//                   articleId: id,
+//                 });
+//               } else {
+//                 Nav.navigate('NewsDetail', {
+//                   _id: id,
+//                 } as NewsDetailsPropType);
+//               }
+//             }}
+//             {...(trendingArticlesSource.length > 0 && {
+//               onLike: () => toggleLike(item?._id as any),
+//             })}
+//           />
+//         );
+//       })}
+//     </ScrollView> */}
+
+//     <FlatList
+//       horizontal
+//       showsHorizontalScrollIndicator={false}
+//       data={ffv}
+//       keyExtractor={(item, index) =>
+//         item._id ? item._id.toHexString() : item.id.toString()
+//       }
+//       renderItem={({item}) => (
+//         <Card
+//           {...item}
+//           onClick={() => {
+//             let id;
+//             if (item._id) {
+//               id =
+//                 typeof item._id.toHexString === 'function'
+//                   ? item._id.toHexString()
+//                   : item._id;
+//             } else {
+//               id = item.id;
+//             }
+
+//             // Navigate based on whether the article is from a "trending" source
+//             if (trendingArticlesSource.includes(item.source)) {
+//               Nav.navigate('Detailedtrend', {
+//                 articleId: id,
+//               });
+//             } else {
+//               Nav.navigate('NewsDetail', {
+//                 _id: id,
+//               } as NewsDetailsPropType);
+//             }
+//           }}
+//           {...(trendingArticlesSource.length > 0 && {
+//             onLike: () => toggleLike(item?._id as any),
+//           })}
+//         />
+//       )}
+//     />
+//   </CategorySection>
+// )}

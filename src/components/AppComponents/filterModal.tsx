@@ -76,8 +76,9 @@ const FilterModal = props => {
       console.error('Failed to clear AsyncStorage:', error);
     }
   };
+
   const handleClearAll = async () => {
-    setSelectedCategory(null); // Reset the selected category
+    setSelectedCategory('All'); // Reset the selected category
     setDateFilter(null); // Reset the date filter if needed
     setSelectedIndex(0); // Optionally, reset the selected tab
     // props.modalClose(false); // Close the modal
@@ -116,7 +117,7 @@ const FilterModal = props => {
       if (selectedIndex === 2 && dateFilter) {
         dateFilter();
       }
-      if (selectedCategory) {
+      if (selectedCategory && selectedCategory !== 'All') {
         realm.write(() => {
           // Clear existing categories
           realm.delete(realm.objects(FilterCategory));
@@ -299,11 +300,14 @@ const Categories = ({
         const category = await AsyncStorage.getItem('selectedCategory');
         if (category !== null) {
           setSelectedCategory(category);
-          console.log('Category retrieved from AsyncStorage:', category);
+          console.log(
+            'Category retrieved from AsyncStorage:->>>>>>>>>>>>>',
+            category,
+          );
 
-          if (category == 'All'){
-            setSelected('')
-          }else {
+          if (category == 'All') {
+            setSelected('');
+          } else {
             // Pre-select the category retrieved from AsyncStorage
             setSelected(category);
           }
@@ -578,7 +582,7 @@ const SortBy = ({
     const loadSelectedIndex = async () => {
       try {
         const storedIndex = await AsyncStorage.getItem('selectedIndex');
-        if (storedIndex !== null ) {
+        if (storedIndex !== null) {
           setSelectedIndex(parseInt(storedIndex, 10)); // Parse and set the value only if not "0"
         }
       } catch (error) {

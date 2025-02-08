@@ -2,7 +2,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {Platform, StyleSheet, View} from 'react-native';
 import TabIcon, {TabIconProps} from './TabIcon';
-import {ReactNode} from 'react';
+import {ReactNode, useEffect} from 'react';
 import {Colors} from '../../config/colors.config';
 import {Size} from '../../config/size.config';
 import {moderateScale} from 'react-native-size-matters';
@@ -10,13 +10,27 @@ import Explore from '../../screens/explore';
 import Favviewall from '../../screens/favscn/Favviewall';
 import Profile from '../../screens/profile';
 import {Icons} from '../../generated/image.assets';
+import { useRoute } from '../../context/initialRoute';
+import { useNavigation } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
 function BottomNavigation() {
+  const navigation = useNavigation();
+  const {initialRoute} = useRoute();
+  useEffect(() => {
+    if (initialRoute) {
+      console.log('initialRoute',initialRoute);
+      
+      navigation.navigate('Detailedtrend', {
+        articleId: initialRoute || 'no available',
+      })
+    }
+
+  }, [initialRoute])
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Explore"
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,

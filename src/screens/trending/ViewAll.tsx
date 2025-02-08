@@ -9,7 +9,7 @@ import {
 import AppSafeAreaView from '../../components/AppSafeAreaView';
 import Header from '../news/components/header';
 import FilterModal from '../../components/AppComponents/filterModal';
-import Card from '../../components/AppComponents/card';
+import Card from '../../components/AppComponents/Card';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigations/MainNavigation/models';
 import axios from 'axios';
@@ -170,3 +170,7 @@ const styles = StyleSheet.create({
 });
 
 export default ViewAll;
+
+
+
+

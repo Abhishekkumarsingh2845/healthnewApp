@@ -1,5 +1,4 @@
-
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   Image,
   Pressable,
@@ -11,22 +10,22 @@ import {
   Text,
 } from 'react-native';
 import AppImage from '../AppImage';
-import { Icons } from '../../generated/image.assets';
-import { moderateScale } from 'react-native-size-matters';
-import { Colors } from '../../config/colors.config';
-import { FontStyle, Style } from '../../config/style.config';
+import {Icons} from '../../generated/image.assets';
+import {moderateScale} from 'react-native-size-matters';
+import {Colors} from '../../config/colors.config';
+import {FontStyle, Style} from '../../config/style.config';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EntypoIcons from 'react-native-vector-icons/Entypo';
-import { Size } from '../../config/size.config';
-import { BSON } from 'realm';
+import {Size} from '../../config/size.config';
+import {BSON} from 'realm';
 import moment from 'moment';
-import { useToggleLikeArticle } from '../../store/article/article.hooks';
+import {useToggleLikeArticle} from '../../store/article/article.hooks';
 import appsFlyer from 'react-native-appsflyer';
-import { Share } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { SvgUri } from 'react-native-svg';
-// Define a function to get the category image URL
+import {Share} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {SvgUri} from 'react-native-svg';
+// Define a function to get the category image URLR
 
 const getCategoryImageUrl = category => {
   if (category === 'Technology Health') {
@@ -49,12 +48,9 @@ const getCategoryImageUrl = category => {
   return null;
 };
 
-
-
 const Card = props => {
   const navigation = useNavigation();
   const [inviteLink, setInviteLink] = useState(null);
-
 
   const generateInviteLink = () => {
     // Generate the invite link
@@ -97,7 +93,7 @@ const Card = props => {
       console.log('Invite link is not generated yet.');
     }
   };
-  const { toggleLike } = useToggleLikeArticle();
+  const {toggleLike} = useToggleLikeArticle();
 
   const onLike = useCallback(() => {
     console.log('likedkkkkkkkkkkkkk');
@@ -121,21 +117,21 @@ const Card = props => {
       onPress={props.onClick}>
       <View style={style.container}>
         <AppImage
-          source={{ uri: props.urlToImage }}
+          source={{uri: props.urlToImage}}
           style={style.image}
           resizeMode={'stretch'}
         />
         <View style={style.overlay}>
-          <View style={[Style.flexRow, { justifyContent: 'space-between' }]}>
+          <View style={[Style.flexRow, {justifyContent: 'space-between'}]}>
             <View style={[Style.flexRow]}>
               <View style={style.icon}>
-
-              <SvgUri
-                uri={ getCategoryImageUrl(props.category)}
-                onError={() => console.log('error svg')}
-                width="100%"
-                height="100%" />
-                </View>
+                <SvgUri
+                  uri={getCategoryImageUrl(props.category)}
+                  onError={() => console.log('error svg')}
+                  width="100%"
+                  height="100%"
+                />
+              </View>
               {/* <Image
                 source={{uri: getCategoryImageUrl(props.category)}} // Use the logic to set the category image
                 style={style.icon}
@@ -145,7 +141,7 @@ const Card = props => {
                 {props.category}
               </Text>
             </View>
-            <View style={[Style.flexRow, { gap: moderateScale(7) }]}>
+            <View style={[Style.flexRow, {gap: moderateScale(7)}]}>
               <Pressable
                 onPress={generateInviteLink}
                 style={[style.iconContainer, style.otherIconsContainer]}>
@@ -169,7 +165,7 @@ const Card = props => {
             </View>
           </View>
           <View>
-            <View style={[Style.flexRow, { gap: moderateScale(3) }]}>
+            <View style={[Style.flexRow, {gap: moderateScale(3)}]}>
               <Ionicons
                 name={'time-outline'}
                 size={moderateScale(20)}
@@ -178,7 +174,7 @@ const Card = props => {
               <Text
                 style={[
                   FontStyle.regular,
-                  { color: Colors.white, fontSize: moderateScale(12) },
+                  {color: Colors.white, fontSize: moderateScale(12)},
                 ]}>
                 {moment(props.updatedAt).fromNow()}
               </Text>
@@ -226,7 +222,7 @@ const Card = props => {
           <Text
             style={[
               FontStyle.bold,
-              { color: Colors.primary, fontSize: moderateScale(14) },
+              {color: Colors.primary, fontSize: moderateScale(14)},
             ]}>
             Read more
           </Text>

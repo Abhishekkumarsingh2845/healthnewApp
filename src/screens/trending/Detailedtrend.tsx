@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   Pressable,
   ImageBackground,
+  Modal,
+  StatusBar,
 } from 'react-native';
 import axios from 'axios';
 import {moderateScale} from 'react-native-size-matters';
@@ -20,8 +22,8 @@ import {useNavigation, RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NavigationProp} from '@react-navigation/native';
 import {Fonts} from '../../config/font.config';
-import {useQuery} from '@realm/react';
-import Card from '../../components/AppComponents/card';
+import {useQuery, useRealm} from '@realm/react';
+import Card from '../../components/AppComponents/Card';
 import CategorySection from '../../components/CategorySections';
 import LottieView from 'lottie-react-native';
 import {Icons, Images, Lottie} from '../../generated/image.assets';
@@ -35,6 +37,10 @@ import BackButton from '../../components/BackButton';
 import {useToggleTrendingLike} from '../../store/trending/trendinghook';
 import moment from 'moment';
 import {SvgUri} from 'react-native-svg';
+import WebView from 'react-native-webview';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BSON} from 'realm';
+import Favorite from '../../store/favorite/favorite.schema';
 type RootStackParamList = {
   NewsDetail: {articleId: string};
 };
@@ -49,30 +55,111 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
   route,
 }) => {
   const {articleId} = route.params;
-  console.log('dd', articleId);
+  console.log('ARTICLE ---> ', articleId);
+
+  const realm = useRealm();
+
   const [article, setArticle] = useState<any>(null);
+  const [webViewVisible, setWebViewVisible] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [trendingArticles, settrendingArticles] = useState([]);
+
+  const trendingArticles1 = useQuery('TrendingArticle'); // Correct way to access query cache
+  // const [singleArticle,setsingleArticle]= useState([]);
   const navigation = useNavigation();
   const [inviteLink, setInviteLink] = useState(null);
-  const trendingArticles = useQuery('TrendingArticle'); // Fetch trending art
+
+  const fetchTrendingArticles = async () => {
+    // const {deleteTrendingArticles} = useDeleteTrendingArticles();
+    try {
+      // deleteTrendingArticles();
+      const response = await axios.get(
+        'http://15.206.16.230:4000/api/v1/android/trendingarticle',
+      );
+      // deleteTrendingArticles();
+      const aa = response.data;
+      // console.log('Api data of the trending response', aa);
+
+      if (response.data.status && response.data.data.length > 0) {
+        const currentArticles = realm.objects(TrendingArticle.schema.name);
+
+        const fetchedArticleIds = response.data.data.map(
+          (article: any) => article._id,
+        );
+
+        realm.write(() => {
+          // deleteTrendingArticles();
+          response.data.data.forEach((article: any) => {
+            const articleId = new BSON.ObjectId(article._id);
+            let data = {
+              ...article,
+              _id: articleId,
+              category: article.category || 'defaultCategory', //his i have chnaged
+            };
+
+            const fav = realm
+              .objects(Favorite.schema.name)
+              .filtered(`articleId == $0`, articleId);
+            data['isLiked'] = fav.length > 0;
+
+            // Create or modify the trending article in the Realm database
+            realm.create(
+              TrendingArticle.schema.name,
+              data,
+              Realm.UpdateMode.Modified,
+            );
+          });
+
+          currentArticles.forEach((currentArticle: any) => {
+            if (!fetchedArticleIds.includes(currentArticle._id.toString())) {
+              realm.delete(currentArticle); // Delete the article from Realm DB
+            }
+          });
+        });
+      } else {
+        console.log('no artilces');
+      }
+    } catch (error) {
+      console.error('Error fetching trending articles:', error);
+    }
+  };
+
+  useEffect(() => {
+    settrendingArticles(trendingArticles1);
+    // console.log(trendingArticles1, 'trending...')
+  }, [trendingArticles1]);
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchTrendingArticles();
+      console.log('herer');
+      // const trendingArticles1 = useQuery('TrendingArticle'); // Correct way to access query cache
+      // console.log("trendingArticles1::",trendingArticles1)
+      // settrendingArticles(trendingArticles1);
+    };
+
+    fetchData();
+    // setsingleArticle(singleArticleOne);
+  }, []);
+
+  const singleArticle = trendingArticles.find(
+    article => article._id == articleId,
+  );
+  const lllg = singleArticle?.isLiked;
+
+  const mm = singleArticle?._id;
+
   // console.log('trendingschema', trendingArticles);
   const articlevar = trendingArticles.map(item => item.article_id);
   // console.log('articlesid', articlevar);
   // const params = props.route.params;
+
   const articles = useQuery(Article);
   const details = articles.find(
     article => article._id.toString() === articleId,
   );
 
   const {toggleLike} = useToggleTrendingLike();
-  const articleIdToFind = articleId;
-  const singleArticle = trendingArticles.find(
-    article => article._id == articleIdToFind,
-  );
 
-  const lllg = singleArticle.isLiked;
-
-  const mm = singleArticle._id;
   useEffect(() => {
     appsFlyer.initSdk(
       {
@@ -234,6 +321,7 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
           <BackButton
             color={Colors.black}
             size={moderateScale(20)}
+            onPress={() => navigation.navigate('BottomNavigation')}
             style={{position: 'relative'}}
           />
           <Image
@@ -255,14 +343,16 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
           ]}>
           <TouchableOpacity
             onPress={() => {
-              toggleLike(mm);
+              toggleLike(singleArticle?._id);
             }}>
             <Image
               resizeMode={'contain'}
-              source={lllg ? Icons.ic_active_love : Icons.ic_heart}
+              source={
+                singleArticle?.isLiked ? Icons.ic_active_love : Icons.ic_heart
+              }
               // style={style.icon}
               style={{width: 25, height: 25}}
-              tintColor={lllg ? Colors.primary : Colors.black}
+              tintColor={singleArticle?.isLiked ? Colors.primary : Colors.black}
             />
           </TouchableOpacity>
           <Pressable onPress={generateInviteLink}>
@@ -331,26 +421,44 @@ const Detailedtrend: React.FC<{route: NewsDetailScreenRouteProp}> = ({
 
             <Text style={styles.title}>{article.title}</Text>
             <Text style={styles.description}>{article.content}</Text>
+
             {article.url ? (
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL(article.url);
-                }}>
-                <Text
-                  style={[
-                    FontStyle.regular,
-                    {
-                      textAlign: 'right',
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log('Article URL:', article.url);
+                    setWebViewVisible(true);
+                  }}>
+                  <Text
+                    style={{
                       fontWeight: '400',
                       fontFamily: Fonts.light,
                       lineHeight: moderateScale(23),
                       fontSize: moderateScale(15),
+                      textAlign: 'right',
                       color: Colors.primary,
-                    },
-                  ]}>
-                  Show Original
-                </Text>
-              </TouchableOpacity>
+                    }}>
+                    Show Original
+                  </Text>
+                </TouchableOpacity>
+
+                <Modal visible={webViewVisible} animationType="slide">
+                  <StatusBar
+                    barStyle={'light-content'}
+                    backgroundColor={'white'}
+                  />
+                  <View style={{flex: 1}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setWebViewVisible(false);
+                      }}
+                      style={styles.closeButton}>
+                      <Text style={styles.closeButtonText}>Go Back</Text>
+                    </TouchableOpacity>
+                    {article && <WebView source={{uri: article.url}} />}
+                  </View>
+                </Modal>
+              </>
             ) : null}
           </>
         ) : (
@@ -468,6 +576,17 @@ const styles = StyleSheet.create({
   moreStyle: {
     color: Colors.primary,
     ...FontStyle.titleSemibold,
+  },
+  closeButton: {
+    padding: 10,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    marginTop: 30,
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: 'black',
+    alignSelf: 'flex-start',
   },
 });
 

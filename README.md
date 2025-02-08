@@ -37,7 +37,7 @@ yarn android
 ```bash
 # using npm
 npm run ios
-
+2
 # OR using Yarn
 yarn ios
 ```
