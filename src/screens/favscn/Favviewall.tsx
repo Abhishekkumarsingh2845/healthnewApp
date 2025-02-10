@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {useGetFavArticles} from '../../store/article/article.hooks';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../../navigations/MainNavigation/models';
-import Card from '../../components/AppComponents/card';
+import Card from '../../components/AppComponents/Card';
 import Header from '../favorite/components/header';
 import Categories from '../../components/AppComponents/categories';
 import {

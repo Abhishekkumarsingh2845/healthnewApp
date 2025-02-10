@@ -3,7 +3,7 @@ import AppSafeAreaView from '../../components/AppSafeAreaView';
 import Categories from '../../components/AppComponents/categories';
 import CategorySection from '../../components/CategorySections';
 import {moderateScale} from 'react-native-size-matters';
-import Card from '../../components/AppComponents/card';
+import Card from '../../components/AppComponents/Card';
 import AppImage from '../../components/AppImage';
 import {Icons} from '../../generated/image.assets';
 import {FontStyle, Style} from '../../config/style.config';
