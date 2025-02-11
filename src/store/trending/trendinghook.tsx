@@ -3,10 +3,8 @@ import {BSON} from 'realm';
 import {useCallback} from 'react';
 import TrendingArticle from './trending.schema';
 import Favorite from './../favorite/favorite.schema';
-import { TrendingTypeArticle } from './trending.interface';
-
-
-
+import {TrendingTypeArticle} from './trending.interface';
+import {Alert} from 'react-native';
 
 export const useToggleTrendingLike = () => {
   const realm = useRealm();
@@ -19,41 +17,44 @@ export const useToggleTrendingLike = () => {
         id,
       ) as TrendingTypeArticle;
 
-      console.log('Called trending');
-      console.log(article, 'art..');
+      if (article) {
+        console.log('Called trending');
+        console.log(article, 'art..');
 
-      realm.write(() => {
-        article.isLiked = !(article?.isLiked ?? false);
-        console.log(article.isLiked, 'LIKED...trending ');
-        const fav = realm
-          .objects(Favorite.schema.name)
-          .filtered(`articleId == $0`, article._id);
+        realm.write(() => {
+          article.isLiked = !(article?.isLiked ?? false);
+          console.log(article.isLiked, 'LIKED...trending ');
+          const fav = realm
+            .objects(Favorite.schema.name)
+            .filtered(`articleId == $0`, article._id);
 
-        if (fav.length > 0) {
-          console.log('Delete trending progress');
-          realm.delete(fav);
-          const fa = realm.objects(Favorite.schema.name);
-          console.log('deleting terding articles completed', fa.toJSON());
-        }
+          if (fav.length > 0) {
+            console.log('Delete trending progress');
+            realm.delete(fav);
+            const fa = realm.objects(Favorite.schema.name);
+            console.log('deleting terding articles completed', fa.toJSON());
+          }
 
-        if (article.isLiked) {
-          console.log('ADD trending progress');
-          realm.create(Favorite.schema.name, {
-            _id: new BSON.ObjectId(),
-            articleId: article._id,
-          });
-          const favEntries = realm.objects(Favorite.schema.name);
-          console.log('adding terding articles', favEntries.toJSON());
-        }
-      });
+          if (article.isLiked) {
+            console.log('ADD trending progress');
+            realm.create(Favorite.schema.name, {
+              _id: new BSON.ObjectId(),
+              articleId: article._id,
+            });
+            const favEntries = realm.objects(Favorite.schema.name);
+            console.log('adding terding articles', favEntries.toJSON());
+          } 
+          // else {
+          //   Alert.alert('Oops!', 'Cannot perform this operation');
+          // }
+        });
+      }
     },
     [realm],
   );
-  
+
   return {toggleLike};
 };
-
-
 
 export const usetrendingFavArticles = () => {
   // console.log("ccccc->>",ll);
@@ -80,5 +81,3 @@ export const useDeleteTrendingArticles = () => {
 
   return {deleteTrendingArticles};
 };
-
-
